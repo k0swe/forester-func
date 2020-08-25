@@ -2,11 +2,12 @@
 package kellog
 
 import (
-	"cloud.google.com/go/firestore"
 	"context"
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
 	"fmt"
+	"golang.org/x/oauth2"
+	"google.golang.org/api/option"
 	"log"
 	"net/http"
 	"os"
@@ -15,8 +16,7 @@ import (
 // GCP_PROJECT is a user-set environment variable.
 var projectID = os.Getenv("GCP_PROJECT")
 
-// firestoreClient is a global client, initialized once per instance.
-var firestoreClient *firestore.Client
+var app *firebase.App
 var authClient *auth.Client
 
 func init() {
@@ -26,12 +26,6 @@ func init() {
 	app, err := firebase.NewApp(ctx, conf)
 	if err != nil {
 		log.Fatalf("Error initializing Firebase app: %v", err)
-		return
-	}
-
-	firestoreClient, err = app.Firestore(ctx)
-	if err != nil {
-		log.Fatalf("Error getting firestoreClient: %v", err)
 		return
 	}
 
@@ -46,25 +40,40 @@ func init() {
 func HelloHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	strings := r.URL.Query()["token"]
-	tokenString := ""
+	idToken := ""
 	if len(strings) > 0 {
-		tokenString = strings[0]
+		idToken = strings[0]
 	}
-	log.Printf("token param is '%v'", tokenString)
-	if tokenString == "" {
+	log.Printf("token param is '%v'", idToken)
+	if idToken == "" {
 		w.WriteHeader(403)
 		return
 	}
-	token, err := authClient.VerifyIDTokenAndCheckRevoked(ctx, tokenString)
+	userToken, err := authClient.VerifyIDToken(ctx, idToken)
 	if err != nil {
 		w.WriteHeader(500)
 		_, _ = fmt.Fprintf(w, "Failed VerifyIDTokenAndCheckRevoked: %v", err)
 		log.Printf("Failed VerifyIDTokenAndCheckRevoked: %v", err)
 		return
 	}
-	log.Printf("Token UID is %v", token.UID)
+	log.Printf("Token UID is %v", userToken.UID)
+	conf := &firebase.Config{ProjectID: projectID}
+	userApp, err := firebase.NewApp(ctx, conf, option.WithTokenSource(
+		oauth2.StaticTokenSource(
+			&oauth2.Token{
+				AccessToken: idToken,
+			})))
+	if err != nil {
+		log.Fatalf("Error initializing Firebase app: %v", err)
+		return
+	}
+	firestoreClient, err := userApp.Firestore(ctx)
+	if err != nil {
+		log.Fatalf("Error getting firestoreClient: %v", err)
+		return
+	}
 
-	docSnapshot, err := firestoreClient.Collection("test").Doc("3bjCgRjsJB1BK3X1Zy8s").Get(ctx)
+	docSnapshot, err := firestoreClient.Collection("users").Doc(userToken.UID).Get(ctx)
 	if err != nil {
 		w.WriteHeader(500)
 		_, _ = fmt.Fprintf(w, "Failed getting test data: %v", err)
