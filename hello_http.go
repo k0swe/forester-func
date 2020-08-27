@@ -4,6 +4,7 @@ package kellog
 import (
 	"cloud.google.com/go/firestore"
 	"context"
+	"encoding/json"
 	"errors"
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
@@ -40,6 +41,17 @@ func init() {
 
 // Hello World function. Called via GCP Cloud Functions.
 func HelloHTTP(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodOptions {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Set("Access-Control-Max-Age", "3600")
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+	// Set CORS headers for the main request.
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	ctx := context.Background()
 	idToken, err := extractIdToken(w, r)
 	if err != nil {
@@ -61,8 +73,8 @@ func HelloHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Failed getting test data: %v", err)
 		return
 	}
-	m := docSnapshot.Data()
-	_, _ = fmt.Fprintf(w, "Document data: %#v\n", m)
+	enc := json.NewEncoder(w)
+	enc.Encode(docSnapshot.Data())
 }
 
 func extractIdToken(w http.ResponseWriter, r *http.Request) (string, error) {
