@@ -97,12 +97,13 @@ func handleCorsOptions(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func extractIdToken(w http.ResponseWriter, r *http.Request) (string, error) {
-	idToken := r.Header.Get("Authorization")
+	idToken := strings.TrimSpace(r.Header.Get("Authorization"))
 	if idToken == "" {
 		w.WriteHeader(403)
 		_, _ = fmt.Fprintf(w, "requests must be authenticated")
 		return "", errors.New("requests must be authenticated")
 	}
+	idToken = strings.TrimPrefix(idToken, "Bearer ")
 	return idToken, nil
 }
 
@@ -110,8 +111,8 @@ func verifyToken(idToken string, ctx context.Context, w http.ResponseWriter) (*a
 	userToken, err := authClient.VerifyIDToken(ctx, idToken)
 	if err != nil {
 		w.WriteHeader(403)
-		_, _ = fmt.Fprintf(w, "Failed VerifyIDToken: %v", err)
-		log.Printf("Failed VerifyIDToken: %v", err)
+		_, _ = fmt.Fprintf(w, "Failed to verify JWT: %v", err)
+		log.Printf("Failed to verify JWT: %v", err)
 		return nil, err
 	}
 	return userToken, nil
@@ -125,7 +126,7 @@ func makeFirestoreClient(ctx context.Context, idToken string) (*firestore.Client
 				AccessToken: idToken,
 			})))
 	if err != nil {
-		log.Fatalf("Error initializing Firebase app: %v", err)
+		log.Fatalf("Error initializing Firebase user app: %v", err)
 		return nil, err
 	}
 	firestoreClient, err := userApp.Firestore(ctx)
