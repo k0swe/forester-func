@@ -14,6 +14,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 // GCP_PROJECT is a user-set environment variable.
@@ -40,23 +41,25 @@ func init() {
 
 // Hello World function. Called via GCP Cloud Functions.
 func HelloHTTP(w http.ResponseWriter, r *http.Request) {
+	origin := r.Header.Get("Origin")
+	if strings.Contains(origin, "log.k0swe.radio") || strings.Contains(origin, "localhost") {
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+	}
 	if r.Method == http.MethodOptions {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		w.Header().Set("Access-Control-Max-Age", "3600")
 		w.WriteHeader(http.StatusNoContent)
 		return
 	}
-	// Set CORS headers for the main request.
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	ctx := context.Background()
 	idToken, err := extractIdToken(w, r)
 	if err != nil {
 		return
 	}
-	userToken, err := verifyToken(w, err, ctx, idToken)
+	userToken, err := verifyToken(idToken, ctx, w)
 	if err != nil {
 		return
 	}
@@ -77,20 +80,16 @@ func HelloHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func extractIdToken(w http.ResponseWriter, r *http.Request) (string, error) {
-	strings := r.URL.Query()["token"]
-	idToken := ""
-	if len(strings) > 0 {
-		idToken = strings[0]
-	}
+	idToken := r.Header.Get("Authorization")
 	if idToken == "" {
 		w.WriteHeader(403)
-		_, _ = fmt.Fprintf(w, "missing token")
-		return "", errors.New("missing token")
+		_, _ = fmt.Fprintf(w, "requests must be authenticated")
+		return "", errors.New("requests must be authenticated")
 	}
 	return idToken, nil
 }
 
-func verifyToken(w http.ResponseWriter, err error, ctx context.Context, idToken string) (*auth.Token, error) {
+func verifyToken(idToken string, ctx context.Context, w http.ResponseWriter) (*auth.Token, error) {
 	userToken, err := authClient.VerifyIDToken(ctx, idToken)
 	if err != nil {
 		w.WriteHeader(403)

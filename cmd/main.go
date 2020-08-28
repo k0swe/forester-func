@@ -8,6 +8,6 @@ import (
 
 // Local development driver, not used by Cloud Functions
 func main() {
-	http.HandleFunc("/", kellog.HelloHTTP)
+	http.HandleFunc("/HelloHTTP", kellog.HelloHTTP)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
