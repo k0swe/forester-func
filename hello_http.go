@@ -19,7 +19,6 @@ import (
 // GCP_PROJECT is a user-set environment variable.
 var projectID = os.Getenv("GCP_PROJECT")
 
-var app *firebase.App
 var authClient *auth.Client
 
 func init() {
@@ -74,7 +73,7 @@ func HelloHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	enc := json.NewEncoder(w)
-	enc.Encode(docSnapshot.Data())
+	_ = enc.Encode(docSnapshot.Data())
 }
 
 func extractIdToken(w http.ResponseWriter, r *http.Request) (string, error) {
