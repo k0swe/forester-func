@@ -8,6 +8,6 @@ import (
 
 // Local development driver, not used by Cloud Functions
 func main() {
-	http.HandleFunc("/HelloHTTP", kellog.HelloHTTP)
+	http.HandleFunc("/ImportQrz", kellog.ImportQrz)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }

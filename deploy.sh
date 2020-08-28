@@ -1,6 +1,6 @@
 #!/bin/bash
-gcloud functions deploy HelloHTTP \
+gcloud functions deploy ImportQrz \
   --project k0swe-kellog \
-  --entry-point HelloHTTP \
+  --entry-point ImportQrz \
   --runtime go113\
   --trigger-http

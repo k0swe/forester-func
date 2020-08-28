@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestHelloHTTP(t *testing.T) {
+func TestImportQrz(t *testing.T) {
 	tests := []struct {
 		body string
 		want string
@@ -16,14 +16,14 @@ func TestHelloHTTP(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		req := httptest.NewRequest("GET", "/", strings.NewReader(test.body))
+		req := httptest.NewRequest("GET", "/ImportQrz", strings.NewReader(test.body))
 		req.Header.Add("Content-Type", "application/json")
 
 		rr := httptest.NewRecorder()
-		HelloHTTP(rr, req)
+		ImportQrz(rr, req)
 
 		if got := rr.Body.String(); got != test.want {
-			t.Errorf("HelloHTTP(%q) = %q, want %q", test.body, got, test.want)
+			t.Errorf("ImportQrz(%q) = %q, want %q", test.body, got, test.want)
 		}
 	}
 }

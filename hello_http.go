@@ -9,6 +9,7 @@ import (
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
 	"fmt"
+	ql "github.com/xylo04/qrz-logbook"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/option"
 	"log"
@@ -40,17 +41,8 @@ func init() {
 }
 
 // Hello World function. Called via GCP Cloud Functions.
-func HelloHTTP(w http.ResponseWriter, r *http.Request) {
-	origin := r.Header.Get("Origin")
-	if strings.Contains(origin, "log.k0swe.radio") || strings.Contains(origin, "localhost") {
-		w.Header().Set("Access-Control-Allow-Origin", origin)
-		w.Header().Set("Access-Control-Allow-Credentials", "true")
-	}
-	if r.Method == http.MethodOptions {
-		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
-		w.Header().Set("Access-Control-Max-Age", "3600")
-		w.WriteHeader(http.StatusNoContent)
+func ImportQrz(w http.ResponseWriter, r *http.Request) {
+	if handleCorsOptions(w, r) {
 		return
 	}
 
@@ -71,12 +63,37 @@ func HelloHTTP(w http.ResponseWriter, r *http.Request) {
 	docSnapshot, err := firestoreClient.Collection("users").Doc(userToken.UID).Get(ctx)
 	if err != nil {
 		w.WriteHeader(500)
-		_, _ = fmt.Fprintf(w, "Failed getting test data: %v", err)
-		log.Printf("Failed getting test data: %v", err)
+		_, _ = fmt.Fprintf(w, "Failed getting Kellog user data: %v", err)
+		log.Printf("Failed getting Kellog user data: %v", err)
+		return
+	}
+	qrzApiKey := fmt.Sprint(docSnapshot.Data()["qrzLogbookApiKey"])
+	status, err := ql.Status(&qrzApiKey)
+	if err != nil {
+		w.WriteHeader(500)
+		_, _ = fmt.Fprintf(w, "Failed getting QRZ.com data: %v", err)
+		log.Printf("Failed getting QRZ.com data: %v", err)
 		return
 	}
 	enc := json.NewEncoder(w)
-	_ = enc.Encode(docSnapshot.Data())
+	_ = enc.Encode(status)
+}
+
+// Write CORS headers to the response. Returns true if this is an OPTIONS request; false otherwise.
+func handleCorsOptions(w http.ResponseWriter, r *http.Request) bool {
+	origin := r.Header.Get("Origin")
+	if strings.Contains(origin, "log.k0swe.radio") || strings.Contains(origin, "localhost") {
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+	}
+	if r.Method == http.MethodOptions {
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		w.Header().Set("Access-Control-Max-Age", "3600")
+		w.WriteHeader(http.StatusNoContent)
+		return true
+	}
+	return false
 }
 
 func extractIdToken(w http.ResponseWriter, r *http.Request) (string, error) {
