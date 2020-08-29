@@ -9,6 +9,7 @@ import (
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
 	"fmt"
+	"github.com/tzneal/ham-go/adif"
 	ql "github.com/xylo04/qrz-logbook"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/option"
@@ -40,7 +41,7 @@ func init() {
 	}
 }
 
-// Hello World function. Called via GCP Cloud Functions.
+// Import QSOs from QRZ logbook and merge into Firestore. Called via GCP Cloud Functions.
 func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	if handleCorsOptions(w, r) {
 		return
@@ -60,23 +61,21 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	docSnapshot, err := firestoreClient.Collection("users").Doc(userToken.UID).Get(ctx)
+	qrzApiKey, err := getQrzApiKey(w, firestoreClient, userToken, ctx)
 	if err != nil {
-		w.WriteHeader(500)
-		_, _ = fmt.Fprintf(w, "Failed getting Kellog user data: %v", err)
-		log.Printf("Failed getting Kellog user data: %v", err)
 		return
 	}
-	qrzApiKey := fmt.Sprint(docSnapshot.Data()["qrzLogbookApiKey"])
-	status, err := ql.Status(&qrzApiKey)
+	fetchResponse, err := ql.Fetch(&qrzApiKey)
 	if err != nil {
 		w.WriteHeader(500)
 		_, _ = fmt.Fprintf(w, "Failed getting QRZ.com data: %v", err)
 		log.Printf("Failed getting QRZ.com data: %v", err)
 		return
 	}
+	log.Printf("Got QRZ.com data, count %d", fetchResponse.Count)
+	adifLog, err := adif.ParseString("<eoh>" + fetchResponse.Adif)
 	enc := json.NewEncoder(w)
-	_ = enc.Encode(status)
+	_ = enc.Encode(adifLog.Records())
 }
 
 // Write CORS headers to the response. Returns true if this is an OPTIONS request; false otherwise.
@@ -139,4 +138,17 @@ func makeFirestoreClient(ctx context.Context, idToken string, w http.ResponseWri
 		return nil, err
 	}
 	return firestoreClient, nil
+}
+
+func getQrzApiKey(w http.ResponseWriter, firestoreClient *firestore.Client, userToken *auth.Token, ctx context.Context) (string, error) {
+	docSnapshot, err := firestoreClient.Collection("users").Doc(userToken.UID).Get(ctx)
+	if err != nil {
+		w.WriteHeader(500)
+		_, _ = fmt.Fprintf(w, "Failed getting Kellog user data: %v", err)
+		log.Printf("Failed getting Kellog user data: %v", err)
+		return "", err
+	}
+	qrzApiKey := fmt.Sprint(docSnapshot.Data()["qrzLogbookApiKey"])
+	log.Printf("Got qrzApiKey %v", qrzApiKey)
+	return qrzApiKey, nil
 }
