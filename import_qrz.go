@@ -10,6 +10,7 @@ import (
 	"firebase.google.com/go/auth"
 	"fmt"
 	adif "github.com/Matir/adifparser"
+	"github.com/xylo04/kellog-qrz-sync/generated/adifpb"
 	ql "github.com/xylo04/qrz-logbook"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/option"
@@ -73,18 +74,8 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Failed getting QRZ.com data: %v", err)
 		return
 	}
-	reader := adif.NewADIFReader(strings.NewReader(fetchResponse.Adif))
-	records := make([]string, reader.RecordCount())
-	record, err := reader.ReadRecord()
-	for err == nil {
-		value, _ := record.GetValue("call")
-		records = append(records, value)
-		record, err = reader.ReadRecord()
-	}
-	if err != io.EOF {
-		w.WriteHeader(500)
-		_, _ = fmt.Fprintf(w, "Failed parsing QRZ.com data: %v", err)
-		log.Printf("Failed parsing QRZ.com data: %v", err)
+	records, err := adifToJson(w, fetchResponse)
+	if err != nil {
 		return
 	}
 	enc := json.NewEncoder(w)
@@ -163,4 +154,28 @@ func getQrzApiKey(w http.ResponseWriter, firestoreClient *firestore.Client, user
 	}
 	qrzApiKey := fmt.Sprint(docSnapshot.Data()["qrzLogbookApiKey"])
 	return qrzApiKey, nil
+}
+
+func adifToJson(w http.ResponseWriter, fetchResponse *ql.FetchResponse) ([]*adifpb.Qso, error) {
+	reader := adif.NewADIFReader(strings.NewReader(fetchResponse.Adif))
+	qsos := make([]*adifpb.Qso, reader.RecordCount())
+	record, err := reader.ReadRecord()
+	for err == nil {
+		qsos = append(qsos, recordToQso(record))
+		record, err = reader.ReadRecord()
+	}
+	if err != io.EOF {
+		w.WriteHeader(500)
+		_, _ = fmt.Fprintf(w, "Failed parsing QRZ.com data: %v", err)
+		log.Printf("Failed parsing QRZ.com data: %v", err)
+		return nil, err
+	}
+	return qsos, nil
+}
+
+func recordToQso(record adif.ADIFRecord) *adifpb.Qso {
+	qso := new(adifpb.Qso)
+	qso.ContactedStation = new(adifpb.Station)
+	qso.ContactedStation.OpCall, _ = record.GetValue("call")
+	return qso
 }
