@@ -55,7 +55,7 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	firestoreClient, err := makeFirestoreClient(ctx, idToken)
+	firestoreClient, err := makeFirestoreClient(ctx, idToken, w)
 	if err != nil {
 		return
 	}
@@ -118,7 +118,7 @@ func verifyToken(idToken string, ctx context.Context, w http.ResponseWriter) (*a
 	return userToken, nil
 }
 
-func makeFirestoreClient(ctx context.Context, idToken string) (*firestore.Client, error) {
+func makeFirestoreClient(ctx context.Context, idToken string, w http.ResponseWriter) (*firestore.Client, error) {
 	conf := &firebase.Config{ProjectID: projectID}
 	userApp, err := firebase.NewApp(ctx, conf, option.WithTokenSource(
 		oauth2.StaticTokenSource(
@@ -126,11 +126,15 @@ func makeFirestoreClient(ctx context.Context, idToken string) (*firestore.Client
 				AccessToken: idToken,
 			})))
 	if err != nil {
+		w.WriteHeader(500)
+		_, _ = fmt.Fprintf(w, "Error initializing Firebase user app: %v", err)
 		log.Fatalf("Error initializing Firebase user app: %v", err)
 		return nil, err
 	}
 	firestoreClient, err := userApp.Firestore(ctx)
 	if err != nil {
+		w.WriteHeader(500)
+		_, _ = fmt.Fprintf(w, "Error getting firestoreClient: %v", err)
 		log.Fatalf("Error getting firestoreClient: %v", err)
 		return nil, err
 	}
