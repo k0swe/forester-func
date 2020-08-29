@@ -7,6 +7,7 @@ import (
 	"github.com/xylo04/kellog-qrz-sync/generated/adifpb"
 	"io"
 	"log"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -68,8 +69,8 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	qso.ContactedStation.Iota, _ = record.GetValue("iota")
 	qso.ContactedStation.IotaIslandId = getUint32(record, "iota_island_id")
 	qso.ContactedStation.ItuZone = getUint32(record, "ituz")
-	qso.ContactedStation.Latitude = getFloat64(record, "lat")
-	qso.ContactedStation.Longitude = getFloat64(record, "lon")
+	qso.ContactedStation.Latitude = getLatLon(record, "lat")
+	qso.ContactedStation.Longitude = getLatLon(record, "lon")
 	qso.ContactedStation.OpName, _ = record.GetValue("name")
 	qso.ContactedStation.Pfx, _ = record.GetValue("pfx")
 	qso.ContactedStation.QslVia, _ = record.GetValue("qsl_via")
@@ -89,6 +90,20 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	qso.ContactedStation.VuccGrids, _ = record.GetValue("vucc_grids")
 	qso.ContactedStation.Web, _ = record.GetValue("web")
 	return qso
+}
+
+func getLatLon(record adifparser.ADIFRecord, field string) float64 {
+	st, _ := record.GetValue(field)
+	r := regexp.MustCompile(`([NESW])(\d+) ([\d.]+)`)
+	groups := r.FindStringSubmatch(st)
+	cardinal := groups[1]
+	degrees, _ := strconv.ParseFloat(groups[2], 64)
+	minutes, _ := strconv.ParseFloat(groups[3], 64)
+	retval := degrees + (minutes / 60.0)
+	if cardinal == "S" || cardinal == "W" {
+		retval *= -1
+	}
+	return retval
 }
 
 func getBool(record adifparser.ADIFRecord, field string) bool {
