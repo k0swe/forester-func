@@ -13,6 +13,7 @@ import (
 	ql "github.com/xylo04/qrz-logbook"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/option"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -79,6 +80,12 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		value, _ := record.GetValue("call")
 		records = append(records, value)
 		record, err = reader.ReadRecord()
+	}
+	if err != io.EOF {
+		w.WriteHeader(500)
+		_, _ = fmt.Fprintf(w, "Failed parsing QRZ.com data: %v", err)
+		log.Printf("Failed parsing QRZ.com data: %v", err)
+		return
 	}
 	enc := json.NewEncoder(w)
 	_ = enc.Encode(records)
