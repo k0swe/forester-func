@@ -9,12 +9,9 @@ import (
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
 	"fmt"
-	adif "github.com/Matir/adifparser"
-	"github.com/xylo04/kellog-qrz-sync/generated/adifpb"
 	ql "github.com/xylo04/qrz-logbook"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/option"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -71,18 +68,18 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching QRZ API key from firestore", err, w)
 		return
 	}
-	fetchResponse, err := ql.Fetch(&qrzApiKey)
+	qrzResponse, err := ql.Fetch(&qrzApiKey)
 	if err != nil {
 		writeError(500, "Error fetching QRZ.com data", err, w)
 		return
 	}
-	records, err := adifToJson(fetchResponse)
+	qrzQsos, err := adifToJson(qrzResponse.Adif)
 	if err != nil {
 		writeError(500, "Failed parsing QRZ.com data", err, w)
 		return
 	}
 	enc := json.NewEncoder(w)
-	_ = enc.Encode(records)
+	_ = enc.Encode(qrzQsos)
 }
 
 func writeError(statusCode int, message string, err error, w http.ResponseWriter) {
@@ -146,25 +143,4 @@ func getQrzApiKey(ctx context.Context, firestoreClient *firestore.Client, userUi
 		return "", errors.New("user hasn't set up their QRZ.com API key")
 	}
 	return qrzApiKey, nil
-}
-
-func adifToJson(fetchResponse *ql.FetchResponse) ([]*adifpb.Qso, error) {
-	reader := adif.NewADIFReader(strings.NewReader(fetchResponse.Adif))
-	qsos := make([]*adifpb.Qso, reader.RecordCount())
-	record, err := reader.ReadRecord()
-	for err == nil {
-		qsos = append(qsos, recordToQso(record))
-		record, err = reader.ReadRecord()
-	}
-	if err != io.EOF {
-		return nil, err
-	}
-	return qsos, nil
-}
-
-func recordToQso(record adif.ADIFRecord) *adifpb.Qso {
-	qso := new(adifpb.Qso)
-	qso.ContactedStation = new(adifpb.Station)
-	qso.ContactedStation.OpCall, _ = record.GetValue("call")
-	return qso
 }
