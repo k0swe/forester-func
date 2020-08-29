@@ -90,6 +90,37 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	qso.ContactedStation.UsacaCounties, _ = record.GetValue("usaca_counties")
 	qso.ContactedStation.VuccGrids, _ = record.GetValue("vucc_grids")
 	qso.ContactedStation.Web, _ = record.GetValue("web")
+
+	qso.LoggingStation = new(adifpb.Station)
+	qso.LoggingStation.AntennaAzimuth = getInt32(record, "ant_az")
+	qso.LoggingStation.AntennaElevation = getInt32(record, "ant_el")
+	qso.LoggingStation.Antenna, _ = record.GetValue("my_antenna")
+	qso.LoggingStation.City, _ = record.GetValue("my_city")
+	qso.LoggingStation.County, _ = record.GetValue("my_cnty")
+	qso.LoggingStation.CqZone = getUint32(record, "my_cq_zone")
+	qso.LoggingStation.Dxcc = getUint32(record, "my_dxcc")
+	qso.LoggingStation.Fists = getUint32(record, "my_fists")
+	qso.LoggingStation.GridSquare, _ = record.GetValue("my_gridsquare")
+	qso.LoggingStation.Iota, _ = record.GetValue("my_iota")
+	qso.LoggingStation.IotaIslandId = getUint32(record, "my_iota_island_id")
+	qso.LoggingStation.ItuZone = getUint32(record, "my_itu_zone")
+	qso.LoggingStation.Latitude = getLatLon(record, "my_lat")
+	qso.LoggingStation.Longitude = getLatLon(record, "my_lon")
+	qso.LoggingStation.OpName, _ = record.GetValue("my_name")
+	qso.LoggingStation.PostalCode, _ = record.GetValue("my_postal_code")
+	qso.LoggingStation.Rig, _ = record.GetValue("my_rig")
+	qso.LoggingStation.Sig, _ = record.GetValue("my_sig")
+	qso.LoggingStation.SigInfo, _ = record.GetValue("my_sig_info")
+	qso.LoggingStation.SotaRef, _ = record.GetValue("my_sota_ref")
+	qso.LoggingStation.State, _ = record.GetValue("my_state")
+	qso.LoggingStation.Street, _ = record.GetValue("my_street")
+	qso.LoggingStation.UsacaCounties, _ = record.GetValue("my_usaca_counties")
+	qso.LoggingStation.VuccGrids, _ = record.GetValue("my_vucc_grids")
+	qso.LoggingStation.OpCall, _ = record.GetValue("operator")
+	qso.LoggingStation.OwnerCall, _ = record.GetValue("owner_callsign")
+	qso.LoggingStation.StationCall, _ = record.GetValue("station_callsign")
+	qso.LoggingStation.Power = getFloat64(record, "tx_pwr")
+
 	return qso
 }
 
@@ -124,6 +155,12 @@ func getUint32(record adifparser.ADIFRecord, field string) uint32 {
 	s, _ := record.GetValue(field)
 	i64, _ := strconv.ParseUint(s, 10, 32)
 	return uint32(i64)
+}
+
+func getInt32(record adifparser.ADIFRecord, field string) int32 {
+	s, _ := record.GetValue(field)
+	i64, _ := strconv.ParseInt(s, 10, 32)
+	return int32(i64)
 }
 
 func getTimestamp(record adifparser.ADIFRecord, dateField string, timeField string) *timestamp.Timestamp {
