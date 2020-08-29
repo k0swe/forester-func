@@ -50,36 +50,47 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	}
 
 	ctx := context.Background()
-	idToken, err := extractIdToken(w, r)
+	idToken, err := extractIdToken(r)
 	if err != nil {
+		writeError(403, "Couldn't find authorization", err, w)
 		return
 	}
-	userToken, err := verifyToken(idToken, ctx, w)
+	userToken, err := authClient.VerifyIDToken(ctx, idToken)
 	if err != nil {
+		writeError(403, "Couldn't verify authorization", err, w)
 		return
 	}
-	firestoreClient, err := makeFirestoreClient(ctx, idToken, w)
+	firestoreClient, err := makeFirestoreClient(ctx, idToken)
 	if err != nil {
+		writeError(500, "Error creating firestore client", err, w)
 		return
 	}
 
-	qrzApiKey, err := getQrzApiKey(w, firestoreClient, userToken, ctx)
+	qrzApiKey, err := getQrzApiKey(ctx, firestoreClient, userToken.UID)
 	if err != nil {
+		writeError(500, "Error fetching QRZ API key from firestore", err, w)
 		return
 	}
 	fetchResponse, err := ql.Fetch(&qrzApiKey)
 	if err != nil {
-		w.WriteHeader(500)
-		_, _ = fmt.Fprintf(w, "Failed getting QRZ.com data: %v", err)
-		log.Printf("Failed getting QRZ.com data: %v", err)
+		writeError(500, "Error fetching QRZ.com data", err, w)
 		return
 	}
-	records, err := adifToJson(w, fetchResponse)
+	records, err := adifToJson(fetchResponse)
 	if err != nil {
+		writeError(500, "Failed parsing QRZ.com data", err, w)
 		return
 	}
 	enc := json.NewEncoder(w)
 	_ = enc.Encode(records)
+}
+
+func writeError(statusCode int, message string, err error, w http.ResponseWriter) {
+	w.WriteHeader(statusCode)
+	_, _ = fmt.Fprintf(w, message+": %v", err)
+	if statusCode >= 500 {
+		log.Fatalf(message+": %v", err)
+	}
 }
 
 // Write CORS headers to the response. Returns true if this is an OPTIONS request; false otherwise.
@@ -99,29 +110,16 @@ func handleCorsOptions(w http.ResponseWriter, r *http.Request) bool {
 	return false
 }
 
-func extractIdToken(w http.ResponseWriter, r *http.Request) (string, error) {
+func extractIdToken(r *http.Request) (string, error) {
 	idToken := strings.TrimSpace(r.Header.Get("Authorization"))
 	if idToken == "" {
-		w.WriteHeader(403)
-		_, _ = fmt.Fprintf(w, "requests must be authenticated")
-		return "", errors.New("requests must be authenticated")
+		return "", errors.New("requests must be authenticated with a Firebase JWT")
 	}
 	idToken = strings.TrimPrefix(idToken, "Bearer ")
 	return idToken, nil
 }
 
-func verifyToken(idToken string, ctx context.Context, w http.ResponseWriter) (*auth.Token, error) {
-	userToken, err := authClient.VerifyIDToken(ctx, idToken)
-	if err != nil {
-		w.WriteHeader(403)
-		_, _ = fmt.Fprintf(w, "Failed to verify JWT: %v", err)
-		log.Printf("Failed to verify JWT: %v", err)
-		return nil, err
-	}
-	return userToken, nil
-}
-
-func makeFirestoreClient(ctx context.Context, idToken string, w http.ResponseWriter) (*firestore.Client, error) {
+func makeFirestoreClient(ctx context.Context, idToken string) (*firestore.Client, error) {
 	conf := &firebase.Config{ProjectID: projectID}
 	userApp, err := firebase.NewApp(ctx, conf, option.WithTokenSource(
 		oauth2.StaticTokenSource(
@@ -129,34 +127,28 @@ func makeFirestoreClient(ctx context.Context, idToken string, w http.ResponseWri
 				AccessToken: idToken,
 			})))
 	if err != nil {
-		w.WriteHeader(500)
-		_, _ = fmt.Fprintf(w, "Error initializing Firebase user app: %v", err)
-		log.Fatalf("Error initializing Firebase user app: %v", err)
 		return nil, err
 	}
 	firestoreClient, err := userApp.Firestore(ctx)
 	if err != nil {
-		w.WriteHeader(500)
-		_, _ = fmt.Fprintf(w, "Error getting firestoreClient: %v", err)
-		log.Fatalf("Error getting firestoreClient: %v", err)
 		return nil, err
 	}
 	return firestoreClient, nil
 }
 
-func getQrzApiKey(w http.ResponseWriter, firestoreClient *firestore.Client, userToken *auth.Token, ctx context.Context) (string, error) {
-	docSnapshot, err := firestoreClient.Collection("users").Doc(userToken.UID).Get(ctx)
+func getQrzApiKey(ctx context.Context, firestoreClient *firestore.Client, userUid string) (string, error) {
+	docSnapshot, err := firestoreClient.Collection("users").Doc(userUid).Get(ctx)
 	if err != nil {
-		w.WriteHeader(500)
-		_, _ = fmt.Fprintf(w, "Failed getting Kellog user data: %v", err)
-		log.Printf("Failed getting Kellog user data: %v", err)
 		return "", err
 	}
 	qrzApiKey := fmt.Sprint(docSnapshot.Data()["qrzLogbookApiKey"])
+	if qrzApiKey == "" {
+		return "", errors.New("user hasn't set up their QRZ.com API key")
+	}
 	return qrzApiKey, nil
 }
 
-func adifToJson(w http.ResponseWriter, fetchResponse *ql.FetchResponse) ([]*adifpb.Qso, error) {
+func adifToJson(fetchResponse *ql.FetchResponse) ([]*adifpb.Qso, error) {
 	reader := adif.NewADIFReader(strings.NewReader(fetchResponse.Adif))
 	qsos := make([]*adifpb.Qso, reader.RecordCount())
 	record, err := reader.ReadRecord()
@@ -165,9 +157,6 @@ func adifToJson(w http.ResponseWriter, fetchResponse *ql.FetchResponse) ([]*adif
 		record, err = reader.ReadRecord()
 	}
 	if err != io.EOF {
-		w.WriteHeader(500)
-		_, _ = fmt.Fprintf(w, "Failed parsing QRZ.com data: %v", err)
-		log.Printf("Failed parsing QRZ.com data: %v", err)
 		return nil, err
 	}
 	return qsos, nil
