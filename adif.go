@@ -48,8 +48,11 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	qso.Submode, _ = record.GetValue("submode")
 	qso.Swl = getBool(record, "swl")
 
-	// TODO: where to put this?
-	_, _ = record.GetValue("app_qrzlog_logid")
+	qso.AppDefined = map[string]string{}
+	setAppDefined(record, "app_qrzlog_logid", qso)
+	setAppDefined(record, "app_qrzlog_qsldate", qso)
+	setAppDefined(record, "app_qrzlog_status", qso)
+	setAppDefined(record, "app_eqsl_ag", qso)
 
 	qso.ContactedStation = new(adifpb.Station)
 	qso.ContactedStation.Address, _ = record.GetValue("address")
@@ -122,6 +125,13 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	qso.LoggingStation.Power = getFloat64(record, "tx_pwr")
 
 	return qso
+}
+
+func setAppDefined(record adifparser.ADIFRecord, field string, qso *adifpb.Qso) {
+	value, _ := record.GetValue(field)
+	if value != "" {
+		qso.AppDefined[field] = value
+	}
 }
 
 func getLatLon(record adifparser.ADIFRecord, field string) float64 {
