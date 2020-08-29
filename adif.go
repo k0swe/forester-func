@@ -7,6 +7,7 @@ import (
 	"github.com/xylo04/kellog-qrz-sync/generated/adifpb"
 	"io"
 	"log"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -103,6 +104,8 @@ func getLatLon(record adifparser.ADIFRecord, field string) float64 {
 	if cardinal == "S" || cardinal == "W" {
 		retval *= -1
 	}
+	// 4 decimal places is enough; https://xkcd.com/2170/
+	retval = math.Round(retval*10000) / 10000
 	return retval
 }
 
