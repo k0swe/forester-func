@@ -71,7 +71,6 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Failed getting QRZ.com data: %v", err)
 		return
 	}
-	log.Printf("Got QRZ.com data, count %d", fetchResponse.Count)
 	enc := json.NewEncoder(w)
 	_ = enc.Encode(fetchResponse)
 }
@@ -147,6 +146,5 @@ func getQrzApiKey(w http.ResponseWriter, firestoreClient *firestore.Client, user
 		return "", err
 	}
 	qrzApiKey := fmt.Sprint(docSnapshot.Data()["qrzLogbookApiKey"])
-	log.Printf("Got qrzApiKey %v", qrzApiKey)
 	return qrzApiKey, nil
 }
