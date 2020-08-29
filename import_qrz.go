@@ -9,6 +9,7 @@ import (
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
 	"fmt"
+	adif "github.com/Matir/adifparser"
 	ql "github.com/xylo04/qrz-logbook"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/option"
@@ -71,8 +72,16 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Failed getting QRZ.com data: %v", err)
 		return
 	}
+	reader := adif.NewADIFReader(strings.NewReader(fetchResponse.Adif))
+	records := make([]string, reader.RecordCount())
+	record, err := reader.ReadRecord()
+	for err == nil {
+		value, _ := record.GetValue("call")
+		records = append(records, value)
+		record, err = reader.ReadRecord()
+	}
 	enc := json.NewEncoder(w)
-	_ = enc.Encode(fetchResponse)
+	_ = enc.Encode(records)
 }
 
 // Write CORS headers to the response. Returns true if this is an OPTIONS request; false otherwise.
