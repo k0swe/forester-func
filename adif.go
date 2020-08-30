@@ -34,6 +34,7 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	parseAppDefined(record, qso)
 	parseContactedStation(record, qso)
 	parseLoggingStation(record, qso)
+	parseContest(record, qso)
 	parseUploads(record, qso)
 	return qso
 }
@@ -138,6 +139,26 @@ func parseLoggingStation(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 	qso.LoggingStation.OwnerCall, _ = record.GetValue("owner_callsign")
 	qso.LoggingStation.StationCall, _ = record.GetValue("station_callsign")
 	qso.LoggingStation.Power = getFloat64(record, "tx_pwr")
+}
+
+func parseContest(record adifparser.ADIFRecord, qso *adifpb.Qso) {
+	contestId, _ := record.GetValue("contest_id")
+	if contestId != "" {
+		qso.Contest = new(adifpb.ContestData)
+		qso.Contest.ContestId = contestId
+		qso.Contest.ArrlSection, _ = record.GetValue("arrl_sect")
+		qso.Contest.StationClass, _ = record.GetValue("class")
+		qso.Contest.Check, _ = record.GetValue("check")
+		qso.Contest.Precedence, _ = record.GetValue("precedence")
+		qso.Contest.SerialReceived, _ = record.GetValue("srx")
+		if qso.Contest.SerialReceived == "" {
+			qso.Contest.SerialReceived, _ = record.GetValue("srx_string")
+		}
+		qso.Contest.SerialSent, _ = record.GetValue("stx")
+		if qso.Contest.SerialSent == "" {
+			qso.Contest.SerialSent, _ = record.GetValue("stx_string")
+		}
+	}
 }
 
 func parseUploads(record adifparser.ADIFRecord, qso *adifpb.Qso) {
