@@ -78,13 +78,8 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Failed parsing QRZ.com data", err, w)
 		return
 	}
-	_, _ = fmt.Fprintln(w, "[")
-	for _, qso := range adi.Qsos {
-		marshal, _ := protojson.Marshal(qso)
-		_, _ = fmt.Fprint(w, string(marshal))
-		_, _ = fmt.Fprintln(w, ",")
-	}
-	_, _ = fmt.Fprintln(w, "]")
+	marshal, _ := protojson.Marshal(adi)
+	_, _ = fmt.Fprint(w, string(marshal))
 }
 
 func writeError(statusCode int, message string, err error, w http.ResponseWriter) {
