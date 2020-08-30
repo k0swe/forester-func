@@ -30,6 +30,15 @@ func adifToJson(adifString string) ([]*adifpb.Qso, error) {
 
 func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	qso := new(adifpb.Qso)
+	parseTopLevel(record, qso)
+	parseAppDefined(record, qso)
+	parseContactedStation(record, qso)
+	parseLoggingStation(record, qso)
+	parseUploads(record, qso)
+	return qso
+}
+
+func parseTopLevel(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 	qso.Band, _ = record.GetValue("band")
 	qso.BandRx, _ = record.GetValue("band_rx")
 	qso.Comment, _ = record.GetValue("comment")
@@ -47,13 +56,17 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	qso.RstSent, _ = record.GetValue("rst_sent")
 	qso.Submode, _ = record.GetValue("submode")
 	qso.Swl = getBool(record, "swl")
+}
 
+func parseAppDefined(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 	qso.AppDefined = map[string]string{}
 	setAppDefined(record, "app_qrzlog_logid", qso)
 	setAppDefined(record, "app_qrzlog_qsldate", qso)
 	setAppDefined(record, "app_qrzlog_status", qso)
 	setAppDefined(record, "app_eqsl_ag", qso)
+}
 
+func parseContactedStation(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 	qso.ContactedStation = new(adifpb.Station)
 	qso.ContactedStation.Address, _ = record.GetValue("address")
 	qso.ContactedStation.Age = getUint32(record, "age")
@@ -93,7 +106,9 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	qso.ContactedStation.UsacaCounties, _ = record.GetValue("usaca_counties")
 	qso.ContactedStation.VuccGrids, _ = record.GetValue("vucc_grids")
 	qso.ContactedStation.Web, _ = record.GetValue("web")
+}
 
+func parseLoggingStation(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 	qso.LoggingStation = new(adifpb.Station)
 	qso.LoggingStation.AntennaAzimuth = getInt32(record, "ant_az")
 	qso.LoggingStation.AntennaElevation = getInt32(record, "ant_el")
@@ -123,7 +138,9 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	qso.LoggingStation.OwnerCall, _ = record.GetValue("owner_callsign")
 	qso.LoggingStation.StationCall, _ = record.GetValue("station_callsign")
 	qso.LoggingStation.Power = getFloat64(record, "tx_pwr")
+}
 
+func parseUploads(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 	qrzStatus, _ := record.GetValue("qrzcom_qso_upload_status")
 	if qrzStatus != "" {
 		qso.Qrzcom = new(adifpb.Upload)
@@ -144,8 +161,6 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 		qso.Clublog.UploadStatus = translateUploadStatus(clublogStatus)
 		qso.Clublog.UploadDate = getDate(record, "clublog_qso_upload_date")
 	}
-
-	return qso
 }
 
 func translateUploadStatus(status string) adifpb.UploadStatus {
