@@ -124,7 +124,41 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	qso.LoggingStation.StationCall, _ = record.GetValue("station_callsign")
 	qso.LoggingStation.Power = getFloat64(record, "tx_pwr")
 
+	qrzStatus, _ := record.GetValue("qrzcom_qso_upload_status")
+	if qrzStatus != "" {
+		qso.Qrzcom = new(adifpb.Upload)
+		qso.Qrzcom.UploadStatus = translateUploadStatus(qrzStatus)
+		qso.Qrzcom.UploadDate = getDate(record, "qrzcom_qso_upload_date")
+	}
+
+	hrdStatus, _ := record.GetValue("hrdlog_qso_upload_status")
+	if hrdStatus != "" {
+		qso.Hrdlog = new(adifpb.Upload)
+		qso.Hrdlog.UploadStatus = translateUploadStatus(hrdStatus)
+		qso.Hrdlog.UploadDate = getDate(record, "hrdlog_qso_upload_date")
+	}
+
+	clublogStatus, _ := record.GetValue("clublog_qso_upload_status")
+	if clublogStatus != "" {
+		qso.Clublog = new(adifpb.Upload)
+		qso.Clublog.UploadStatus = translateUploadStatus(clublogStatus)
+		qso.Clublog.UploadDate = getDate(record, "clublog_qso_upload_date")
+	}
+
 	return qso
+}
+
+func translateUploadStatus(status string) adifpb.UploadStatus {
+	switch status {
+	case "Y":
+		return adifpb.UploadStatus_UPLOAD_COMPLETE
+	case "N":
+		return adifpb.UploadStatus_DO_NOT_UPLOAD
+	case "M":
+		return adifpb.UploadStatus_MODIFIED_AFTER_UPLOAD
+	default:
+		return adifpb.UploadStatus_UNKNOWN
+	}
 }
 
 func setAppDefined(record adifparser.ADIFRecord, field string, qso *adifpb.Qso) {
@@ -177,6 +211,19 @@ func getTimestamp(record adifparser.ADIFRecord, dateField string, timeField stri
 	dateStr, _ := record.GetValue(dateField)
 	timeStr, _ := record.GetValue(timeField)
 	t, err := time.Parse("20060102 1504", dateStr+" "+timeStr)
+	if err != nil {
+		log.Print(err)
+	}
+	ts, err := ptypes.TimestampProto(t)
+	if err != nil {
+		log.Print(err)
+	}
+	return ts
+}
+
+func getDate(record adifparser.ADIFRecord, field string) *timestamp.Timestamp {
+	dateStr, _ := record.GetValue(field)
+	t, err := time.Parse("20060102", dateStr)
 	if err != nil {
 		log.Print(err)
 	}
