@@ -4,7 +4,6 @@ package kellog
 import (
 	"cloud.google.com/go/firestore"
 	"context"
-	"encoding/json"
 	"errors"
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
@@ -12,6 +11,7 @@ import (
 	ql "github.com/xylo04/qrz-logbook"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/option"
+	"google.golang.org/protobuf/encoding/protojson"
 	"log"
 	"net/http"
 	"os"
@@ -78,8 +78,13 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Failed parsing QRZ.com data", err, w)
 		return
 	}
-	enc := json.NewEncoder(w)
-	_ = enc.Encode(qrzQsos)
+	_, _ = fmt.Fprintln(w, "[")
+	for _, qso := range qrzQsos {
+		marshal, _ := protojson.Marshal(qso)
+		_, _ = fmt.Fprint(w, string(marshal))
+		_, _ = fmt.Fprintln(w, ",")
+	}
+	_, _ = fmt.Fprintln(w, "]")
 }
 
 func writeError(statusCode int, message string, err error, w http.ResponseWriter) {
