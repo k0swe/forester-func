@@ -73,13 +73,13 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching QRZ.com data", err, w)
 		return
 	}
-	qrzQsos, err := adifToJson(qrzResponse.Adif)
+	adi, err := adifToJson(qrzResponse.Adif)
 	if err != nil {
 		writeError(500, "Failed parsing QRZ.com data", err, w)
 		return
 	}
 	_, _ = fmt.Fprintln(w, "[")
-	for _, qso := range qrzQsos {
+	for _, qso := range adi.Qsos {
 		marshal, _ := protojson.Marshal(qso)
 		_, _ = fmt.Fprint(w, string(marshal))
 		_, _ = fmt.Fprintln(w, ",")

@@ -14,8 +14,16 @@ import (
 	"time"
 )
 
-func adifToJson(adifString string) ([]*adifpb.Qso, error) {
+func adifToJson(adifString string) (*adifpb.Adif, error) {
 	reader := adifparser.NewADIFReader(strings.NewReader(adifString))
+	adi := new(adifpb.Adif)
+	created, _ := ptypes.TimestampProto(time.Now())
+	adi.Header = &adifpb.Header{
+		AdifVersion:      "3.1.0",
+		CreatedTimestamp: created,
+		ProgramId:        "kellog-func",
+		ProgramVersion:   "0.0.1",
+	}
 	qsos := make([]*adifpb.Qso, reader.RecordCount())
 	record, err := reader.ReadRecord()
 	for err == nil {
@@ -25,7 +33,8 @@ func adifToJson(adifString string) ([]*adifpb.Qso, error) {
 	if err != io.EOF {
 		return nil, err
 	}
-	return qsos, nil
+	adi.Qsos = qsos
+	return adi, nil
 }
 
 func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
