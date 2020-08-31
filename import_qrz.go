@@ -4,6 +4,7 @@ package kellog
 import (
 	"cloud.google.com/go/firestore"
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"errors"
 	firebase "firebase.google.com/go"
@@ -81,11 +82,13 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Failed parsing QRZ.com data", err, w)
 		return
 	}
-	fsContacts, err := getContacts(ctx, firestoreClient, userToken.UID)
+	contactsRef := firestoreClient.Collection("users").Doc(userToken.UID).Collection("contacts")
+	fsContacts, err := getContacts(ctx, contactsRef)
 	if err != nil {
 		writeError(500, "Error fetching contacts from firestore", err, w)
 		return
 	}
+	mergeQsos(fsContacts, qrzAdi, contactsRef, ctx)
 
 	var report = map[string]int{}
 	report["qrz"] = len(qrzAdi.Qsos)
@@ -157,9 +160,14 @@ func getQrzApiKey(ctx context.Context, firestoreClient *firestore.Client, userUi
 	return qrzApiKey, nil
 }
 
-func getContacts(ctx context.Context, firestoreClient *firestore.Client, userUid string) ([]adifpb.Qso, error) {
-	docItr := firestoreClient.Collection("users").Doc(userUid).Collection("contacts").Documents(ctx)
-	var retval = make([]adifpb.Qso, 0, 100)
+type FirestoreQso struct {
+	qsopb  adifpb.Qso
+	docref *firestore.DocumentRef
+}
+
+func getContacts(ctx context.Context, contactsRef *firestore.CollectionRef) ([]FirestoreQso, error) {
+	docItr := contactsRef.Documents(ctx)
+	var retval = make([]FirestoreQso, 0, 100)
 	for i := 0; ; i++ {
 		qsoDoc, err := docItr.Next()
 		if err == iterator.Done {
@@ -171,14 +179,42 @@ func getContacts(ctx context.Context, firestoreClient *firestore.Client, userUid
 
 		// I want to just qsoDoc.DataTo(&qso), but timestamps don't unmarshal
 		buf := qsoDoc.Data()
-		marshal, err := json.Marshal(buf)
+		marshal, _ := json.Marshal(buf)
 		var qso adifpb.Qso
 		err = protojson.Unmarshal(marshal, &qso)
 		if err != nil {
 			log.Printf("Skipping qso %d: unmarshaling error: %v", i, err)
 			continue
 		}
-		retval = append(retval, qso)
+		retval = append(retval, FirestoreQso{qso, qsoDoc.Ref})
 	}
 	return retval, nil
+}
+
+func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *firestore.CollectionRef, ctx context.Context) {
+	m := map[string]FirestoreQso{}
+	for _, fsQso := range firebaseQsos {
+		hash := hashQso(fsQso.qsopb)
+		m[hash] = fsQso
+	}
+
+	for _, qrzQso := range qrzAdi.Qsos {
+		hash := hashQso(*qrzQso)
+		if _, ok := m[hash]; ok {
+			// TODO: merge
+			log.Printf("Found a match for %v on %v",
+				qrzQso.ContactedStation.StationCall,
+				qrzQso.TimeOn.String())
+		} else {
+			jso, _ := protojson.Marshal(qrzQso)
+			var buf *interface{}
+			_ = json.Unmarshal(jso, buf)
+			_, _ = contactsRef.NewDoc().Create(ctx, buf)
+		}
+	}
+}
+
+func hashQso(qsopb adifpb.Qso) string {
+	payload := []byte(qsopb.ContactedStation.StationCall + qsopb.TimeOn.String())
+	return fmt.Sprintf("%x", sha256.Sum256(payload))
 }
