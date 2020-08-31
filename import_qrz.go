@@ -206,10 +206,21 @@ func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *fi
 				qrzQso.ContactedStation.StationCall,
 				qrzQso.TimeOn.String())
 		} else {
+			log.Printf("Creating QSO with %v on %v",
+				qrzQso.ContactedStation.StationCall,
+				qrzQso.TimeOn.String())
 			jso, _ := protojson.Marshal(qrzQso)
-			var buf *interface{}
-			_ = json.Unmarshal(jso, buf)
-			_, _ = contactsRef.NewDoc().Create(ctx, buf)
+			var buf map[string]interface{}
+			err := json.Unmarshal(jso, &buf)
+			if err != nil {
+				log.Printf("Problem unmarshaling for create: %v", err)
+				continue
+			}
+			_, err = contactsRef.NewDoc().Create(ctx, buf)
+			if err != nil {
+				log.Printf("Problem creating: %v", err)
+				continue
+			}
 		}
 	}
 }
