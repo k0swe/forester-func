@@ -4,12 +4,15 @@ package kellog
 import (
 	"cloud.google.com/go/firestore"
 	"context"
+	"encoding/json"
 	"errors"
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
 	"fmt"
+	"github.com/xylo04/kellog-qrz-sync/generated/adifpb"
 	ql "github.com/xylo04/qrz-logbook"
 	"golang.org/x/oauth2"
+	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"google.golang.org/protobuf/encoding/protojson"
 	"log"
@@ -73,12 +76,21 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching QRZ.com data", err, w)
 		return
 	}
-	adi, err := adifToJson(qrzResponse.Adif)
+	qrzAdi, err := adifToJson(qrzResponse.Adif)
 	if err != nil {
 		writeError(500, "Failed parsing QRZ.com data", err, w)
 		return
 	}
-	marshal, _ := protojson.Marshal(adi)
+	fsContacts, err := getContacts(ctx, firestoreClient, userToken.UID)
+	if err != nil {
+		writeError(500, "Error fetching contacts from firestore", err, w)
+		return
+	}
+
+	var report = map[string]int{}
+	report["qrz"] = len(qrzAdi.Qsos)
+	report["firestore"] = len(fsContacts)
+	marshal, _ := json.Marshal(report)
 	_, _ = fmt.Fprint(w, string(marshal))
 }
 
@@ -143,4 +155,30 @@ func getQrzApiKey(ctx context.Context, firestoreClient *firestore.Client, userUi
 		return "", errors.New("user hasn't set up their QRZ.com API key")
 	}
 	return qrzApiKey, nil
+}
+
+func getContacts(ctx context.Context, firestoreClient *firestore.Client, userUid string) ([]adifpb.Qso, error) {
+	docItr := firestoreClient.Collection("users").Doc(userUid).Collection("contacts").Documents(ctx)
+	var retval = make([]adifpb.Qso, 0, 100)
+	for i := 0; ; i++ {
+		qsoDoc, err := docItr.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+
+		// I want to just qsoDoc.DataTo(&qso), but timestamps don't unmarshal
+		buf := qsoDoc.Data()
+		marshal, err := json.Marshal(buf)
+		var qso adifpb.Qso
+		err = protojson.Unmarshal(marshal, &qso)
+		if err != nil {
+			log.Printf("Skipping qso %d: unmarshaling error: %v", i, err)
+			continue
+		}
+		retval = append(retval, qso)
+	}
+	return retval, nil
 }
