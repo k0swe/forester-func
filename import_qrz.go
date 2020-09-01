@@ -88,11 +88,13 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching contacts from firestore", err, w)
 		return
 	}
-	mergeQsos(fsContacts, qrzAdi, contactsRef, ctx)
+	created, modified := mergeQsos(fsContacts, qrzAdi, contactsRef, ctx)
 
 	var report = map[string]int{}
 	report["qrz"] = len(qrzAdi.Qsos)
 	report["firestore"] = len(fsContacts)
+	report["created"] = created
+	report["modified"] = modified
 	marshal, _ := json.Marshal(report)
 	_, _ = fmt.Fprint(w, string(marshal))
 }
@@ -191,7 +193,9 @@ func getContacts(ctx context.Context, contactsRef *firestore.CollectionRef) ([]F
 	return retval, nil
 }
 
-func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *firestore.CollectionRef, ctx context.Context) {
+func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *firestore.CollectionRef, ctx context.Context) (int, int) {
+	var created = 0
+	var modified = 0
 	m := map[string]FirestoreQso{}
 	for _, fsQso := range firebaseQsos {
 		hash := hashQso(fsQso.qsopb)
@@ -221,8 +225,10 @@ func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *fi
 				log.Printf("Problem creating: %v", err)
 				continue
 			}
+			created++
 		}
 	}
+	return created, modified
 }
 
 func hashQso(qsopb adifpb.Qso) string {
