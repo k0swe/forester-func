@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/xylo04/kellog-qrz-sync"
+	"github.com/k0swe/kellog-qrz-sync"
 	"log"
 	"net/http"
 )
