@@ -10,7 +10,7 @@ import (
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/auth"
 	"fmt"
-	"github.com/k0swe/kellog-qrz-sync/generated/adifpb"
+	adifpb "github.com/k0swe/adif-json-protobuf/go"
 	ql "github.com/k0swe/qrz-logbook"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/iterator"

@@ -4,7 +4,7 @@ import (
 	"github.com/Matir/adifparser"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/timestamp"
-	"github.com/k0swe/kellog-qrz-sync/generated/adifpb"
+	adifpb "github.com/k0swe/adif-json-protobuf/go"
 	"io"
 	"log"
 	"math"
