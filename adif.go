@@ -67,7 +67,9 @@ func parseTopLevel(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 	qso.Submode, _ = record.GetValue("submode")
 	qso.Swl = getBool(record, "swl")
 
-	qso.Mode = fixToLower(qso.Mode)
+	qso.Mode = fixToUpper(qso.Mode)
+	qso.Band = fixToLower(qso.Band)
+	qso.BandRx = fixToLower(qso.BandRx)
 }
 
 func parseAppDefined(record adifparser.ADIFRecord, qso *adifpb.Qso) {
