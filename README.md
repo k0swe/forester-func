@@ -1,4 +1,3 @@
-# kellog-qrz-sync
+# kellog-func
 
-Code for syncing between K0SWE's KelLog amateur radio logger and the QRZ.com
-logbook. This is invoked by Google Cloud Functions.
+Serverless cloud functions to support K0SWE's KelLog amateur radio logger.
