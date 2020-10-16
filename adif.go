@@ -129,7 +129,7 @@ func parseContactedStation(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 	qso.ContactedStation.GridSquare = fixToUpper(qso.ContactedStation.GridSquare)
 	qso.ContactedStation.OpName = fixToTitle(qso.ContactedStation.OpName)
 	qso.ContactedStation.City = fixToTitle(qso.ContactedStation.City)
-	if len(qso.ContactedStation.State) > 3 {
+	if len(qso.ContactedStation.State) < 3 {
 		// probably an abbreviation
 		qso.ContactedStation.State = fixToUpper(qso.ContactedStation.State)
 	} else {
@@ -174,7 +174,7 @@ func parseLoggingStation(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 	qso.LoggingStation.Country = fixToTitle(qso.LoggingStation.Country)
 	qso.LoggingStation.GridSquare = fixToUpper(qso.LoggingStation.GridSquare)
 	qso.LoggingStation.OpName = fixToTitle(qso.LoggingStation.OpName)
-	if len(qso.LoggingStation.State) > 3 {
+	if len(qso.LoggingStation.State) < 3 {
 		// probably an abbreviation
 		qso.LoggingStation.State = fixToUpper(qso.LoggingStation.State)
 	} else {
