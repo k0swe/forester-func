@@ -66,6 +66,8 @@ func parseTopLevel(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 	qso.RstSent, _ = record.GetValue("rst_sent")
 	qso.Submode, _ = record.GetValue("submode")
 	qso.Swl = getBool(record, "swl")
+
+	qso.Mode = fixToLower(qso.Mode)
 }
 
 func parseAppDefined(record adifparser.ADIFRecord, qso *adifpb.Qso) {
@@ -116,6 +118,24 @@ func parseContactedStation(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 	qso.ContactedStation.UsacaCounties, _ = record.GetValue("usaca_counties")
 	qso.ContactedStation.VuccGrids, _ = record.GetValue("vucc_grids")
 	qso.ContactedStation.Web, _ = record.GetValue("web")
+
+	qso.ContactedStation.Address = fixToTitle(qso.ContactedStation.Address)
+	qso.ContactedStation.StationCall = fixToUpper(qso.ContactedStation.StationCall)
+	qso.ContactedStation.Continent = fixToUpper(qso.ContactedStation.Continent)
+	qso.ContactedStation.OpCall = fixToUpper(qso.ContactedStation.OpCall)
+	qso.ContactedStation.Country = fixToTitle(qso.ContactedStation.Country)
+	qso.ContactedStation.Email = strings.TrimSpace(qso.ContactedStation.Email)
+	qso.ContactedStation.OwnerCall = fixToUpper(qso.ContactedStation.OwnerCall)
+	qso.ContactedStation.GridSquare = fixToUpper(qso.ContactedStation.GridSquare)
+	qso.ContactedStation.OpName = fixToTitle(qso.ContactedStation.OpName)
+	qso.ContactedStation.City = fixToTitle(qso.ContactedStation.City)
+	if len(qso.ContactedStation.State) > 3 {
+		// probably an abbreviation
+		qso.ContactedStation.State = fixToUpper(qso.ContactedStation.State)
+	} else {
+		// probably a proper name
+		qso.ContactedStation.State = fixToTitle(qso.ContactedStation.State)
+	}
 }
 
 func parseLoggingStation(record adifparser.ADIFRecord, qso *adifpb.Qso) {
@@ -125,6 +145,7 @@ func parseLoggingStation(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 	qso.LoggingStation.Antenna, _ = record.GetValue("my_antenna")
 	qso.LoggingStation.City, _ = record.GetValue("my_city")
 	qso.LoggingStation.County, _ = record.GetValue("my_cnty")
+	qso.LoggingStation.Country, _ = record.GetValue("my_country")
 	qso.LoggingStation.CqZone = getUint32(record, "my_cq_zone")
 	qso.LoggingStation.Dxcc = getUint32(record, "my_dxcc")
 	qso.LoggingStation.Fists = getUint32(record, "my_fists")
@@ -148,6 +169,21 @@ func parseLoggingStation(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 	qso.LoggingStation.OwnerCall, _ = record.GetValue("owner_callsign")
 	qso.LoggingStation.StationCall, _ = record.GetValue("station_callsign")
 	qso.LoggingStation.Power = getFloat64(record, "tx_pwr")
+
+	qso.LoggingStation.City = fixToTitle(qso.LoggingStation.City)
+	qso.LoggingStation.Country = fixToTitle(qso.LoggingStation.Country)
+	qso.LoggingStation.GridSquare = fixToUpper(qso.LoggingStation.GridSquare)
+	qso.LoggingStation.OpName = fixToTitle(qso.LoggingStation.OpName)
+	if len(qso.LoggingStation.State) > 3 {
+		// probably an abbreviation
+		qso.LoggingStation.State = fixToUpper(qso.LoggingStation.State)
+	} else {
+		// probably a proper name
+		qso.LoggingStation.State = fixToTitle(qso.LoggingStation.State)
+	}
+	qso.LoggingStation.OpCall = fixToUpper(qso.LoggingStation.OpCall)
+	qso.LoggingStation.OwnerCall = fixToUpper(qso.LoggingStation.OwnerCall)
+	qso.LoggingStation.StationCall = fixToUpper(qso.LoggingStation.StationCall)
 }
 
 func parseContest(record adifparser.ADIFRecord, qso *adifpb.Qso) {
@@ -277,4 +313,16 @@ func getDate(record adifparser.ADIFRecord, field string) *timestamp.Timestamp {
 		log.Print(err)
 	}
 	return ts
+}
+
+func fixToLower(str string) string {
+	return strings.TrimSpace(strings.ToLower(str))
+}
+
+func fixToUpper(str string) string {
+	return strings.TrimSpace(strings.ToUpper(str))
+}
+
+func fixToTitle(str string) string {
+	return strings.TrimSpace(strings.Title(strings.ToLower(str)))
 }
