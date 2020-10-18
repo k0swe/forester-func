@@ -72,11 +72,15 @@ func parseTopLevel(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 }
 
 func parseAppDefined(record adifparser.ADIFRecord, qso *adifpb.Qso) {
-	qso.AppDefined = map[string]string{}
-	setAppDefined(record, "app_qrzlog_logid", qso)
-	setAppDefined(record, "app_qrzlog_qsldate", qso)
-	setAppDefined(record, "app_qrzlog_status", qso)
-	setAppDefined(record, "app_eqsl_ag", qso)
+	appDefined := map[string]string{}
+	for _, field := range record.GetFields() {
+		if strings.HasPrefix(field, "app_") {
+			appDefined[field], _ = record.GetValue(field)
+		}
+	}
+	if len(appDefined) > 0 {
+		qso.AppDefined = appDefined
+	}
 }
 
 func parseContactedStation(record adifparser.ADIFRecord, qso *adifpb.Qso) {
@@ -204,9 +208,7 @@ func parseAwards(record adifparser.ADIFRecord, adifField string) []string {
 	}
 	awards := strings.Split(awardString, ",")
 	ret := make([]string, len(awards))
-	for _, a := range awards {
-		ret = append(ret, a)
-	}
+	ret = append(ret, awards...)
 	return ret
 }
 
@@ -297,13 +299,6 @@ func parseQsl(record adifparser.ADIFRecord, prefix string) *adifpb.Qsl {
 	qsl.SentDate = getDate(record, prefix+"qslsdate")
 
 	return qsl
-}
-
-func setAppDefined(record adifparser.ADIFRecord, field string, qso *adifpb.Qso) {
-	value, _ := record.GetValue(field)
-	if value != "" {
-		qso.AppDefined[field] = value
-	}
 }
 
 func getLatLon(record adifparser.ADIFRecord, field string) float64 {
