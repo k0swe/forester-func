@@ -9,11 +9,11 @@ require (
 	firebase.google.com/go/v4 v4.0.0
 	github.com/Matir/adifparser v0.0.0-20201018173435-4ff0e273b485
 	github.com/golang/protobuf v1.4.3
-	github.com/k0swe/adif-json-protobuf/go v0.0.0-20201017033828-fe669cf22853
+	github.com/k0swe/adif-json-protobuf/go v0.0.0-20201018005139-9070f174b917
 	github.com/k0swe/qrz-logbook v0.0.5
 	golang.org/x/net v0.0.0-20201016165138-7b1cca2348c0 // indirect
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
-	golang.org/x/sys v0.0.0-20201017003518-b09fb700fbb7 // indirect
+	golang.org/x/sys v0.0.0-20201018121011-98379d014ca7 // indirect
 	golang.org/x/tools v0.0.0-20201017001424-6003fad69a88 // indirect
 	google.golang.org/api v0.33.0
 	google.golang.org/appengine v1.6.7 // indirect
