@@ -266,36 +266,37 @@ func translateUploadStatus(status string) adifpb.UploadStatus {
 }
 
 func parseQsls(record adifparser.ADIFRecord, qso *adifpb.Qso) {
-	cardSent, _ := record.GetValue("qsl_sent")
-	if cardSent != "" {
-		qso.Card = new(adifpb.Qsl)
-		qso.Card.SentStatus = cardSent
-		qso.Card.SentDate = getDate(record, "qslsdate")
-		qso.Card.SentVia, _ = record.GetValue("qsl_sent_via")
-		qso.Card.ReceivedStatus, _ = record.GetValue("qsl_rcvd")
-		qso.Card.ReceivedDate = getDate(record, "qslrdate")
-		qso.Card.ReceivedVia, _ = record.GetValue("qsl_rcvd_via")
-		qso.Card.ReceivedMessage, _ = record.GetValue("qslmsg")
-	}
+	qso.Card = parseCardQsl(record)
+	qso.Eqsl = parseQsl(record, "eqsl_")
+	qso.Lotw = parseQsl(record, "lotw_")
+}
 
-	eqslSent, _ := record.GetValue("eqsl_qsl_sent")
-	if eqslSent != "" {
-		qso.Eqsl = new(adifpb.Qsl)
-		qso.Eqsl.SentStatus = eqslSent
-		qso.Eqsl.ReceivedDate = getDate(record, "eqsl_qslrdate")
-		qso.Eqsl.SentDate = getDate(record, "eqsl_qslsdate")
-		qso.Eqsl.ReceivedStatus, _ = record.GetValue("eqsl_qsl_rcvd")
+func parseCardQsl(record adifparser.ADIFRecord) *adifpb.Qsl {
+	card := parseQsl(record, "")
+	if card == nil {
+		return nil
 	}
+	card.SentVia, _ = record.GetValue("qsl_sent_via")
+	card.ReceivedVia, _ = record.GetValue("qsl_rcvd_via")
+	card.ReceivedMessage, _ = record.GetValue("qslmsg")
+	return card
+}
 
-	lotwSent, _ := record.GetValue("lotw_qsl_sent")
-	if lotwSent != "" {
-		qso.Lotw = new(adifpb.Qsl)
-		qso.Lotw.SentStatus = lotwSent
-		qso.Lotw.ReceivedDate = getDate(record, "lotw_qslrdate")
-		qso.Lotw.SentDate = getDate(record, "lotw_qslsdate")
-		qso.Lotw.ReceivedStatus, _ = record.GetValue("lotw_qsl_rcvd")
+func parseQsl(record adifparser.ADIFRecord, prefix string) *adifpb.Qsl {
+	sent, _ := record.GetValue(prefix + "qsl_sent")
+	received, _ := record.GetValue(prefix + "qsl_rcvd")
+	var noQsl = (sent == "" || sent == "N") &&
+		(received == "" || received == "N")
+	if noQsl {
+		return nil
 	}
+	qsl := new(adifpb.Qsl)
+	qsl.SentStatus = sent
+	qsl.ReceivedDate = getDate(record, prefix+"qslrdate")
+	qsl.ReceivedStatus = received
+	qsl.SentDate = getDate(record, prefix+"qslsdate")
 
+	return qsl
 }
 
 func setAppDefined(record adifparser.ADIFRecord, field string, qso *adifpb.Qso) {
