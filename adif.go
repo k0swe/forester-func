@@ -45,6 +45,7 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	parseLoggingStation(record, qso)
 	parseContest(record, qso)
 	parseUploads(record, qso)
+	parseQsls(record, qso)
 	return qso
 }
 
@@ -242,6 +243,39 @@ func translateUploadStatus(status string) adifpb.UploadStatus {
 	default:
 		return adifpb.UploadStatus_UNKNOWN
 	}
+}
+
+func parseQsls(record adifparser.ADIFRecord, qso *adifpb.Qso) {
+	cardSent, _ := record.GetValue("qsl_sent")
+	if cardSent != "" {
+		qso.Card = new(adifpb.Qsl)
+		qso.Card.SentStatus, _ = record.GetValue("qsl_sent")
+		qso.Card.SentDate = getDate(record, "qslsdate")
+		qso.Card.SentVia, _ = record.GetValue("qsl_sent_via")
+		qso.Card.ReceivedStatus, _ = record.GetValue("qsl_rcvd")
+		qso.Card.ReceivedDate = getDate(record, "qslrdate")
+		qso.Card.ReceivedVia, _ = record.GetValue("qsl_rcvd_via")
+		qso.Card.ReceivedMessage, _ = record.GetValue("qslmsg")
+	}
+
+	eqslSent, _ := record.GetValue("eqsl_qsl_sent")
+	if eqslSent != "" {
+		qso.Eqsl = new(adifpb.Qsl)
+		qso.Eqsl.SentStatus, _ = record.GetValue("eqsl_qsl_sent")
+		qso.Eqsl.ReceivedDate = getDate(record, "eqsl_qslrdate")
+		qso.Eqsl.SentDate = getDate(record, "eqsl_qslsdate")
+		qso.Eqsl.ReceivedStatus, _ = record.GetValue("eqsl_qsl_rcvd")
+	}
+
+	lotwSentDate, _ := record.GetValue("lotw_qslsdate")
+	if lotwSentDate != "" {
+		qso.Lotw = new(adifpb.Qsl)
+		qso.Lotw.SentStatus, _ = record.GetValue("lotw_qsl_sent")
+		qso.Lotw.ReceivedDate = getDate(record, "lotw_qslrdate")
+		qso.Lotw.SentDate = getDate(record, "lotw_qslsdate")
+		qso.Lotw.ReceivedStatus, _ = record.GetValue("lotw_qsl_rcvd")
+	}
+
 }
 
 func setAppDefined(record adifparser.ADIFRecord, field string, qso *adifpb.Qso) {
