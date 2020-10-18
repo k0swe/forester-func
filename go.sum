@@ -47,8 +47,8 @@ firebase.google.com/go/v4 v4.0.0/go.mod h1:mB8wL5ohyReUeds5IIaA1+pOw3Tk1aybMEwce
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/Matir/adifparser v0.0.0-20200811003629-eed0b0b00437 h1:idfGzkogwLqWHgWg555gtrxIh2lFRQpFpNuxaMWAuVE=
-github.com/Matir/adifparser v0.0.0-20200811003629-eed0b0b00437/go.mod h1:Xa1gtvR7IFhs6o8WR9dNXyYdA8dJo60kaAcLc1XGZSM=
+github.com/Matir/adifparser v0.0.0-20201018173435-4ff0e273b485 h1:jb8baYjBcpDq62VH5LSRZ/blzgqpGmfEOcgZB1xFB0U=
+github.com/Matir/adifparser v0.0.0-20201018173435-4ff0e273b485/go.mod h1:Xa1gtvR7IFhs6o8WR9dNXyYdA8dJo60kaAcLc1XGZSM=
 github.com/antihax/optional v1.0.0 h1:xK2lYat7ZLaVVcIuj82J8kIro4V6kDe0AUDFboUCwcg=
 github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=

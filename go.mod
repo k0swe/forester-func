@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go/firestore v1.3.0
 	cloud.google.com/go/storage v1.12.0 // indirect
 	firebase.google.com/go/v4 v4.0.0
-	github.com/Matir/adifparser v0.0.0-20200811003629-eed0b0b00437
+	github.com/Matir/adifparser v0.0.0-20201018173435-4ff0e273b485
 	github.com/golang/protobuf v1.4.3
 	github.com/k0swe/adif-json-protobuf/go v0.0.0-20201017033828-fe669cf22853
 	github.com/k0swe/qrz-logbook v0.0.5
