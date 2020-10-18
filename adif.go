@@ -44,6 +44,7 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	parseContactedStation(record, qso)
 	parseLoggingStation(record, qso)
 	parseContest(record, qso)
+	parsePropagation(record, qso)
 	parseAwardsAndCredit(record, qso)
 	parseUploads(record, qso)
 	parseQsls(record, qso)
@@ -208,6 +209,22 @@ func parseContest(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 			qso.Contest.SerialSent, _ = record.GetValue("stx_string")
 		}
 	}
+}
+
+func parsePropagation(record adifparser.ADIFRecord, qso *adifpb.Qso) {
+	qso.Propagation = new(adifpb.Propagation)
+	qso.Propagation.AIndex = getUint32(record, "a_index")
+	qso.Propagation.AntPath, _ = record.GetValue("ant_path")
+	qso.Propagation.ForceInit = getBool(record, "force_init")
+	qso.Propagation.KIndex = getUint32(record, "k_index")
+	qso.Propagation.MaxBursts = getUint32(record, "max_bursts")
+	qso.Propagation.MeteorShowerName, _ = record.GetValue("ms_shower")
+	qso.Propagation.NrBursts = getUint32(record, "nr_bursts")
+	qso.Propagation.NrPings = getUint32(record, "nr_pings")
+	qso.Propagation.PropagationMode, _ = record.GetValue("prop_mode")
+	qso.Propagation.SatMode, _ = record.GetValue("sat_mode")
+	qso.Propagation.SatName, _ = record.GetValue("sat_name")
+	qso.Propagation.SolarFluxIndex = getUint32(record, "sfi")
 }
 
 func parseAwardsAndCredit(record adifparser.ADIFRecord, qso *adifpb.Qso) {
