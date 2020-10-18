@@ -44,6 +44,7 @@ func recordToQso(record adifparser.ADIFRecord) *adifpb.Qso {
 	parseContactedStation(record, qso)
 	parseLoggingStation(record, qso)
 	parseContest(record, qso)
+	parseAwardsAndCredit(record, qso)
 	parseUploads(record, qso)
 	parseQsls(record, qso)
 	return qso
@@ -207,6 +208,45 @@ func parseContest(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 			qso.Contest.SerialSent, _ = record.GetValue("stx_string")
 		}
 	}
+}
+
+func parseAwardsAndCredit(record adifparser.ADIFRecord, qso *adifpb.Qso) {
+	qso.AwardSubmitted = parseAwards(record, "award_submitted")
+	qso.AwardGranted = parseAwards(record, "award_granted")
+	qso.CreditSubmitted = parseCredit(record, "credit_submitted")
+	qso.CreditGranted = parseCredit(record, "credit_granted")
+}
+
+func parseAwards(record adifparser.ADIFRecord, adifField string) []string {
+	awardString, _ := record.GetValue(adifField)
+	if awardString == "" {
+		return nil
+	}
+	awards := strings.Split(awardString, ",")
+	ret := make([]string, len(awards))
+	for _, a := range awards {
+		ret = append(ret, a)
+	}
+	return ret
+}
+
+func parseCredit(record adifparser.ADIFRecord, adifField string) []*adifpb.Credit {
+	creditString, _ := record.GetValue(adifField)
+	if creditString == "" {
+		return nil
+	}
+	credits := strings.Split(creditString, ",")
+	ret := make([]*adifpb.Credit, len(credits))
+	for _, c := range credits {
+		cred := new(adifpb.Credit)
+		cSplit := strings.Split(c, ":")
+		cred.Credit = cSplit[0]
+		if len(cSplit) > 1 {
+			cred.QslMedium = cSplit[1]
+		}
+		ret = append(ret, cred)
+	}
+	return ret
 }
 
 func parseUploads(record adifparser.ADIFRecord, qso *adifpb.Qso) {
