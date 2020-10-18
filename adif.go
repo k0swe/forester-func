@@ -19,7 +19,7 @@ func adifToJson(adifString string) (*adifpb.Adif, error) {
 	adi := new(adifpb.Adif)
 	created, _ := ptypes.TimestampProto(time.Now())
 	adi.Header = &adifpb.Header{
-		AdifVersion:      "3.1.0",
+		AdifVersion:      "3.1.1",
 		CreatedTimestamp: created,
 		ProgramId:        "kellog-func",
 		ProgramVersion:   "0.0.1",
