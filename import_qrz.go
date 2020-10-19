@@ -20,6 +20,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 // GCP_PROJECT is a user-set environment variable.
@@ -79,7 +80,7 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching QRZ.com data", err, w)
 		return
 	}
-	qrzAdi, err := adifToProto(qrzResponse.Adif)
+	qrzAdi, err := adifToProto(qrzResponse.Adif, time.Now())
 	if err != nil {
 		writeError(500, "Failed parsing QRZ.com data", err, w)
 		return

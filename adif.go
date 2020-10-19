@@ -14,10 +14,10 @@ import (
 	"time"
 )
 
-func adifToProto(adifString string) (*adifpb.Adif, error) {
+func adifToProto(adifString string, createTime time.Time) (*adifpb.Adif, error) {
 	reader := adifparser.NewADIFReader(strings.NewReader(adifString))
 	adi := new(adifpb.Adif)
-	created, _ := ptypes.TimestampProto(time.Now())
+	created, _ := ptypes.TimestampProto(createTime)
 	adi.Header = &adifpb.Header{
 		AdifVersion:      "3.1.1",
 		CreatedTimestamp: created,
@@ -303,6 +303,9 @@ func parseQsl(record adifparser.ADIFRecord, prefix string) *adifpb.Qsl {
 
 func getLatLon(record adifparser.ADIFRecord, field string) float64 {
 	st, _ := record.GetValue(field)
+	if st == "" {
+		return 0
+	}
 	r := regexp.MustCompile(`([NESW])(\d+) ([\d.]+)`)
 	groups := r.FindStringSubmatch(st)
 	cardinal := groups[1]
@@ -342,6 +345,9 @@ func getInt32(record adifparser.ADIFRecord, field string) int32 {
 
 func getTimestamp(record adifparser.ADIFRecord, dateField string, timeField string) *timestamp.Timestamp {
 	dateStr, _ := record.GetValue(dateField)
+	if dateStr == "" {
+		return nil
+	}
 	timeStr, _ := record.GetValue(timeField)
 	t, err := time.Parse("20060102 1504", dateStr+" "+timeStr)
 	if err != nil {
