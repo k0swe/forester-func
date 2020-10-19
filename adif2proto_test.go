@@ -60,6 +60,40 @@ func Test_adifToProto(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "App-defined",
+			args: args{
+				adifString: `QRZLogbook download for k0swe<eoh>
+<app_qrzlog_logid:9>488692380<app_qrzlog_qsldate:8>20200406<app_qrzlog_status:1>C<eor>
+<APP_MOMNPOP_HEIGHT:2>72<app_yourlog_weight:3>187<eor>
+`,
+				createTime: createTime,
+			},
+			want: &adifpb.Adif{
+				Header: standardHeader,
+				Qsos: []*adifpb.Qso{
+					{
+						AppDefined: map[string]string{
+							"app_qrzlog_logid":   "488692380",
+							"app_qrzlog_qsldate": "20200406",
+							"app_qrzlog_status":  "C",
+						},
+						LoggingStation:   &adifpb.Station{},
+						ContactedStation: &adifpb.Station{},
+						Propagation:      &adifpb.Propagation{},
+					}, {
+						AppDefined: map[string]string{
+							"app_momnpop_height": "72",
+							"app_yourlog_weight": "187",
+						},
+						LoggingStation:   &adifpb.Station{},
+						ContactedStation: &adifpb.Station{},
+						Propagation:      &adifpb.Propagation{},
+					},
+				},
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
