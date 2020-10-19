@@ -94,6 +94,59 @@ func Test_adifToProto(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "Stations",
+			args: args{
+				adifString: `QRZLogbook download for k0swe<eoh>
+<call:4>KK9A<cnty:12>NC, Cabarrus<cont:2>NA<country:13>United States<cqz:1>5<dxcc:3>291
+<email:13>john@kk9a.com<gridsquare:6>EM95re<lat:11>N035 12.004<lon:11>W080 31.464
+<my_city:11>Westminster<my_cnty:13>CO, Jefferson<my_country:13>United States<my_cq_zone:1>4
+<my_gridsquare:6>DM79lv<my_itu_zone:1>7<my_lat:11>N039 54.615<my_lon:11>W105 03.416
+<my_name:20>Christopher C Keller<my_state:2>CO<name:12>JOHN P BAYNE<qsl_via:6>WD9DZV
+<qth:7>MIDLAND<state:2>NC<station_callsign:5>K0SWE<tx_pwr:3>100<eor>
+`,
+				createTime: createTime,
+			},
+			want: &adifpb.Adif{
+				Header: standardHeader,
+				Qsos: []*adifpb.Qso{
+					{
+						LoggingStation: &adifpb.Station{
+							City:        "Westminster",
+							Country:     "United States",
+							County:      "CO, Jefferson",
+							CqZone:      4,
+							GridSquare:  "DM79lv",
+							ItuZone:     7,
+							Latitude:    39.9103,
+							Longitude:   -105.0569,
+							OpName:      "Christopher C Keller",
+							Power:       100,
+							State:       "CO",
+							StationCall: "K0SWE",
+						},
+						ContactedStation: &adifpb.Station{
+							City:        "MIDLAND",
+							Continent:   "NA",
+							Country:     "United States",
+							County:      "NC, Cabarrus",
+							CqZone:      5,
+							Dxcc:        291,
+							Email:       "john@kk9a.com",
+							GridSquare:  "EM95re",
+							Latitude:    35.2001,
+							Longitude:   -80.5244,
+							OpName:      "JOHN P BAYNE",
+							QslVia:      "WD9DZV",
+							State:       "NC",
+							StationCall: "KK9A",
+						},
+						Propagation: &adifpb.Propagation{},
+					},
+				},
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
