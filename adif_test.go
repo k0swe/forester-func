@@ -30,7 +30,10 @@ func Test_adifToProto(t *testing.T) {
 		{
 			name: "Top Level",
 			args: args{
-				adifString: `<band:3>40m`,
+				adifString: `QRZLogbook download for k0swe<eoh>
+<band:3>40m<band_rx:3>20m<freq:5>7.282<freq_rx:6>14.282<eor>
+<band:3>10m<band_rx:3>10m<freq:6>28.282<freq_rx:6>28.282<eor>
+`,
 				createTime: createTime,
 			},
 			want: &adifpb.Adif{
@@ -38,6 +41,17 @@ func Test_adifToProto(t *testing.T) {
 				Qsos: []*adifpb.Qso{
 					{
 						Band:             "40m",
+						BandRx:           "20m",
+						Freq:             7.282,
+						FreqRx:           14.282,
+						LoggingStation:   &adifpb.Station{},
+						ContactedStation: &adifpb.Station{},
+						Propagation:      &adifpb.Propagation{},
+					}, {
+						Band:             "10m",
+						BandRx:           "10m",
+						Freq:             28.282,
+						FreqRx:           28.282,
 						LoggingStation:   &adifpb.Station{},
 						ContactedStation: &adifpb.Station{},
 						Propagation:      &adifpb.Propagation{},
