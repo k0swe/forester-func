@@ -1,4 +1,3 @@
-// Package kellog provides a set of Cloud Functions samples.
 package kellog
 
 import (
