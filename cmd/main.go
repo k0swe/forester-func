@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/k0swe/kellog-qrz-sync"
+	"github.com/k0swe/kellog-func"
 	"log"
 	"net/http"
 )

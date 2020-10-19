@@ -1,4 +1,4 @@
-module github.com/k0swe/kellog-qrz-sync
+module github.com/k0swe/kellog-func
 
 go 1.14
 
