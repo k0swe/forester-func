@@ -216,14 +216,14 @@ func parseCredit(record adifparser.ADIFRecord, adifField string) []*adifpb.Credi
 	}
 	credits := strings.Split(creditString, ",")
 	ret := make([]*adifpb.Credit, len(credits))
-	for _, c := range credits {
+	for i, c := range credits {
 		cred := new(adifpb.Credit)
 		cSplit := strings.Split(c, ":")
 		cred.Credit = cSplit[0]
 		if len(cSplit) > 1 {
 			cred.QslMedium = cSplit[1]
 		}
-		ret = append(ret, cred)
+		ret[i] = cred
 	}
 	return ret
 }

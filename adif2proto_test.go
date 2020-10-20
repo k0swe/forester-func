@@ -170,6 +170,36 @@ func Test_adifToProto(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "Credit",
+			args: args{
+				adifString: `QRZLogbook download for k0swe<eoh>
+<CREDIT_SUBMITTED:28>IOTA,WAS:LOTW&CARD,DXCC:CARD
+<CREDIT_GRANTED:14>IOTA,DXCC:CARD<eor>
+`,
+				createTime: createTime,
+			},
+			want: &adifpb.Adif{
+				Header: standardHeader,
+				Qsos: []*adifpb.Qso{
+					{
+						CreditSubmitted: []*adifpb.Credit{
+							{Credit: "IOTA"},
+							{Credit: "WAS", QslMedium: "LOTW&CARD"},
+							{Credit: "DXCC", QslMedium: "CARD"},
+						},
+						CreditGranted: []*adifpb.Credit{
+							{Credit: "IOTA"},
+							{Credit: "DXCC", QslMedium: "CARD"},
+						},
+						LoggingStation:   &adifpb.Station{},
+						ContactedStation: &adifpb.Station{},
+						Propagation:      &adifpb.Propagation{},
+					},
+				},
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
