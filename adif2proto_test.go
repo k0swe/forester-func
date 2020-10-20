@@ -147,6 +147,29 @@ func Test_adifToProto(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "Awards",
+			args: args{
+				adifString: `QRZLogbook download for k0swe<eoh>
+<AWARD_SUBMITTED:61>ADIF_CENTURY_BASIC,ADIF_CENTURY_SILVER,ADIF_SPECTRUM_100-160m
+<AWARD_GRANTED:41>ADIF_CENTURY_BASIC,ADIF_SPECTRUM_100-160m<eor>
+`,
+				createTime: createTime,
+			},
+			want: &adifpb.Adif{
+				Header: standardHeader,
+				Qsos: []*adifpb.Qso{
+					{
+						AwardSubmitted:   []string{"ADIF_CENTURY_BASIC", "ADIF_CENTURY_SILVER", "ADIF_SPECTRUM_100-160m"},
+						AwardGranted:     []string{"ADIF_CENTURY_BASIC", "ADIF_SPECTRUM_100-160m"},
+						LoggingStation:   &adifpb.Station{},
+						ContactedStation: &adifpb.Station{},
+						Propagation:      &adifpb.Propagation{},
+					},
+				},
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

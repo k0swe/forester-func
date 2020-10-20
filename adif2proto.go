@@ -206,10 +206,7 @@ func parseAwards(record adifparser.ADIFRecord, adifField string) []string {
 	if awardString == "" {
 		return nil
 	}
-	awards := strings.Split(awardString, ",")
-	ret := make([]string, len(awards))
-	ret = append(ret, awards...)
-	return ret
+	return strings.Split(awardString, ",")
 }
 
 func parseCredit(record adifparser.ADIFRecord, adifField string) []*adifpb.Credit {
