@@ -53,3 +53,4 @@ jobs:
           name: ImportQrz
           entry_point: ImportQrz
           runtime: go113
+          env_vars: GCP_PROJECT=k0swe-kellog
