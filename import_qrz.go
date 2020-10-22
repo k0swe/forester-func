@@ -170,7 +170,7 @@ func getQrzApiKey(ctx context.Context, firestoreClient *firestore.Client, userUi
 }
 
 type FirestoreQso struct {
-	qsopb  adifpb.Qso
+	qsopb  *adifpb.Qso
 	docref *firestore.DocumentRef
 }
 
@@ -195,7 +195,7 @@ func getContacts(ctx context.Context, contactsRef *firestore.CollectionRef) ([]F
 			log.Printf("Skipping qso %d: unmarshaling error: %v", i, err)
 			continue
 		}
-		retval = append(retval, FirestoreQso{qso, qsoDoc.Ref})
+		retval = append(retval, FirestoreQso{&qso, qsoDoc.Ref})
 	}
 	return retval, nil
 }
@@ -210,7 +210,7 @@ func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *fi
 	}
 
 	for _, qrzQso := range qrzAdi.Qsos {
-		hash := hashQso(*qrzQso)
+		hash := hashQso(qrzQso)
 		if _, ok := m[hash]; ok {
 			// TODO: merge
 			log.Printf("Found a match for %v on %v",
@@ -238,7 +238,7 @@ func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *fi
 	return created, modified
 }
 
-func hashQso(qsopb adifpb.Qso) string {
+func hashQso(qsopb *adifpb.Qso) string {
 	payload := []byte(qsopb.ContactedStation.StationCall + qsopb.TimeOn.String())
 	return fmt.Sprintf("%x", sha256.Sum256(payload))
 }

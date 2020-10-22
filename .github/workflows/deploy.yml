@@ -35,6 +35,9 @@ jobs:
       - name: Test
         run: go test ./...
 
+      - name: Vet
+        run: go vet ./...
+
   deploy:
     runs-on: ubuntu-latest
     name: Deploy code to Cloud Functions
