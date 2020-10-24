@@ -18,6 +18,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -239,6 +240,8 @@ func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *fi
 }
 
 func hashQso(qsopb *adifpb.Qso) string {
-	payload := []byte(qsopb.ContactedStation.StationCall + qsopb.TimeOn.String())
+	payload := []byte(qsopb.LoggingStation.StationCall +
+		qsopb.ContactedStation.StationCall +
+		strconv.FormatInt(qsopb.TimeOn.Seconds, 10))
 	return fmt.Sprintf("%x", sha256.Sum256(payload))
 }
