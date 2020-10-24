@@ -5,7 +5,6 @@
     ":ignoreUnstable",
     ":prImmediately",
     ":semanticPrefixFixDepsChoreOthers",
-    ":updateNotScheduled",
     ":automergeDisabled",
     ":ignoreModulesAndTests",
     ":autodetectPinVersions",
@@ -17,5 +16,7 @@
   ],
   "postUpdateOptions": [
     "gomodTidy"
-  ]
+  ],
+  "schedule": ["after 3am and before 7am"],
+  "timezone": "America/Denver"
 }
