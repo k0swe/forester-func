@@ -55,7 +55,7 @@ jobs:
           export_default_credentials: true
 
       - name: Cloud Functions Deploy ImportQrz
-        uses: GoogleCloudPlatform/github-actions/deploy-cloud-functions@cf-action
+        uses: GoogleCloudPlatform/github-actions/deploy-cloud-functions@master
         with:
           name: ImportQrz
           entry_point: ImportQrz
