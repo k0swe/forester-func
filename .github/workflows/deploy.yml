@@ -24,14 +24,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: GCP Auth
-        # TODO: It's dumb that this is necessary for unit tests. Find a way around this
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-        with:
-          version: '290.0.1'
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
-
       - name: Test
         run: go test ./...
 
