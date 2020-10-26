@@ -100,13 +100,14 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching contacts from firestore", err, w)
 		return
 	}
-	created, modified := mergeQsos(fsContacts, qrzAdi, contactsRef, ctx)
+	created, modified, noDiff := mergeQsos(fsContacts, qrzAdi, contactsRef, ctx)
 
 	var report = map[string]int{}
 	report["qrz"] = len(qrzAdi.Qsos)
 	report["firestore"] = len(fsContacts)
 	report["created"] = created
 	report["modified"] = modified
+	report["noDiff"] = noDiff
 	marshal, _ := json.Marshal(report)
 	_, _ = fmt.Fprint(w, string(marshal))
 }
@@ -205,9 +206,10 @@ func getContacts(ctx context.Context, contactsRef *firestore.CollectionRef) ([]F
 	return retval, nil
 }
 
-func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *firestore.CollectionRef, ctx context.Context) (int, int) {
+func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *firestore.CollectionRef, ctx context.Context) (int, int, int) {
 	var created = 0
 	var modified = 0
+	var noDiff = 0
 	m := map[string]FirestoreQso{}
 	for _, fsQso := range firebaseQsos {
 		hash := hashQso(fsQso.qsopb)
@@ -231,6 +233,7 @@ func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *fi
 				log.Printf("No difference for QSO with %v on %v",
 					qrzQso.ContactedStation.StationCall,
 					qrzQso.TimeOn.String())
+				noDiff++
 			}
 		} else {
 			err := create(qrzQso, contactsRef, ctx)
@@ -240,7 +243,7 @@ func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *fi
 			created++
 		}
 	}
-	return created, modified
+	return created, modified, noDiff
 }
 
 func hashQso(qsopb *adifpb.Qso) string {
