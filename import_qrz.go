@@ -10,6 +10,8 @@ import (
 	"firebase.google.com/go/v4/auth"
 	"fmt"
 	"github.com/golang/protobuf/ptypes"
+	"github.com/imdario/mergo"
+	"github.com/jinzhu/copier"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
 	ql "github.com/k0swe/qrz-logbook"
 	"golang.org/x/oauth2"
@@ -19,6 +21,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -250,11 +253,13 @@ func hashQso(qsopb *adifpb.Qso) string {
 	return fmt.Sprintf("%x", sha256.Sum256(payload))
 }
 
-// Given two QSO objects, update missing values in `base` with those from `backfill`. Values already present in `base`
-// should be preserved.
+// Given two QSO objects, replace missing values in `base` with those from `backfill`. Values
+// already present in `base` should be preserved.
 func mergeQso(base *adifpb.Qso, backfill *adifpb.Qso) bool {
-	// TODO
-	return false
+	original := &adifpb.Qso{}
+	_ = copier.Copy(original, base)
+	_ = mergo.Merge(base, backfill)
+	return !reflect.DeepEqual(original, base)
 }
 
 func create(qrzQso *adifpb.Qso, contactsRef *firestore.CollectionRef, ctx context.Context) error {
