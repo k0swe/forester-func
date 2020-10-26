@@ -9,6 +9,8 @@ require (
 	firebase.google.com/go/v4 v4.1.0
 	github.com/Matir/adifparser v0.0.0-20201018173435-4ff0e273b485
 	github.com/golang/protobuf v1.4.3
+	github.com/imdario/mergo v0.3.11
+	github.com/jinzhu/copier v0.0.0-20201025035756-632e723a6687
 	github.com/k0swe/adif-json-protobuf/go v0.0.0-20201018005139-9070f174b917
 	github.com/k0swe/qrz-logbook v0.0.5
 	golang.org/x/net v0.0.0-20201016165138-7b1cca2348c0 // indirect

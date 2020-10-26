@@ -12,8 +12,8 @@ func Test_mergeQso(t *testing.T) {
 		backfill *adifpb.Qso
 	}
 	type returnValues struct {
-		diff      bool
-		returnQso *adifpb.Qso
+		diff    bool
+		wantQso *adifpb.Qso
 	}
 	tests := []struct {
 		name string
@@ -27,8 +27,8 @@ func Test_mergeQso(t *testing.T) {
 				backfill: &adifpb.Qso{Band: "20m", Mode: "CW"},
 			},
 			want: returnValues{
-				diff:      true,
-				returnQso: &adifpb.Qso{Band: "20m", Freq: 14.050, Mode: "CW"},
+				diff:    true,
+				wantQso: &adifpb.Qso{Band: "20m", Freq: 14.050, Mode: "CW"},
 			},
 		},
 		{
@@ -39,8 +39,8 @@ func Test_mergeQso(t *testing.T) {
 				backfill: &adifpb.Qso{Band: "20m", Freq: 14.051},
 			},
 			want: returnValues{
-				diff:      false,
-				returnQso: &adifpb.Qso{Band: "20m", Freq: 14.050, Mode: "CW"},
+				diff:    false,
+				wantQso: &adifpb.Qso{Band: "20m", Freq: 14.050, Mode: "CW"},
 			},
 		},
 		{
@@ -72,7 +72,57 @@ func Test_mergeQso(t *testing.T) {
 			},
 			want: returnValues{
 				diff: true,
-				returnQso: &adifpb.Qso{
+				wantQso: &adifpb.Qso{
+					Band: "40m",
+					Freq: 7.07595,
+					Mode: "FT8",
+					ContactedStation: &adifpb.Station{
+						StationCall: "K9IJ",
+						GridSquare:  "EN52",
+						OpName:      "JOHN F RICE",
+						City:        "LAKE ZURICH",
+						State:       "IL",
+						Country:     "United States",
+						Dxcc:        291,
+					},
+				},
+			},
+		},
+		{
+			name: "QrzcomPlusQrzcom",
+			args: args{
+				base: &adifpb.Qso{
+					Band: "40m",
+					Freq: 7.07595,
+					Mode: "FT8",
+					ContactedStation: &adifpb.Station{
+						StationCall: "K9IJ",
+						GridSquare:  "EN52",
+						OpName:      "JOHN F RICE",
+						City:        "LAKE ZURICH",
+						State:       "IL",
+						Country:     "United States",
+						Dxcc:        291,
+					},
+				},
+				backfill: &adifpb.Qso{
+					Band: "40m",
+					Freq: 7.07595,
+					Mode: "FT8",
+					ContactedStation: &adifpb.Station{
+						StationCall: "K9IJ",
+						GridSquare:  "EN52",
+						OpName:      "JOHN F RICE",
+						City:        "LAKE ZURICH",
+						State:       "IL",
+						Country:     "United States",
+						Dxcc:        291,
+					},
+				},
+			},
+			want: returnValues{
+				diff: false,
+				wantQso: &adifpb.Qso{
 					Band: "40m",
 					Freq: 7.07595,
 					Mode: "FT8",
@@ -95,8 +145,8 @@ func Test_mergeQso(t *testing.T) {
 			if diff != tt.want.diff {
 				t.Errorf("mergeQso() diff got = %v, want %v", diff, tt.want.diff)
 			}
-			if !reflect.DeepEqual(tt.args.base, tt.want.returnQso) {
-				t.Errorf("mergeQso() returnQso got = %v, want %v", tt.args.base, tt.want.returnQso)
+			if !reflect.DeepEqual(tt.args.base, tt.want.wantQso) {
+				t.Errorf("mergeQso() qso got = %v, want %v", tt.args.base, tt.want.wantQso)
 			}
 		})
 	}
