@@ -251,15 +251,24 @@ func hashQso(qsopb *adifpb.Qso) string {
 	return fmt.Sprintf("%x", sha256.Sum256(payload))
 }
 
-// Given two QSO objects, update missing values in `base` with those from `backfill`. Values already
-// present in `base` should be preserved.
+// Given two QSO objects, replace missing values in `base` with those from `backfill`. Values
+// already present in `base` should be preserved.
 func mergeQso(base *adifpb.Qso, backfill *adifpb.Qso) bool {
-	baseReflect := reflect.ValueOf(base)
-	backfillReflect := reflect.ValueOf(backfill)
+	modified := false
+	baseReflect := reflect.ValueOf(base).Elem()
+	backfillReflect := reflect.ValueOf(backfill).Elem()
 	for i := 0; i < baseReflect.NumField(); i++ {
-		fmt.Printf("%v vs %v", baseReflect.Field(i).Interface(), backfillReflect.Field(i).Interface())
+		baseField := baseReflect.Field(i)
+		backfillField := backfillReflect.Field(i)
+		if baseField.CanInterface() &&
+			baseField.IsZero() &&
+			!backfillField.IsZero() {
+
+			baseField.Set(backfillField)
+			modified = true
+		}
 	}
-	return false
+	return modified
 }
 
 func create(qrzQso *adifpb.Qso, contactsRef *firestore.CollectionRef, ctx context.Context) error {
