@@ -214,24 +214,24 @@ func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *fi
 	for _, qrzQso := range qrzAdi.Qsos {
 		hash := hashQso(qrzQso)
 		if _, ok := m[hash]; ok {
-			// TODO: merge
 			log.Printf("Found a match for %v on %v",
 				qrzQso.ContactedStation.StationCall,
 				qrzQso.TimeOn.String())
-		} else {
-			log.Printf("Creating QSO with %v on %v",
-				qrzQso.ContactedStation.StationCall,
-				qrzQso.TimeOn.String())
-			jso, _ := protojson.Marshal(qrzQso)
-			var buf map[string]interface{}
-			err := json.Unmarshal(jso, &buf)
-			if err != nil {
-				log.Printf("Problem unmarshaling for create: %v", err)
-				continue
+			diff := mergeQso(m[hash].qsopb, qrzQso)
+			if diff {
+				err := update(qrzQso, m[hash].docref, ctx)
+				if err != nil {
+					continue
+				}
+				modified++
+			} else {
+				log.Printf("No difference for QSO with %v on %v",
+					qrzQso.ContactedStation.StationCall,
+					qrzQso.TimeOn.String())
 			}
-			_, err = contactsRef.NewDoc().Create(ctx, buf)
+		} else {
+			err := create(qrzQso, contactsRef, ctx)
 			if err != nil {
-				log.Printf("Problem creating: %v", err)
 				continue
 			}
 			created++
@@ -248,4 +248,52 @@ func hashQso(qsopb *adifpb.Qso) string {
 		qsopb.ContactedStation.StationCall +
 		strconv.FormatInt(timeOn.Unix(), 10))
 	return fmt.Sprintf("%x", sha256.Sum256(payload))
+}
+
+// Given two QSO objects, update missing values in `base` with those from `backfill`. Values already present in `base`
+// should be preserved.
+func mergeQso(base *adifpb.Qso, backfill *adifpb.Qso) bool {
+	// TODO
+	return false
+}
+
+func create(qrzQso *adifpb.Qso, contactsRef *firestore.CollectionRef, ctx context.Context) error {
+	log.Printf("Creating QSO with %v on %v",
+		qrzQso.ContactedStation.StationCall,
+		qrzQso.TimeOn.String())
+	buf, err := qsoToJson(qrzQso)
+	if err != nil {
+		log.Printf("Problem unmarshaling for create: %v", err)
+		return err
+	}
+	_, err = contactsRef.NewDoc().Create(ctx, buf)
+	if err != nil {
+		log.Printf("Problem creating: %v", err)
+		return err
+	}
+	return nil
+}
+
+func update(qrzQso *adifpb.Qso, ref *firestore.DocumentRef, ctx context.Context) error {
+	log.Printf("Updating QSO with %v on %v",
+		qrzQso.ContactedStation.StationCall,
+		qrzQso.TimeOn.String())
+	buf, err := qsoToJson(qrzQso)
+	if err != nil {
+		log.Printf("Problem unmarshaling for update: %v", err)
+		return err
+	}
+	_, err = ref.Set(ctx, buf)
+	if err != nil {
+		log.Printf("Problem updating: %v", err)
+		return err
+	}
+	return nil
+}
+
+func qsoToJson(qrzQso *adifpb.Qso) (map[string]interface{}, error) {
+	jso, _ := protojson.Marshal(qrzQso)
+	var buf map[string]interface{}
+	err := json.Unmarshal(jso, &buf)
+	return buf, err
 }
