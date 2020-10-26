@@ -53,6 +53,7 @@ func Test_mergeQso(t *testing.T) {
 					ContactedStation: &adifpb.Station{
 						StationCall: "K9IJ",
 						GridSquare:  "EN52",
+						OpName:      "Johnny",
 					},
 				},
 				backfill: &adifpb.Qso{
@@ -79,7 +80,7 @@ func Test_mergeQso(t *testing.T) {
 					ContactedStation: &adifpb.Station{
 						StationCall: "K9IJ",
 						GridSquare:  "EN52",
-						OpName:      "JOHN F RICE",
+						OpName:      "Johnny",
 						City:        "LAKE ZURICH",
 						State:       "IL",
 						Country:     "United States",
