@@ -19,6 +19,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -250,10 +251,14 @@ func hashQso(qsopb *adifpb.Qso) string {
 	return fmt.Sprintf("%x", sha256.Sum256(payload))
 }
 
-// Given two QSO objects, update missing values in `base` with those from `backfill`. Values already present in `base`
-// should be preserved.
+// Given two QSO objects, update missing values in `base` with those from `backfill`. Values already
+// present in `base` should be preserved.
 func mergeQso(base *adifpb.Qso, backfill *adifpb.Qso) bool {
-	// TODO
+	baseReflect := reflect.ValueOf(base)
+	backfillReflect := reflect.ValueOf(backfill)
+	for i := 0; i < baseReflect.NumField(); i++ {
+		fmt.Printf("%v vs %v", baseReflect.Field(i).Interface(), backfillReflect.Field(i).Interface())
+	}
 	return false
 }
 
