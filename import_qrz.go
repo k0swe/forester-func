@@ -24,6 +24,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -31,10 +32,17 @@ import (
 var projectID = os.Getenv("GCP_PROJECT")
 
 var authClient *auth.Client
+var mu sync.Mutex
+var isInit = false
 
 const isFixCase = true
 
-func init() {
+func myInit() {
+	mu.Lock()
+	if isInit {
+		return
+	}
+	defer mu.Unlock()
 	// Use the application default credentials
 	ctx := context.Background()
 	conf := &firebase.Config{ProjectID: projectID}
@@ -49,10 +57,12 @@ func init() {
 		log.Fatalf("Error getting authClient: %v", err)
 		return
 	}
+	isInit = true
 }
 
 // Import QSOs from QRZ logbook and merge into Firestore. Called via GCP Cloud Functions.
 func ImportQrz(w http.ResponseWriter, r *http.Request) {
+	myInit()
 	if handleCorsOptions(w, r) {
 		return
 	}
