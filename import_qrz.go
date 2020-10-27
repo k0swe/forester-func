@@ -9,6 +9,7 @@ import (
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/auth"
 	"fmt"
+	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/imdario/mergo"
 	"github.com/jinzhu/copier"
@@ -21,7 +22,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"reflect"
 	"strconv"
 	"strings"
 	"sync"
@@ -232,11 +232,11 @@ func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *fi
 	for _, qrzQso := range qrzAdi.Qsos {
 		hash := hashQso(qrzQso)
 		if _, ok := m[hash]; ok {
-			log.Printf("Found a match for %v on %v",
-				qrzQso.ContactedStation.StationCall,
-				qrzQso.TimeOn.String())
 			diff := mergeQso(m[hash].qsopb, qrzQso)
 			if diff {
+				log.Printf("Updating QSO with %v on %v",
+					qrzQso.ContactedStation.StationCall,
+					qrzQso.TimeOn.String())
 				err := update(qrzQso, m[hash].docref, ctx)
 				if err != nil {
 					continue
@@ -249,6 +249,9 @@ func mergeQsos(firebaseQsos []FirestoreQso, qrzAdi *adifpb.Adif, contactsRef *fi
 				noDiff++
 			}
 		} else {
+			log.Printf("Creating QSO with %v on %v",
+				qrzQso.ContactedStation.StationCall,
+				qrzQso.TimeOn.String())
 			err := create(qrzQso, contactsRef, ctx)
 			if err != nil {
 				continue
@@ -275,13 +278,10 @@ func mergeQso(base *adifpb.Qso, backfill *adifpb.Qso) bool {
 	original := &adifpb.Qso{}
 	_ = copier.Copy(original, base)
 	_ = mergo.Merge(base, backfill)
-	return !reflect.DeepEqual(original, base)
+	return !proto.Equal(original, base)
 }
 
 func create(qrzQso *adifpb.Qso, contactsRef *firestore.CollectionRef, ctx context.Context) error {
-	log.Printf("Creating QSO with %v on %v",
-		qrzQso.ContactedStation.StationCall,
-		qrzQso.TimeOn.String())
 	buf, err := qsoToJson(qrzQso)
 	if err != nil {
 		log.Printf("Problem unmarshaling for create: %v", err)
@@ -296,9 +296,6 @@ func create(qrzQso *adifpb.Qso, contactsRef *firestore.CollectionRef, ctx contex
 }
 
 func update(qrzQso *adifpb.Qso, ref *firestore.DocumentRef, ctx context.Context) error {
-	log.Printf("Updating QSO with %v on %v",
-		qrzQso.ContactedStation.StationCall,
-		qrzQso.TimeOn.String())
 	buf, err := qsoToJson(qrzQso)
 	if err != nil {
 		log.Printf("Problem unmarshaling for update: %v", err)

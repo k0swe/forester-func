@@ -1,8 +1,8 @@
 package kellog
 
 import (
+	"github.com/golang/protobuf/proto"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
-	"reflect"
 	"testing"
 )
 
@@ -146,7 +146,7 @@ func Test_mergeQso(t *testing.T) {
 			if diff != tt.want.diff {
 				t.Errorf("mergeQso() diff got = %v, want %v", diff, tt.want.diff)
 			}
-			if !reflect.DeepEqual(tt.args.base, tt.want.wantQso) {
+			if !proto.Equal(tt.args.base, tt.want.wantQso) {
 				t.Errorf("mergeQso() qso got = %v, want %v", tt.args.base, tt.want.wantQso)
 			}
 		})
