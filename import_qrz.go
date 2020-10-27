@@ -45,6 +45,9 @@ func myInit() {
 	defer mu.Unlock()
 	// Use the application default credentials
 	ctx := context.Background()
+	if projectID == "" {
+		panic("GCP_PROJECT is not set")
+	}
 	conf := &firebase.Config{ProjectID: projectID}
 	app, err := firebase.NewApp(ctx, conf)
 	if err != nil {
