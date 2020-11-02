@@ -1,8 +1,8 @@
 package kellog
 
 import (
-	"github.com/golang/protobuf/proto"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
+	"google.golang.org/protobuf/proto"
 	"testing"
 )
 
