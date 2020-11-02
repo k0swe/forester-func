@@ -2,6 +2,7 @@ package kellog
 
 import (
 	"github.com/golang/protobuf/ptypes"
+	"github.com/golang/protobuf/ptypes/timestamp"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
 	"reflect"
 	"testing"
@@ -200,6 +201,65 @@ func Test_adifToProto(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "LotW",
+			args: args{
+				adifString: `ARRL Logbook of the World Status Report                        
+Generated at 2020-11-02 21:31:01                            
+for k0swe                                                                                                                     
+Query:                    
+    QSL ONLY: YES                                              
+QSL RX SINCE: 2020-10-31 21:08:24 (system supplied default)
+                                                                                                                              
+<PROGRAMID:4>LoTW                                              
+<APP_LoTW_LASTQSL:19>2020-10-31 21:08:24                       
+                               
+<APP_LoTW_NUMREC:1>1
+
+<eoh>
+
+<CALL:4>N6DN
+<BAND:3>20M
+<FREQ:8>14.07610
+<MODE:3>FT8
+<APP_LoTW_MODEGROUP:4>DATA
+<QSO_DATE:8>20201025
+<APP_LoTW_RXQSO:19>2020-10-25 20:29:33 
+<TIME_ON:6>201500
+<APP_LoTW_QSO_TIMESTAMP:20>2020-10-25T20:15:00Z 
+<QSL_RCVD:1>Y
+<QSLRDATE:8>20201031
+<APP_LoTW_RXQSL:19>2020-10-31 21:08:24 
+<eor>
+`,
+				createTime: createTime,
+			},
+			want: &adifpb.Adif{
+				Header: standardHeader,
+				Qsos: []*adifpb.Qso{
+					{
+						Band:             "20M",
+						Freq:             14.07610,
+						Mode:             "FT8",
+						TimeOn:           protoTime(time.Date(2020, 10, 25, 20, 15, 0, 0, time.UTC)),
+						LoggingStation:   &adifpb.Station{},
+						ContactedStation: &adifpb.Station{StationCall: "N6DN"},
+						Propagation:      &adifpb.Propagation{},
+						Card: &adifpb.Qsl{
+							ReceivedDate:   protoTime(time.Date(2020, 10, 31, 0, 0, 0, 0, time.UTC)),
+							ReceivedStatus: "Y",
+						},
+						AppDefined: map[string]string{
+							"app_lotw_modegroup":     "DATA",
+							"app_lotw_qso_timestamp": "2020-10-25T20:15:00Z",
+							"app_lotw_rxqsl":         "2020-10-31 21:08:24",
+							"app_lotw_rxqso":         "2020-10-25 20:29:33",
+						},
+					},
+				},
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -213,4 +273,9 @@ func Test_adifToProto(t *testing.T) {
 			}
 		})
 	}
+}
+
+func protoTime(t time.Time) *timestamp.Timestamp {
+	proto, _ := ptypes.TimestampProto(t)
+	return proto
 }

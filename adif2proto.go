@@ -362,6 +362,9 @@ func getTimestamp(record adifparser.ADIFRecord, dateField string, timeField stri
 
 func getDate(record adifparser.ADIFRecord, field string) *timestamp.Timestamp {
 	dateStr, _ := record.GetValue(field)
+	if dateStr == "" {
+		return nil
+	}
 	t, err := time.Parse("20060102", dateStr)
 	if err != nil {
 		log.Print(err)
