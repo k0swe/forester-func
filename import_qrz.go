@@ -11,10 +11,9 @@ import (
 	"time"
 )
 
-const isFixCase = true
-
 // Import QSOs from QRZ logbook and merge into Firestore. Called via GCP Cloud Functions.
 func ImportQrz(w http.ResponseWriter, r *http.Request) {
+	const isFixCase = true
 	ctx, userToken, firestoreClient, done, err := getUserFirestore(w, r)
 	if done || err != nil {
 		return
