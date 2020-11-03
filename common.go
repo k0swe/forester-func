@@ -211,6 +211,7 @@ func hashQso(qsopb *adifpb.Qso) string {
 func mergeQso(base *adifpb.Qso, backfill *adifpb.Qso) bool {
 	original := &adifpb.Qso{}
 	_ = copier.Copy(original, base)
+	cleanQsl(base)
 	_ = mergo.Merge(base, backfill)
 	return !proto.Equal(original, base)
 }
@@ -260,4 +261,30 @@ func fetchSecret(key string, client *secretmanager.Client, ctx context.Context) 
 		return "", err
 	}
 	return string(secretResp.GetPayload().GetData()), nil
+}
+
+func cleanQsl(qso *adifpb.Qso) {
+	// If QSO has LotW QSL with status=N or date=0001-01-01T00:00:00Z,
+	// remove those to make way for the merge
+	if qso.Lotw != nil {
+		l := qso.Lotw
+		if l.SentStatus == "N" {
+			l.SentStatus = ""
+			log.Println("Clearing sent status")
+		}
+		if l.SentDate != nil &&
+			(l.SentDate.Seconds == -62135596800 || l.SentDate.Seconds == 0) {
+			l.SentDate = nil
+			log.Println("Clearing sent date")
+		}
+		if l.ReceivedStatus == "N" {
+			l.ReceivedStatus = ""
+			log.Println("Clearing received status")
+		}
+		if l.ReceivedDate != nil &&
+			(l.ReceivedDate.Seconds == -62135596800 || l.ReceivedDate.Seconds == 0) {
+			l.ReceivedDate = nil
+			log.Println("Clearing received date")
+		}
+	}
 }
