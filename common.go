@@ -270,21 +270,17 @@ func cleanQsl(qso *adifpb.Qso) {
 		l := qso.Lotw
 		if l.SentStatus == "N" {
 			l.SentStatus = ""
-			log.Println("Clearing sent status")
 		}
 		if l.SentDate != nil &&
 			(l.SentDate.Seconds == -62135596800 || l.SentDate.Seconds == 0) {
 			l.SentDate = nil
-			log.Println("Clearing sent date")
 		}
 		if l.ReceivedStatus == "N" {
 			l.ReceivedStatus = ""
-			log.Println("Clearing received status")
 		}
 		if l.ReceivedDate != nil &&
 			(l.ReceivedDate.Seconds == -62135596800 || l.ReceivedDate.Seconds == 0) {
 			l.ReceivedDate = nil
-			log.Println("Clearing received date")
 		}
 	}
 }
