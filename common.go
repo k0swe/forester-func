@@ -212,6 +212,7 @@ func mergeQso(base *adifpb.Qso, backfill *adifpb.Qso) bool {
 	original := &adifpb.Qso{}
 	_ = copier.Copy(original, base)
 	cleanQsl(base)
+	cleanQsl(backfill)
 	_ = mergo.Merge(base, backfill)
 	return !proto.Equal(original, base)
 }
