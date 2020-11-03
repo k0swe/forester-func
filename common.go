@@ -214,8 +214,8 @@ func hashQso(qsopb *adifpb.Qso) string {
 	timeOn, _ := ptypes.Timestamp(qsopb.TimeOn)
 	// Some providers (QRZ.com) only have minute precision
 	timeOn = timeOn.Truncate(time.Minute)
-	payload := []byte(qsopb.LoggingStation.StationCall +
-		qsopb.ContactedStation.StationCall +
+	// Some providers (LotW) don't have LoggingStation.StationCall
+	payload := []byte(qsopb.ContactedStation.StationCall +
 		strconv.FormatInt(timeOn.Unix(), 10))
 	return fmt.Sprintf("%x", sha256.Sum256(payload))
 }

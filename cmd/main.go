@@ -11,10 +11,12 @@ import (
 func main() {
 	if os.Getenv("GCP_PROJECT") == "" {
 		panic("GCP_PROJECT is not set")
+	} else {
+		log.Printf("GCP_PROJECT is %v", os.Getenv("GCP_PROJECT"))
 	}
 	const addr = "localhost:8080"
-	const path = "/ImportQrz"
-	http.HandleFunc(path, kellog.ImportQrz)
-	log.Printf("Ready to serve on http://%s%s", addr, path)
+	http.HandleFunc("/ImportQrz", kellog.ImportQrz)
+	http.HandleFunc("/ImportLotw", kellog.ImportLotw)
+	log.Printf("Ready to serve on http://%s", addr)
 	log.Fatal(http.ListenAndServe(addr, nil))
 }

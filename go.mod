@@ -12,6 +12,7 @@ require (
 	github.com/imdario/mergo v0.3.11
 	github.com/jinzhu/copier v0.0.0-20201025035756-632e723a6687
 	github.com/k0swe/adif-json-protobuf/go v0.0.0-20201102033741-7debd286c580
+	github.com/k0swe/lotw-qsl v0.0.2
 	github.com/k0swe/qrz-logbook v0.0.5
 	golang.org/x/net v0.0.0-20201031054903-ff519b6c9102 // indirect
 	golang.org/x/oauth2 v0.0.0-20200902213428-5d25da1a8d43
