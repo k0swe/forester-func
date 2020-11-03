@@ -1,7 +1,7 @@
 package kellog
 
 import (
-	"cloud.google.com/go/firestore"
+	"cloud.google.com/go/secretmanager/apiv1"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -20,7 +20,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	lotwUser, lotwPass, err := getLotwCreds(ctx, firestoreClient, userToken.UID)
+	lotwUser, lotwPass, err := getLotwCreds(ctx, userToken.UID)
 	if err != nil {
 		writeError(500, "Error fetching LotW creds", err, w)
 		return
@@ -73,7 +73,18 @@ func fixLotwQsls(lotwAdi *adifpb.Adif) {
 	}
 }
 
-func getLotwCreds(ctx context.Context, firestoreClient *firestore.Client, userUid string) (string, string, error) {
-	// TODO: pull creds from Google Cloud Secret Manager
-	return "", "", nil
+func getLotwCreds(ctx context.Context, userUid string) (string, string, error) {
+	client, err := secretmanager.NewClient(ctx)
+	if err != nil {
+		return "", "", err
+	}
+	username, err := fetchSecret(userUid+"_lotw_username", client, ctx)
+	if err != nil {
+		return "", "", err
+	}
+	password, err := fetchSecret(userUid+"_lotw_password", client, ctx)
+	if err != nil {
+		return "", "", err
+	}
+	return username, password, nil
 }

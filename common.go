@@ -2,6 +2,7 @@ package kellog
 
 import (
 	"cloud.google.com/go/firestore"
+	"cloud.google.com/go/secretmanager/apiv1"
 	"context"
 	"crypto/sha256"
 	"encoding/json"
@@ -16,6 +17,7 @@ import (
 	"golang.org/x/oauth2"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
+	secretmanagerpb "google.golang.org/genproto/googleapis/cloud/secretmanager/v1"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"log"
@@ -246,4 +248,16 @@ func qsoToJson(qso *adifpb.Qso) (map[string]interface{}, error) {
 	var buf map[string]interface{}
 	err := json.Unmarshal(jso, &buf)
 	return buf, err
+}
+
+func fetchSecret(key string, client *secretmanager.Client, ctx context.Context) (string, error) {
+	fullKey := "projects/" + projectID + "/secrets/" + key + "/versions/latest"
+	accessRequest := &secretmanagerpb.AccessSecretVersionRequest{
+		Name: fullKey,
+	}
+	secretResp, err := client.AccessSecretVersion(ctx, accessRequest)
+	if err != nil {
+		return "", err
+	}
+	return string(secretResp.GetPayload().GetData()), nil
 }
