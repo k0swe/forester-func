@@ -30,9 +30,9 @@ jobs:
       - name: Vet
         run: go vet ./...
 
-  deploy:
+  deploy-ImportQrz:
     runs-on: ubuntu-latest
-    name: Deploy code to Cloud Functions
+    name: Deploy ImportQrz to Cloud Functions
     needs: test
 
     steps:
@@ -51,5 +51,29 @@ jobs:
         with:
           name: ImportQrz
           entry_point: ImportQrz
+          runtime: go113
+          env_vars: GCP_PROJECT=k0swe-kellog
+
+  deploy-ImportLotw:
+    runs-on: ubuntu-latest
+    name: Deploy ImportLotw to Cloud Functions
+    needs: test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: GCP Auth
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '290.0.1'
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Cloud Functions Deploy ImportLotw
+        uses: GoogleCloudPlatform/github-actions/deploy-cloud-functions@master
+        with:
+          name: ImportLotw
+          entry_point: ImportLotw
           runtime: go113
           env_vars: GCP_PROJECT=k0swe-kellog
