@@ -171,7 +171,7 @@ func mergeQsos(firebaseQsos []FirestoreQso, remoteAdi *adifpb.Adif, contactsRef 
 				log.Printf("Updating QSO with %v on %v",
 					remoteQso.ContactedStation.StationCall,
 					remoteQso.TimeOn.String())
-				err := update(remoteQso, m[hash].docref, ctx)
+				err := update(m[hash].qsopb, m[hash].docref, ctx)
 				if err != nil {
 					continue
 				}
