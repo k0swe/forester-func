@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/antihax/optional"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
 	"github.com/k0swe/lotw-qsl"
 	"net/http"
@@ -25,7 +26,12 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching LotW creds", err, w)
 		return
 	}
-	lotwResponse, err := lotw.Query(lotwUser, lotwPass, &lotw.QueryOpts{})
+	lotwResponse, err := lotw.Query(lotwUser, lotwPass, &lotw.QueryOpts{
+		QsoQsl: optional.NewInterface(lotw.NO),
+		// TODO: Last query time should be stored and fast-forward only
+		QsoQsorxsince: optional.NewString("1970-01-01"),
+		QsoMydetail:   optional.NewInterface(lotw.YES),
+	})
 	if err != nil {
 		writeError(500, "Error fetching LotW data", err, w)
 		return
@@ -48,6 +54,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching contacts from firestore", err, w)
 		return
 	}
+
 	created, modified, noDiff := mergeQsos(fsContacts, lotwAdi, contactsRef, ctx)
 
 	var report = map[string]int{}
