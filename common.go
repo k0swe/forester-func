@@ -23,23 +23,13 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 )
 
 // GCP_PROJECT is a user-set environment variable.
 var projectID = os.Getenv("GCP_PROJECT")
 
-var authClient *auth.Client
-var mu sync.Mutex
-var isInit = false
-
-func myInit() {
-	mu.Lock()
-	if isInit {
-		return
-	}
-	defer mu.Unlock()
+func getUserFirestore(w http.ResponseWriter, r *http.Request) (context.Context, *auth.Token, *firestore.Client, bool, error) {
 	// Use the application default credentials
 	ctx := context.Background()
 	if projectID == "" {
@@ -48,25 +38,19 @@ func myInit() {
 	conf := &firebase.Config{ProjectID: projectID}
 	app, err := firebase.NewApp(ctx, conf)
 	if err != nil {
-		log.Fatalf("Error initializing Firebase app: %v", err)
-		return
+		writeError(500, "Error initializing Firebase app", err, w)
+		return nil, nil, nil, true, err
 	}
 
-	authClient, err = app.Auth(ctx)
+	authClient, err := app.Auth(ctx)
 	if err != nil {
-		log.Fatalf("Error getting authClient: %v", err)
-		return
+		writeError(500, "Error getting authClient", err, w)
+		return nil, nil, nil, true, err
 	}
-	isInit = true
-}
-
-func getUserFirestore(w http.ResponseWriter, r *http.Request) (context.Context, *auth.Token, *firestore.Client, bool, error) {
-	myInit()
 	if handleCorsOptions(w, r) {
 		return nil, nil, nil, true, nil
 	}
 
-	ctx := context.Background()
 	idToken, err := extractIdToken(r)
 	if err != nil {
 		writeError(403, "Couldn't find authorization", err, w)
