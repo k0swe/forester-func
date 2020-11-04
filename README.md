@@ -1,4 +1,4 @@
-![Test and Deploy main](https://github.com/k0swe/kellog-func/workflows/Test%20and%20Deploy%20main/badge.svg?branch=main)
+![Deploy](https://github.com/k0swe/kellog-func/workflows/Deploy/badge.svg?branch=main)
 
 # kellog-func
 
