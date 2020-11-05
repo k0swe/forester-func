@@ -77,3 +77,27 @@ jobs:
           entry_point: ImportLotw
           runtime: go113
           env_vars: GCP_PROJECT=k0swe-kellog
+
+  deploy-UpdateSecret:
+    runs-on: ubuntu-latest
+    name: Deploy UpdateSecret to Cloud Functions
+    needs: test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: GCP Auth
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '290.0.1'
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Cloud Functions Deploy UpdateSecret
+        uses: GoogleCloudPlatform/github-actions/deploy-cloud-functions@master
+        with:
+          name: UpdateSecret
+          entry_point: UpdateSecret
+          runtime: go113
+          env_vars: GCP_PROJECT=k0swe-kellog

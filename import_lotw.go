@@ -81,11 +81,11 @@ func fixLotwQsls(lotwAdi *adifpb.Adif) {
 
 func getLotwCreds(ctx context.Context, userUid string) (string, string, error) {
 	secretStore := NewSecretStore(ctx)
-	username, err := secretStore.fetchSecret(userUid + "_lotw_username")
+	username, err := secretStore.FetchSecret(userUid, lotwUsername)
 	if err != nil {
 		return "", "", err
 	}
-	password, err := secretStore.fetchSecret(userUid + "_lotw_password")
+	password, err := secretStore.FetchSecret(userUid, lotwPassword)
 	if err != nil {
 		return "", "", err
 	}

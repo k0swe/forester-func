@@ -17,6 +17,7 @@ func main() {
 	const addr = "localhost:8080"
 	http.HandleFunc("/ImportQrz", kellog.ImportQrz)
 	http.HandleFunc("/ImportLotw", kellog.ImportLotw)
+	http.HandleFunc("/UpdateSecrets", kellog.UpdateSecret)
 	log.Printf("Ready to serve on http://%s", addr)
 	log.Fatal(http.ListenAndServe(addr, nil))
 }
