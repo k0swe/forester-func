@@ -11,7 +11,7 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = r.ParseForm()
+	err = r.ParseMultipartForm(102400)
 	if err != nil {
 		writeError(500, "Error parsing form values", err, w)
 		return
@@ -40,5 +40,4 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 	}
 	// TODO: put a flag in firestore
 	w.WriteHeader(204)
-	return
 }
