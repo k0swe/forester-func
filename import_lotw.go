@@ -1,7 +1,6 @@
 package kellog
 
 import (
-	"cloud.google.com/go/secretmanager/apiv1"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -81,15 +80,12 @@ func fixLotwQsls(lotwAdi *adifpb.Adif) {
 }
 
 func getLotwCreds(ctx context.Context, userUid string) (string, string, error) {
-	client, err := secretmanager.NewClient(ctx)
+	secretStore := NewSecretStore(ctx)
+	username, err := secretStore.fetchSecret(userUid + "_lotw_username")
 	if err != nil {
 		return "", "", err
 	}
-	username, err := fetchSecret(userUid+"_lotw_username", client, ctx)
-	if err != nil {
-		return "", "", err
-	}
-	password, err := fetchSecret(userUid+"_lotw_password", client, ctx)
+	password, err := secretStore.fetchSecret(userUid + "_lotw_password")
 	if err != nil {
 		return "", "", err
 	}
