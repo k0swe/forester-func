@@ -140,8 +140,7 @@ github.com/k0swe/adif-json-protobuf/go v0.0.0-20201102033741-7debd286c580 h1:zRj
 github.com/k0swe/adif-json-protobuf/go v0.0.0-20201102033741-7debd286c580/go.mod h1:BhcpZpsk2usW06WahrCX+3Zos8befpn2/XI3og7fCjc=
 github.com/k0swe/lotw-qsl v0.1.0 h1:HJk3Lh8AcobraOTLCMmvPH0oTXStUwiw6fO1Ij4ytx0=
 github.com/k0swe/lotw-qsl v0.1.0/go.mod h1:F30b7cAh4RiQyTuw6PPQDh9DU7UOkuEm1eHpKlQILgo=
-github.com/k0swe/qrz-logbook v0.0.5 h1:EMgPK2fGrB0QZVKakJpuqEx+lXXzfgzkXH/p4mq38M4=
-github.com/k0swe/qrz-logbook v0.0.5/go.mod h1:yXdv+NLVMFhzZAJObS8litYbdNrARkXlwajT68EW8ic=
+github.com/k0swe/qrz-logbook v0.1.0/go.mod h1:QAi7CfVoocWV/mdeVFozzJ9lp7POW1lJhpE+sMkk/nE=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
@@ -230,8 +229,6 @@ golang.org/x/net v0.0.0-20200707034311-ab3426394381 h1:VXak5I6aEWmAXeQjA+QSZzlgN
 golang.org/x/net v0.0.0-20200707034311-ab3426394381/go.mod h1:/O7V0waA8r7cgGh81Ro3o1hOxt32SMVPicZroKQ2sZA=
 golang.org/x/net v0.0.0-20200822124328-c89045814202/go.mod h1:/O7V0waA8r7cgGh81Ro3o1hOxt32SMVPicZroKQ2sZA=
 golang.org/x/net v0.0.0-20200904194848-62affa334b73/go.mod h1:/O7V0waA8r7cgGh81Ro3o1hOxt32SMVPicZroKQ2sZA=
-golang.org/x/net v0.0.0-20200927032502-5d4f70055728 h1:5wtQIAulKU5AbLQOkjxl32UufnIOqgBX72pS0AV14H0=
-golang.org/x/net v0.0.0-20200927032502-5d4f70055728/go.mod h1:/O7V0waA8r7cgGh81Ro3o1hOxt32SMVPicZroKQ2sZA=
 golang.org/x/net v0.0.0-20201021035429-f5854403a974/go.mod h1:sp8m0HH+o8qH0wwXwYZr8TS3Oi6o0r6Gce1SSxlDquU=
 golang.org/x/net v0.0.0-20201031054903-ff519b6c9102 h1:42cLlJJdEh+ySyeUUbEQ5bsTiq8voBeTuweGVkY6Puw=
 golang.org/x/net v0.0.0-20201031054903-ff519b6c9102/go.mod h1:sp8m0HH+o8qH0wwXwYZr8TS3Oi6o0r6Gce1SSxlDquU=
