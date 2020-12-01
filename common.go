@@ -121,6 +121,17 @@ func makeFirestoreClient(ctx context.Context, idToken string) (*firestore.Client
 	return firestoreClient, nil
 }
 
+func getUserSettings(ctx context.Context, userDoc *firestore.DocumentRef) (map[string]interface{}, error) {
+	userSettings, err := userDoc.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if !userSettings.Exists() {
+		return make(map[string]interface{}), nil
+	}
+	return userSettings.Data(), nil
+}
+
 type FirestoreQso struct {
 	qsopb  *adifpb.Qso
 	docref *firestore.DocumentRef
