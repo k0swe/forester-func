@@ -18,19 +18,21 @@ const lotwLastFetchedDate = "lotwLastFetchedDate"
 // Import QSOs from Logbook of the World and merge into Firestore. Called via GCP Cloud Functions.
 func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	const isFixCase = true
-	ctx, userToken, firestoreClient, done, err := getUserFirestore(w, r)
-	if done || err != nil {
+	ctx := context.Background()
+	if handleCorsOptions(w, r) {
 		return
 	}
-
-	userDoc := firestoreClient.Collection("users").Doc(userToken.UID)
-	userSettings, err := getUserSettings(ctx, userDoc)
+	fb, err := MakeFirebaseManager(&ctx, r)
+	if err != nil {
+		return
+	}
+	userSettings, err := fb.GetUserSettings()
 	if err != nil {
 		writeError(500, "Error fetching user settings", err, w)
 		return
 	}
 	lastFetchedTime := getLastFetchedDate(userSettings)
-	lotwUser, lotwPass, err := getLotwCreds(ctx, userToken.UID)
+	lotwUser, lotwPass, err := getLotwCreds(ctx, fb.GetUID())
 	if err != nil {
 		writeError(500, "Error fetching LotW creds", err, w)
 		return
@@ -57,15 +59,14 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	contactsRef := userDoc.Collection("contacts")
-	fsContacts, err := getContacts(ctx, contactsRef)
+	fsContacts, err := fb.GetContacts()
 	if err != nil {
 		writeError(500, "Error fetching contacts from firestore", err, w)
 		return
 	}
-	created, modified, noDiff := mergeQsos(fsContacts, lotwAdi, contactsRef, ctx)
+	created, modified, noDiff := fb.MergeQsos(fsContacts, lotwAdi)
 
-	err = storeLastFetched(ctx, userDoc)
+	err = storeLastFetched(fb)
 	if err != nil {
 		writeError(500, "Failed storing last fetched date", err, w)
 		return
@@ -82,14 +83,14 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 
 func getLastFetchedDate(userSettings map[string]interface{}) optional.String {
 	if l, ok := userSettings[lotwLastFetchedDate]; ok {
-		return optional.NewString(fmt.Sprintf("%v", l))
+		return optional.NewString(fmt.Sprint(l))
 	}
 	return optional.NewString("1970-01-01")
 }
 
-func storeLastFetched(ctx context.Context, userDoc *firestore.DocumentRef) error {
+func storeLastFetched(fb *FirebaseManager) error {
 	today := time.Now().UTC().Format("2006-01-02")
-	_, err := userDoc.Update(ctx, []firestore.Update{{Path: lotwLastFetchedDate, Value: today}})
+	_, err := fb.userDoc.Update(*fb.ctx, []firestore.Update{{Path: lotwLastFetchedDate, Value: today}})
 	return err
 }
 

@@ -1,13 +1,18 @@
 package kellog
 
 import (
+	"context"
 	"net/http"
 )
 
 // Import QSOs from QRZ logbook and merge into Firestore. Called via GCP Cloud Functions.
 func UpdateSecret(w http.ResponseWriter, r *http.Request) {
-	ctx, userToken, _, done, err := getUserFirestore(w, r)
-	if done || err != nil {
+	ctx := context.Background()
+	if handleCorsOptions(w, r) {
+		return
+	}
+	fb, err := MakeFirebaseManager(&ctx, r)
+	if err != nil {
 		return
 	}
 
@@ -25,14 +30,14 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 
 	secretStore := NewSecretStore(ctx)
 	if lotwUser != "" {
-		_, err = secretStore.SetSecret(userToken.UID, lotwUsername, lotwUser)
+		_, err = secretStore.SetSecret(fb.GetUID(), lotwUsername, lotwUser)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
 			return
 		}
 	}
 	if lotwPass != "" {
-		_, err = secretStore.SetSecret(userToken.UID, lotwPassword, lotwPass)
+		_, err = secretStore.SetSecret(fb.GetUID(), lotwPassword, lotwPass)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
 			return

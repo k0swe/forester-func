@@ -25,53 +25,62 @@ import (
 	"time"
 )
 
-// Do a bunch of initialization. Verify JWT and get user token back, and init a Firestore connection as that user.
-func getUserFirestore(w http.ResponseWriter, r *http.Request) (context.Context, *auth.Token, *firestore.Client, bool, error) {
+type FirestoreQso struct {
+	qsopb  *adifpb.Qso
+	docref *firestore.DocumentRef
+}
+
+type FirebaseManager struct {
+	ctx             *context.Context
+	userToken       *auth.Token
+	firestoreClient *firestore.Client
+	userDoc         *firestore.DocumentRef
+	contactsCol     *firestore.CollectionRef
+}
+
+// Do a bunch of initialization. Verify JWT and get user token back, and init a Firestore connection
+//as that user.
+func MakeFirebaseManager(ctx *context.Context, r *http.Request) (*FirebaseManager, error) {
 	// Use the application default credentials
-	ctx := context.Background()
+
 	if projectID == "" {
 		panic("GCP_PROJECT is not set")
 	}
 	conf := &firebase.Config{ProjectID: projectID}
-	app, err := firebase.NewApp(ctx, conf)
+	app, err := firebase.NewApp(*ctx, conf)
 	if err != nil {
-		writeError(500, "Error initializing Firebase app", err, w)
-		return nil, nil, nil, true, err
+		// 500
+		return nil, fmt.Errorf("error initializing Firebase app: %v", err)
 	}
 
-	authClient, err := app.Auth(ctx)
+	authClient, err := app.Auth(*ctx)
 	if err != nil {
-		writeError(500, "Error getting authClient", err, w)
-		return nil, nil, nil, true, err
+		// 500
+		return nil, fmt.Errorf("error getting authClient: %v", err)
 	}
-	if handleCorsOptions(w, r) {
-		return nil, nil, nil, true, nil
-	}
-
 	idToken, err := extractIdToken(r)
 	if err != nil {
-		writeError(403, "Couldn't find authorization", err, w)
-		return nil, nil, nil, true, err
+		// 403
+		return nil, fmt.Errorf("couldn't find authorization: %v", err)
 	}
-	userToken, err := authClient.VerifyIDToken(ctx, idToken)
+	userToken, err := authClient.VerifyIDToken(*ctx, idToken)
 	if err != nil {
-		writeError(403, "Couldn't verify authorization", err, w)
-		return nil, nil, nil, true, err
+		// 403
+		return nil, fmt.Errorf("couldn't verify authorization: %v", err)
 	}
-	firestoreClient, err := makeFirestoreClient(ctx, idToken)
+	firestoreClient, err := makeFirestoreClient(*ctx, idToken)
 	if err != nil {
-		writeError(500, "Error creating firestore client", err, w)
-		return nil, nil, nil, true, err
+		// 500
+		return nil, fmt.Errorf("error creating firestore client: %v", err)
 	}
-	return ctx, userToken, firestoreClient, false, err
-}
-
-func writeError(statusCode int, message string, err error, w http.ResponseWriter) {
-	w.WriteHeader(statusCode)
-	_, _ = fmt.Fprintf(w, message+": %v", err)
-	if statusCode >= 500 {
-		log.Fatalf(message+": %v", err)
-	}
+	userDoc := firestoreClient.Collection("users").Doc(userToken.UID)
+	return &FirebaseManager{
+		ctx,
+		userToken,
+		firestoreClient,
+		userDoc,
+		userDoc.Collection("contacts"),
+	}, nil
 }
 
 func extractIdToken(r *http.Request) (string, error) {
@@ -100,8 +109,12 @@ func makeFirestoreClient(ctx context.Context, idToken string) (*firestore.Client
 	return firestoreClient, nil
 }
 
-func getUserSettings(ctx context.Context, userDoc *firestore.DocumentRef) (map[string]interface{}, error) {
-	userSettings, err := userDoc.Get(ctx)
+func (f *FirebaseManager) GetUID() string {
+	return f.userToken.UID
+}
+
+func (f *FirebaseManager) GetUserSettings() (map[string]interface{}, error) {
+	userSettings, err := f.userDoc.Get(*f.ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -111,13 +124,8 @@ func getUserSettings(ctx context.Context, userDoc *firestore.DocumentRef) (map[s
 	return userSettings.Data(), nil
 }
 
-type FirestoreQso struct {
-	qsopb  *adifpb.Qso
-	docref *firestore.DocumentRef
-}
-
-func getContacts(ctx context.Context, contactsRef *firestore.CollectionRef) ([]FirestoreQso, error) {
-	docItr := contactsRef.Documents(ctx)
+func (f *FirebaseManager) GetContacts() ([]FirestoreQso, error) {
+	docItr := f.contactsCol.Documents(*f.ctx)
 	var retval = make([]FirestoreQso, 0, 100)
 	for i := 0; ; i++ {
 		qsoDoc, err := docItr.Next()
@@ -142,7 +150,11 @@ func getContacts(ctx context.Context, contactsRef *firestore.CollectionRef) ([]F
 	return retval, nil
 }
 
-func mergeQsos(firebaseQsos []FirestoreQso, remoteAdi *adifpb.Adif, contactsRef *firestore.CollectionRef, ctx context.Context) (int, int, int) {
+// Merge the remote ADIF contacts into the Firestore ones. Returns the counts of
+// QSOs created, modified, and with no difference.
+func (f *FirebaseManager) MergeQsos(
+	firebaseQsos []FirestoreQso,
+	remoteAdi *adifpb.Adif) (int, int, int) {
 	var created = 0
 	var modified = 0
 	var noDiff = 0
@@ -160,7 +172,7 @@ func mergeQsos(firebaseQsos []FirestoreQso, remoteAdi *adifpb.Adif, contactsRef 
 				log.Printf("Updating QSO with %v on %v",
 					remoteQso.ContactedStation.StationCall,
 					remoteQso.TimeOn.String())
-				err := update(m[hash].qsopb, m[hash].docref, ctx)
+				err := f.Update(m[hash])
 				if err != nil {
 					continue
 				}
@@ -175,7 +187,7 @@ func mergeQsos(firebaseQsos []FirestoreQso, remoteAdi *adifpb.Adif, contactsRef 
 			log.Printf("Creating QSO with %v on %v",
 				remoteQso.ContactedStation.StationCall,
 				remoteQso.TimeOn.String())
-			err := create(remoteQso, contactsRef, ctx)
+			err := f.Create(remoteQso)
 			if err != nil {
 				continue
 			}
@@ -206,13 +218,13 @@ func mergeQso(base *adifpb.Qso, backfill *adifpb.Qso) bool {
 	return !proto.Equal(original, base)
 }
 
-func create(remoteQso *adifpb.Qso, contactsRef *firestore.CollectionRef, ctx context.Context) error {
-	buf, err := qsoToJson(remoteQso)
+func (f *FirebaseManager) Create(qso *adifpb.Qso) error {
+	buf, err := qsoToJson(qso)
 	if err != nil {
 		log.Printf("Problem unmarshaling for create: %v", err)
 		return err
 	}
-	_, err = contactsRef.NewDoc().Create(ctx, buf)
+	_, err = f.contactsCol.NewDoc().Create(*f.ctx, buf)
 	if err != nil {
 		log.Printf("Problem creating: %v", err)
 		return err
@@ -220,13 +232,13 @@ func create(remoteQso *adifpb.Qso, contactsRef *firestore.CollectionRef, ctx con
 	return nil
 }
 
-func update(remoteQso *adifpb.Qso, ref *firestore.DocumentRef, ctx context.Context) error {
-	buf, err := qsoToJson(remoteQso)
+func (f *FirebaseManager) Update(qso FirestoreQso) error {
+	buf, err := qsoToJson(qso.qsopb)
 	if err != nil {
 		log.Printf("Problem unmarshaling for update: %v", err)
 		return err
 	}
-	_, err = ref.Set(ctx, buf)
+	_, err = qso.docref.Set(*f.ctx, buf)
 	if err != nil {
 		log.Printf("Problem updating: %v", err)
 		return err

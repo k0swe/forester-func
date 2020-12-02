@@ -1,6 +1,8 @@
 package kellog
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -24,4 +26,12 @@ func handleCorsOptions(w http.ResponseWriter, r *http.Request) bool {
 		return true
 	}
 	return false
+}
+
+func writeError(statusCode int, message string, err error, w http.ResponseWriter) {
+	w.WriteHeader(statusCode)
+	_, _ = fmt.Fprintf(w, message+": %v", err)
+	if statusCode >= 500 {
+		log.Fatalf(message+": %v", err)
+	}
 }
