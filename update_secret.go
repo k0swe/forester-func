@@ -7,7 +7,8 @@ import (
 
 // Import QSOs from QRZ logbook and merge into Firestore. Called via GCP Cloud Functions.
 func UpdateSecret(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	if handleCorsOptions(w, r) {
 		return
 	}

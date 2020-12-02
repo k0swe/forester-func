@@ -18,7 +18,8 @@ const lotwLastFetchedDate = "lotwLastFetchedDate"
 // Import QSOs from Logbook of the World and merge into Firestore. Called via GCP Cloud Functions.
 func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	const isFixCase = true
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	if handleCorsOptions(w, r) {
 		return
 	}
