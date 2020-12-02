@@ -9,8 +9,6 @@ import (
 	"time"
 )
 
-const qrzLogbookApiKey = "qrzLogbookApiKey"
-
 // Import QSOs from QRZ logbook and merge into Firestore. Called via GCP Cloud Functions.
 func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	const isFixCase = true
@@ -24,9 +22,10 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	qrzApiKey, err := fb.GetUserSetting(qrzLogbookApiKey)
+	secretStore := NewSecretStore(ctx)
+	qrzApiKey, err := secretStore.FetchSecret(fb.GetUID(), qrzLogbookApiKey)
 	if err != nil {
-		writeError(500, "Error fetching QRZ API key from firestore", err, w)
+		writeError(500, "Error fetching QRZ API key from secret manager", err, w)
 		return
 	}
 	qrzResponse, err := ql.Fetch(&qrzApiKey)

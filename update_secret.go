@@ -24,7 +24,8 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 	}
 	lotwUser := r.PostFormValue(lotwUsername)
 	lotwPass := r.PostFormValue(lotwPassword)
-	if lotwUser == "" && lotwPass == "" {
+	qrzKey := r.PostFormValue(qrzLogbookApiKey)
+	if lotwUser == "" && lotwPass == "" && qrzKey == "" {
 		w.WriteHeader(204)
 		return
 	}
@@ -39,6 +40,13 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 	}
 	if lotwPass != "" {
 		_, err = secretStore.SetSecret(fb.GetUID(), lotwPassword, lotwPass)
+		if err != nil {
+			writeError(500, "Error storing a secret", err, w)
+			return
+		}
+	}
+	if qrzKey != "" {
+		_, err = secretStore.SetSecret(fb.GetUID(), qrzLogbookApiKey, qrzKey)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
 			return

@@ -8,6 +8,7 @@ import (
 
 const lotwUsername = "lotw_username"
 const lotwPassword = "lotw_password"
+const qrzLogbookApiKey = "qrz_logbook_api_key"
 
 type SecretStore struct {
 	ctx    context.Context
