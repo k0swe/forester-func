@@ -113,7 +113,16 @@ func (f *FirebaseManager) GetUID() string {
 	return f.userToken.UID
 }
 
-func (f *FirebaseManager) GetUserSettings() (map[string]interface{}, error) {
+func (f *FirebaseManager) GetUserSetting(key string) (string, error) {
+	userSettings, err := f.getUserSettings()
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprint(userSettings[key]), nil
+}
+
+func (f *FirebaseManager) getUserSettings() (map[string]interface{}, error) {
+	// This could be memoized, but I think the Firestore client does that anyway
 	userSettings, err := f.userDoc.Get(*f.ctx)
 	if err != nil {
 		return nil, err

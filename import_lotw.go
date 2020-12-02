@@ -27,12 +27,14 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-	userSettings, err := fb.GetUserSettings()
+	lastFetchedTime, err := fb.GetUserSetting(lotwLastFetchedDate)
 	if err != nil {
 		writeError(500, "Error fetching user settings", err, w)
 		return
 	}
-	lastFetchedTime := getLastFetchedDate(userSettings)
+	if lastFetchedTime == "" {
+		lastFetchedTime = "1970-01-01"
+	}
 	lotwUser, lotwPass, err := getLotwCreds(ctx, fb.GetUID())
 	if err != nil {
 		writeError(500, "Error fetching LotW creds", err, w)
@@ -40,7 +42,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	}
 	lotwResponse, err := lotw.Query(lotwUser, lotwPass, &lotw.QueryOpts{
 		QsoQsl:        optional.NewInterface(lotw.NO),
-		QsoQsorxsince: lastFetchedTime,
+		QsoQsorxsince: optional.NewString(lastFetchedTime),
 		QsoMydetail:   optional.NewInterface(lotw.YES),
 	})
 	if err != nil {
@@ -80,13 +82,6 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	report["noDiff"] = noDiff
 	marshal, _ := json.Marshal(report)
 	_, _ = fmt.Fprint(w, string(marshal))
-}
-
-func getLastFetchedDate(userSettings map[string]interface{}) optional.String {
-	if l, ok := userSettings[lotwLastFetchedDate]; ok {
-		return optional.NewString(fmt.Sprint(l))
-	}
-	return optional.NewString("1970-01-01")
 }
 
 func storeLastFetched(fb *FirebaseManager) error {
