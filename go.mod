@@ -3,7 +3,7 @@ module github.com/k0swe/kellog-func
 go 1.14
 
 require (
-	cloud.google.com/go v0.72.0
+	cloud.google.com/go v0.73.0
 	cloud.google.com/go/firestore v1.3.0
 	cloud.google.com/go/storage v1.12.0 // indirect
 	firebase.google.com/go/v4 v4.1.0
