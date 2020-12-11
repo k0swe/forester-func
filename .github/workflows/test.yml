@@ -3,7 +3,10 @@ name: Test
 on:
   push:
     branches-ignore:
-      - main
+      # Renovate branches will immediately become PRs
+      - 'renovate/**'
+    tags-ignore:
+      - deploy
   pull_request:
     branches:
       - '**'
