@@ -31,7 +31,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching user settings", err, w)
 		return
 	}
-	if lastFetchedTime == "" {
+	if lastFetchedTime == "<nil>" {
 		lastFetchedTime = "1970-01-01"
 	}
 	lotwUser, lotwPass, err := getLotwCreds(ctx, fb.GetUID())
