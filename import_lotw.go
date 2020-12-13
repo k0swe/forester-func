@@ -9,7 +9,6 @@ import (
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
 	"github.com/k0swe/lotw-qsl"
 	"net/http"
-	"strings"
 	"time"
 )
 
@@ -49,7 +48,6 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching LotW data", err, w)
 		return
 	}
-	lotwResponse = removeEof(lotwResponse)
 	lotwAdi, err := adifToProto(lotwResponse, time.Now())
 	if err != nil {
 		writeError(500, "Failed parsing LotW data", err, w)
@@ -88,11 +86,6 @@ func storeLastFetched(fb *FirebaseManager) error {
 	today := time.Now().UTC().Format("2006-01-02")
 	_, err := fb.userDoc.Update(*fb.ctx, []firestore.Update{{Path: lotwLastFetchedDate, Value: today}})
 	return err
-}
-
-func removeEof(response string) string {
-	// This non-conformant tag screws up the parser
-	return strings.ReplaceAll(response, "<APP_LoTW_EOF>", "")
 }
 
 func fixLotwQsls(lotwAdi *adifpb.Adif) {
