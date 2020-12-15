@@ -12,11 +12,11 @@ require (
 	github.com/golang/protobuf v1.4.3
 	github.com/imdario/mergo v0.3.11
 	github.com/jinzhu/copier v0.1.0
-	github.com/k0swe/adif-json-protobuf/go v0.0.0-20201129182120-84f6bb36ce2b
+	github.com/k0swe/adif-json-protobuf/go v0.0.0-20201215170007-a98021ef4423
 	github.com/k0swe/lotw-qsl v0.3.0
-	github.com/k0swe/qrz-logbook v0.1.0
+	github.com/k0swe/qrz-logbook v0.1.1
 	golang.org/x/oauth2 v0.0.0-20201208152858-08078c50e5b5
-	golang.org/x/sys v0.0.0-20201211090839-8ad439b19e0f // indirect
+	golang.org/x/sys v0.0.0-20201214210602-f9fddec55a1e // indirect
 	golang.org/x/tools v0.0.0-20201211185031-d93e913c1a58 // indirect
 	google.golang.org/api v0.36.0
 	google.golang.org/genproto v0.0.0-20201214200347-8c77b98c765d
