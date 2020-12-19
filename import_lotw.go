@@ -40,9 +40,9 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	lotwResponse, err := lotw.Query(lotwUser, lotwPass, &lotw.QueryOpts{
-		QsoQsl:        optional.NewInterface(lotw.NO),
-		QsoQsorxsince: optional.NewString(lastFetchedTime),
-		QsoMydetail:   optional.NewInterface(lotw.YES),
+		QsoQsl:      optional.NewInterface(lotw.YES),
+		QsoQslsince: optional.NewString(lastFetchedTime),
+		QsoMydetail: optional.NewInterface(lotw.YES),
 	})
 	if err != nil {
 		writeError(500, "Error fetching LotW data", err, w)
