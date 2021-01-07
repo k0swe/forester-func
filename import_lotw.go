@@ -3,6 +3,7 @@ package kellog
 import (
 	"cloud.google.com/go/firestore"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"github.com/antihax/optional"
@@ -52,7 +53,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	lotwAdi, err := adifToProto(lotwResponse, time.Now())
 	if err != nil {
 		writeError(500, "Failed parsing LotW data", err, w)
-		log.Printf("%v", lotwResponse)
+		log.Printf("LotW payload: %v", base64.StdEncoding.EncodeToString([]byte(lotwResponse)))
 		return
 	}
 	fixLotwQsls(lotwAdi)

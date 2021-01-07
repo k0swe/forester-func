@@ -2,6 +2,7 @@ package kellog
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	ql "github.com/k0swe/qrz-logbook"
@@ -37,7 +38,7 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	qrzAdi, err := adifToProto(qrzResponse.Adif, time.Now())
 	if err != nil {
 		writeError(500, "Failed parsing QRZ.com data", err, w)
-		log.Printf("%v", qrzResponse)
+		log.Printf("QRZ.com payload: %v", base64.StdEncoding.EncodeToString([]byte(qrzResponse.Adif)))
 		return
 	}
 	if isFixCase {
