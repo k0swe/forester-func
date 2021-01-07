@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	ql "github.com/k0swe/qrz-logbook"
+	"log"
 	"net/http"
 	"time"
 )
@@ -36,6 +37,7 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	qrzAdi, err := adifToProto(qrzResponse.Adif, time.Now())
 	if err != nil {
 		writeError(500, "Failed parsing QRZ.com data", err, w)
+		log.Printf("%v", qrzResponse)
 		return
 	}
 	if isFixCase {

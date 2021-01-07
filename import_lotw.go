@@ -8,6 +8,7 @@ import (
 	"github.com/antihax/optional"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
 	"github.com/k0swe/lotw-qsl"
+	"log"
 	"net/http"
 	"time"
 )
@@ -51,6 +52,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	lotwAdi, err := adifToProto(lotwResponse, time.Now())
 	if err != nil {
 		writeError(500, "Failed parsing LotW data", err, w)
+		log.Printf("%v", lotwResponse)
 		return
 	}
 	fixLotwQsls(lotwAdi)

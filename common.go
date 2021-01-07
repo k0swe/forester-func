@@ -32,6 +32,6 @@ func writeError(statusCode int, message string, err error, w http.ResponseWriter
 	w.WriteHeader(statusCode)
 	_, _ = fmt.Fprintf(w, message+": %v", err)
 	if statusCode >= 500 {
-		log.Fatalf(message+": %v", err)
+		log.Printf(message+": %v", err)
 	}
 }
