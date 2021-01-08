@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go/firestore v1.4.0
 	cloud.google.com/go/storage v1.12.0 // indirect
 	firebase.google.com/go/v4 v4.1.0
-	github.com/Matir/adifparser v0.0.0-20201208062640-e70240124a37
+	github.com/Matir/adifparser v0.0.0-20210108025200-83b6892b94b3
 	github.com/antihax/optional v1.0.0
 	github.com/golang/protobuf v1.4.3
 	github.com/imdario/mergo v0.3.11
