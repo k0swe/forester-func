@@ -2,7 +2,6 @@ package kellog
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -32,12 +31,14 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 	lotwPass := r.PostFormValue(lotwPassword)
 	qrzKey := r.PostFormValue(qrzLogbookApiKey)
 	if lotwUser == "" && lotwPass == "" && qrzKey == "" {
+		log.Print("Nothing to do")
 		w.WriteHeader(204)
 		return
 	}
 
 	secretStore := NewSecretStore(ctx)
 	if lotwUser != "" {
+		log.Printf("Updating %v", lotwUsername)
 		_, err = checkAndSetSecret(secretStore, fb, lotwUsername, lotwUser)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
@@ -45,6 +46,7 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if lotwPass != "" {
+		log.Printf("Updating %v", lotwPassword)
 		_, err = checkAndSetSecret(secretStore, fb, lotwPassword, lotwPass)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
@@ -52,13 +54,13 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if qrzKey != "" {
+		log.Printf("Updating %v", qrzLogbookApiKey)
 		_, err = checkAndSetSecret(secretStore, fb, qrzLogbookApiKey, qrzKey)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
 			return
 		}
 	}
-	// TODO: put a flag in firestore
 	w.WriteHeader(204)
 }
 
@@ -66,12 +68,12 @@ func checkAndSetSecret(secretStore SecretStore, fb *FirebaseManager, key string,
 	// Rely on Firestore rules to check that user is an editor on the logbook
 	err := fb.SetLogbookProperty(
 		key+"_last_set",
-		time.Now().UTC().String(),
+		time.Now().UTC().Format(time.RFC3339),
 	)
 	if err != nil {
 		// 403
-		return "", errors.New(fmt.Sprintf("can't modify logbook, are you an editor? "+
-			"not saving secret: %v", err))
+		return "", fmt.Errorf("can't modify logbook, are you an editor? "+
+			"not saving secret: %v", err)
 	}
 
 	return secretStore.SetSecret(fb.logbookId, key, value)

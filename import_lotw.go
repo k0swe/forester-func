@@ -37,6 +37,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	if lastFetchedTime == "<nil>" {
 		lastFetchedTime = "1970-01-01"
 	}
+	log.Printf("Last fetched time was %v", lastFetchedTime)
 	lotwUser, lotwPass, err := getLotwCreds(ctx, fb.logbookId)
 	if err != nil {
 		writeError(500, "Error fetching LotW creds", err, w)
@@ -51,6 +52,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching LotW data", err, w)
 		return
 	}
+	log.Printf("Fetched LotW data, %d bytes", len(lotwResponse))
 	lotwAdi, err := adifToProto(lotwResponse, time.Now())
 	if err != nil {
 		writeError(500, "Failed parsing LotW data", err, w)
@@ -82,6 +84,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	report["created"] = created
 	report["modified"] = modified
 	report["noDiff"] = noDiff
+	log.Printf("report: %v", report)
 	marshal, _ := json.Marshal(report)
 	_, _ = fmt.Fprint(w, string(marshal))
 }

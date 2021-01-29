@@ -44,6 +44,7 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching QRZ.com data", err, w)
 		return
 	}
+	log.Printf("Fetched QRZ.com data, %d records", qrzResponse.Count)
 	qrzAdi, err := adifToProto(qrzResponse.Adif, time.Now())
 	if err != nil {
 		writeError(500, "Failed parsing QRZ.com data", err, w)
@@ -68,6 +69,7 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	report["created"] = created
 	report["modified"] = modified
 	report["noDiff"] = noDiff
+	log.Printf("report: %v", report)
 	marshal, _ := json.Marshal(report)
 	_, _ = fmt.Fprint(w, string(marshal))
 }

@@ -81,7 +81,7 @@ func MakeFirebaseManager(ctx *context.Context, r *http.Request) (*FirebaseManage
 		return nil, fmt.Errorf("error creating firestore client: %v", err)
 	}
 	userDoc := firestoreClient.Collection("users").Doc(userToken.UID)
-	logbookDoc := firestoreClient.Collection("logbook").Doc(logbookId)
+	logbookDoc := firestoreClient.Collection("logbooks").Doc(logbookId)
 	contactsCol := logbookDoc.Collection("contacts")
 	return &FirebaseManager{
 		ctx,
