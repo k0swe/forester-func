@@ -19,13 +19,15 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	if handleCorsOptions(w, r) {
 		return
 	}
+	log.Print("Serving ImportQrz")
 	fb, err := MakeFirebaseManager(&ctx, r)
 	if err != nil {
+		writeError(500, "", err, w)
 		return
 	}
 
 	secretStore := NewSecretStore(ctx)
-	qrzApiKey, err := secretStore.FetchSecret(fb.GetUID(), qrzLogbookApiKey)
+	qrzApiKey, err := secretStore.FetchSecret(fb.logbookId, qrzLogbookApiKey)
 	if err != nil {
 		writeError(500, "Error fetching QRZ API key from secret manager", err, w)
 		return

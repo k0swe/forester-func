@@ -33,8 +33,10 @@ type FirestoreQso struct {
 type FirebaseManager struct {
 	ctx             *context.Context
 	userToken       *auth.Token
+	logbookId       string
 	firestoreClient *firestore.Client
 	userDoc         *firestore.DocumentRef
+	logbookDoc      *firestore.DocumentRef
 	contactsCol     *firestore.CollectionRef
 }
 
@@ -68,18 +70,27 @@ func MakeFirebaseManager(ctx *context.Context, r *http.Request) (*FirebaseManage
 		// 403
 		return nil, fmt.Errorf("couldn't verify authorization: %v", err)
 	}
+	logbookId, err := extractLogbookId(r)
+	if err != nil {
+		// 400
+		return nil, fmt.Errorf("couldn't get logbook ID: %v", err)
+	}
 	firestoreClient, err := makeFirestoreClient(*ctx, idToken)
 	if err != nil {
 		// 500
 		return nil, fmt.Errorf("error creating firestore client: %v", err)
 	}
 	userDoc := firestoreClient.Collection("users").Doc(userToken.UID)
+	logbookDoc := firestoreClient.Collection("logbook").Doc(logbookId)
+	contactsCol := logbookDoc.Collection("contacts")
 	return &FirebaseManager{
 		ctx,
 		userToken,
+		logbookId,
 		firestoreClient,
 		userDoc,
-		userDoc.Collection("contacts"),
+		logbookDoc,
+		contactsCol,
 	}, nil
 }
 
@@ -90,6 +101,14 @@ func extractIdToken(r *http.Request) (string, error) {
 	}
 	idToken = strings.TrimPrefix(idToken, "Bearer ")
 	return idToken, nil
+}
+
+func extractLogbookId(r *http.Request) (string, error) {
+	logbookIds, ok := r.URL.Query()["logbookId"]
+	if !ok || len(logbookIds) != 1 {
+		return "", errors.New("must be exactly one logbookId param")
+	}
+	return logbookIds[0], nil
 }
 
 func makeFirestoreClient(ctx context.Context, idToken string) (*firestore.Client, error) {
@@ -114,16 +133,24 @@ func (f *FirebaseManager) GetUID() string {
 }
 
 func (f *FirebaseManager) GetUserSetting(key string) (string, error) {
-	userSettings, err := f.getUserSettings()
+	userSettings, err := f.getDocProperties(f.userDoc)
 	if err != nil {
 		return "", err
 	}
 	return fmt.Sprint(userSettings[key]), nil
 }
 
-func (f *FirebaseManager) getUserSettings() (map[string]interface{}, error) {
+func (f *FirebaseManager) GetLogbookSetting(key string) (string, error) {
+	userSettings, err := f.getDocProperties(f.logbookDoc)
+	if err != nil {
+		return "", err
+	}
+	return fmt.Sprint(userSettings[key]), nil
+}
+
+func (f *FirebaseManager) getDocProperties(doc *firestore.DocumentRef) (map[string]interface{}, error) {
 	// This could be memoized, but I think the Firestore client does that anyway
-	userSettings, err := f.userDoc.Get(*f.ctx)
+	userSettings, err := doc.Get(*f.ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -253,6 +280,11 @@ func (f *FirebaseManager) Update(qso FirestoreQso) error {
 		return err
 	}
 	return nil
+}
+
+func (f *FirebaseManager) SetLogbookSetting(key string, value string) error {
+	_, err := f.logbookDoc.Update(*f.ctx, []firestore.Update{{Path: key, Value: value}})
+	return err
 }
 
 func qsoToJson(qso *adifpb.Qso) (map[string]interface{}, error) {

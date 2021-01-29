@@ -2,7 +2,9 @@ package kellog
 
 import (
 	"context"
+	"log"
 	"net/http"
+	"time"
 )
 
 // Import QSOs from QRZ logbook and merge into Firestore. Called via GCP Cloud Functions.
@@ -12,8 +14,10 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 	if handleCorsOptions(w, r) {
 		return
 	}
+	log.Print("Serving UpdateSecret")
 	fb, err := MakeFirebaseManager(&ctx, r)
 	if err != nil {
+		writeError(500, "", err, w)
 		return
 	}
 
@@ -32,21 +36,21 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 
 	secretStore := NewSecretStore(ctx)
 	if lotwUser != "" {
-		_, err = secretStore.SetSecret(fb.GetUID(), lotwUsername, lotwUser)
+		_, err = checkAndSetSecret(secretStore, fb, lotwUsername, lotwUser)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
 			return
 		}
 	}
 	if lotwPass != "" {
-		_, err = secretStore.SetSecret(fb.GetUID(), lotwPassword, lotwPass)
+		_, err = checkAndSetSecret(secretStore, fb, lotwPassword, lotwPass)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
 			return
 		}
 	}
 	if qrzKey != "" {
-		_, err = secretStore.SetSecret(fb.GetUID(), qrzLogbookApiKey, qrzKey)
+		_, err = checkAndSetSecret(secretStore, fb, qrzLogbookApiKey, qrzKey)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
 			return
@@ -54,4 +58,17 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 	}
 	// TODO: put a flag in firestore
 	w.WriteHeader(204)
+}
+
+func checkAndSetSecret(secretStore SecretStore, fb *FirebaseManager, key string, value string) (string, error) {
+	// Rely on Firestore rules to check that user is an editor on the logbook
+	err := fb.SetLogbookSetting(
+		key+"_last_set",
+		time.Now().UTC().String(),
+	)
+	if err != nil {
+		return "", err
+	}
+
+	return secretStore.SetSecret(fb.logbookId, key, value)
 }

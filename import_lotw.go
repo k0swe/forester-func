@@ -1,7 +1,6 @@
 package kellog
 
 import (
-	"cloud.google.com/go/firestore"
 	"context"
 	"encoding/base64"
 	"encoding/json"
@@ -24,11 +23,13 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	if handleCorsOptions(w, r) {
 		return
 	}
+	log.Print("Serving ImportLotw")
 	fb, err := MakeFirebaseManager(&ctx, r)
 	if err != nil {
+		writeError(500, "", err, w)
 		return
 	}
-	lastFetchedTime, err := fb.GetUserSetting(lotwLastFetchedDate)
+	lastFetchedTime, err := fb.GetLogbookSetting(lotwLastFetchedDate)
 	if err != nil {
 		writeError(500, "Error fetching user settings", err, w)
 		return
@@ -36,7 +37,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	if lastFetchedTime == "<nil>" {
 		lastFetchedTime = "1970-01-01"
 	}
-	lotwUser, lotwPass, err := getLotwCreds(ctx, fb.GetUID())
+	lotwUser, lotwPass, err := getLotwCreds(ctx, fb.logbookId)
 	if err != nil {
 		writeError(500, "Error fetching LotW creds", err, w)
 		return
@@ -87,8 +88,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 
 func storeLastFetched(fb *FirebaseManager) error {
 	today := time.Now().UTC().Format("2006-01-02")
-	_, err := fb.userDoc.Update(*fb.ctx, []firestore.Update{{Path: lotwLastFetchedDate, Value: today}})
-	return err
+	return fb.SetLogbookSetting(lotwLastFetchedDate, today)
 }
 
 func fixLotwQsls(lotwAdi *adifpb.Adif) {
@@ -99,13 +99,13 @@ func fixLotwQsls(lotwAdi *adifpb.Adif) {
 	}
 }
 
-func getLotwCreds(ctx context.Context, userUid string) (string, string, error) {
+func getLotwCreds(ctx context.Context, logbookId string) (string, string, error) {
 	secretStore := NewSecretStore(ctx)
-	username, err := secretStore.FetchSecret(userUid, lotwUsername)
+	username, err := secretStore.FetchSecret(logbookId, lotwUsername)
 	if err != nil {
 		return "", "", err
 	}
-	password, err := secretStore.FetchSecret(userUid, lotwPassword)
+	password, err := secretStore.FetchSecret(logbookId, lotwPassword)
 	if err != nil {
 		return "", "", err
 	}

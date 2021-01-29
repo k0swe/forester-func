@@ -24,8 +24,8 @@ func makeSecretId(userId string, key string) string {
 	return userId + "_" + key
 }
 
-func (s *SecretStore) FetchSecret(userId string, key string) (string, error) {
-	secretId := makeSecretId(userId, key)
+func (s *SecretStore) FetchSecret(logbookId string, key string) (string, error) {
+	secretId := makeSecretId(logbookId, key)
 	versionName := "projects/" + projectID + "/secrets/" + secretId + "/versions/latest"
 	req := &secretmanagerpb.AccessSecretVersionRequest{
 		Name: versionName,
@@ -39,8 +39,8 @@ func (s *SecretStore) FetchSecret(userId string, key string) (string, error) {
 
 // Add a version to the given secret, possibly creating the secret first. Returns the version name,
 // e.g. "/projects/*/secrets/*/versions/*".
-func (s *SecretStore) SetSecret(userId string, key string, secretValue string) (string, error) {
-	secretId := makeSecretId(userId, key)
+func (s *SecretStore) SetSecret(logbookId string, key string, secretValue string) (string, error) {
+	secretId := makeSecretId(logbookId, key)
 	projectName := "projects/" + projectID
 	secretName := projectName + "/secrets/" + secretId
 	_, err := s.client.GetSecret(s.ctx, &secretmanagerpb.GetSecretRequest{Name: secretName})
