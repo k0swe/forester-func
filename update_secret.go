@@ -14,10 +14,10 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 	if handleCorsOptions(w, r) {
 		return
 	}
-	log.Print("Serving UpdateSecret")
+	log.Print("Starting UpdateSecret")
 	fb, err := MakeFirebaseManager(&ctx, r)
 	if err != nil {
-		writeError(500, "", err, w)
+		writeError(500, "Error", err, w)
 		return
 	}
 
