@@ -20,8 +20,8 @@ func NewSecretStore(ctx context.Context) SecretStore {
 	return SecretStore{ctx, client}
 }
 
-func makeSecretId(userId string, key string) string {
-	return userId + "_" + key
+func makeSecretId(scope string, key string) string {
+	return scope + "_" + key
 }
 
 func (s *SecretStore) FetchSecret(logbookId string, key string) (string, error) {

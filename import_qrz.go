@@ -11,6 +11,8 @@ import (
 	"time"
 )
 
+const qrzLastFetchedDate = "qrzLastFetchedDate"
+
 // Import QSOs from QRZ logbook and merge into Firestore. Called via GCP Cloud Functions.
 func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	const isFixCase = true
@@ -23,6 +25,11 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	fb, err := MakeFirebaseManager(&ctx, r)
 	if err != nil {
 		writeError(500, "Error", err, w)
+		return
+	}
+	_, err = fb.GetLogbookProperty(qrzLastFetchedDate)
+	if err != nil {
+		writeError(500, "Error fetching logbook properties from firestore", err, w)
 		return
 	}
 

@@ -29,9 +29,9 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error", err, w)
 		return
 	}
-	lastFetchedTime, err := fb.GetLogbookSetting(lotwLastFetchedDate)
+	lastFetchedTime, err := fb.GetLogbookProperty(lotwLastFetchedDate)
 	if err != nil {
-		writeError(500, "Error fetching user settings", err, w)
+		writeError(500, "Error fetching logbook properties from firestore", err, w)
 		return
 	}
 	if lastFetchedTime == "<nil>" {
@@ -88,7 +88,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 
 func storeLastFetched(fb *FirebaseManager) error {
 	today := time.Now().UTC().Format("2006-01-02")
-	return fb.SetLogbookSetting(lotwLastFetchedDate, today)
+	return fb.SetLogbookProperty(lotwLastFetchedDate, today)
 }
 
 func fixLotwQsls(lotwAdi *adifpb.Adif) {

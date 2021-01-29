@@ -132,32 +132,29 @@ func (f *FirebaseManager) GetUID() string {
 	return f.userToken.UID
 }
 
-func (f *FirebaseManager) GetUserSetting(key string) (string, error) {
-	userSettings, err := f.getDocProperties(f.userDoc)
-	if err != nil {
-		return "", err
-	}
-	return fmt.Sprint(userSettings[key]), nil
+func (f *FirebaseManager) GetUserProperty(key string) (string, error) {
+	return f.getDocProperty(f.userDoc, key)
 }
 
-func (f *FirebaseManager) GetLogbookSetting(key string) (string, error) {
-	userSettings, err := f.getDocProperties(f.logbookDoc)
-	if err != nil {
-		return "", err
-	}
-	return fmt.Sprint(userSettings[key]), nil
+func (f *FirebaseManager) GetLogbookProperty(key string) (string, error) {
+	return f.getDocProperty(f.logbookDoc, key)
 }
 
-func (f *FirebaseManager) getDocProperties(doc *firestore.DocumentRef) (map[string]interface{}, error) {
+func (f *FirebaseManager) getDocProperty(doc *firestore.DocumentRef, key string) (string, error) {
 	// This could be memoized, but I think the Firestore client does that anyway
-	userSettings, err := doc.Get(*f.ctx)
+	docSnapshot, err := doc.Get(*f.ctx)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	if !userSettings.Exists() {
-		return make(map[string]interface{}), nil
+	if !docSnapshot.Exists() {
+		return "", nil
 	}
-	return userSettings.Data(), nil
+	return fmt.Sprint(docSnapshot.Data()[key]), nil
+}
+
+func (f *FirebaseManager) SetLogbookProperty(key string, value string) error {
+	_, err := f.logbookDoc.Update(*f.ctx, []firestore.Update{{Path: key, Value: value}})
+	return err
 }
 
 func (f *FirebaseManager) GetContacts() ([]FirestoreQso, error) {
@@ -280,11 +277,6 @@ func (f *FirebaseManager) Update(qso FirestoreQso) error {
 		return err
 	}
 	return nil
-}
-
-func (f *FirebaseManager) SetLogbookSetting(key string, value string) error {
-	_, err := f.logbookDoc.Update(*f.ctx, []firestore.Update{{Path: key, Value: value}})
-	return err
 }
 
 func qsoToJson(qso *adifpb.Qso) (map[string]interface{}, error) {

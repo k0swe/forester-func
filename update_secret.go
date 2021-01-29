@@ -2,6 +2,8 @@ package kellog
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -62,12 +64,14 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 
 func checkAndSetSecret(secretStore SecretStore, fb *FirebaseManager, key string, value string) (string, error) {
 	// Rely on Firestore rules to check that user is an editor on the logbook
-	err := fb.SetLogbookSetting(
+	err := fb.SetLogbookProperty(
 		key+"_last_set",
 		time.Now().UTC().String(),
 	)
 	if err != nil {
-		return "", err
+		// 403
+		return "", errors.New(fmt.Sprintf("can't modify logbook, are you an editor? "+
+			"not saving secret: %v", err))
 	}
 
 	return secretStore.SetSecret(fb.logbookId, key, value)
