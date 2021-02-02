@@ -14,7 +14,7 @@ var projectID = os.Getenv("GCP_PROJECT")
 // Write CORS headers to the response. Returns true if this is an OPTIONS request; false otherwise.
 func handleCorsOptions(w http.ResponseWriter, r *http.Request) bool {
 	origin := r.Header.Get("Origin")
-	if strings.Contains(origin, "log.k0swe.radio") || strings.Contains(origin, "localhost") {
+	if strings.Contains(origin, "forester.radio") || strings.Contains(origin, "localhost") {
 		w.Header().Set("Access-Control-Allow-Origin", origin)
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 	}
