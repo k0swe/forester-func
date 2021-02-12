@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go v0.76.0
 	cloud.google.com/go/firestore v1.4.0
 	cloud.google.com/go/storage v1.12.0 // indirect
-	firebase.google.com/go/v4 v4.1.0
+	firebase.google.com/go/v4 v4.2.0
 	github.com/Matir/adifparser v0.0.0-20210115003802-6f5d33690059
 	github.com/antihax/optional v1.0.0
 	github.com/golang/protobuf v1.4.3
