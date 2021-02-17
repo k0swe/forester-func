@@ -16,7 +16,7 @@ require (
 	github.com/k0swe/lotw-qsl v0.3.3
 	github.com/k0swe/qrz-logbook v0.1.4
 	go.opencensus.io v0.22.6 // indirect
-	golang.org/x/oauth2 v0.0.0-20210210192628-66670185b0cd
+	golang.org/x/oauth2 v0.0.0-20210216194517-16ff1888fd2e
 	google.golang.org/api v0.40.0
 	google.golang.org/genproto v0.0.0-20210212180131-e7f2df4ecc2d
 	google.golang.org/protobuf v1.25.0
