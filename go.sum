@@ -151,8 +151,7 @@ github.com/k0swe/adif-json-protobuf/go v0.0.0-20201215170007-a98021ef4423 h1:Ej9
 github.com/k0swe/adif-json-protobuf/go v0.0.0-20201215170007-a98021ef4423/go.mod h1:BhcpZpsk2usW06WahrCX+3Zos8befpn2/XI3og7fCjc=
 github.com/k0swe/lotw-qsl v0.3.5 h1:Ik39QHNPWangbLYpoEQPvUH1qxxK1Zz7odoYu56lYmw=
 github.com/k0swe/lotw-qsl v0.3.5/go.mod h1:0yTEyTl6ZwBXaKjmMTs2QL4tNkGZzl5t4Cd3czSX6Ig=
-github.com/k0swe/qrz-logbook v0.1.5 h1:2YJy4lbD1WppU2xxffzQqD0ul1FrIGX/8a7PilgGDHw=
-github.com/k0swe/qrz-logbook v0.1.5/go.mod h1:O5YFOznAaN1KcwQgCtEzOIOTonzp4NDXYPTk2vrJRpM=
+github.com/k0swe/qrz-logbook v0.1.6/go.mod h1:HwEysP0Q9NE3kIMX3mELEKP+c3her0zeuzbHxWKloPA=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
@@ -272,7 +271,6 @@ golang.org/x/oauth2 v0.0.0-20201109201403-9fd604954f58/go.mod h1:KelEdhl1UZF7XfJ
 golang.org/x/oauth2 v0.0.0-20201208152858-08078c50e5b5 h1:Lm4OryKCca1vehdsWogr9N4t7NfZxLbJoc/H0w4K4S4=
 golang.org/x/oauth2 v0.0.0-20201208152858-08078c50e5b5/go.mod h1:KelEdhl1UZF7XfJ4dDtk6s++YSgaE7mD/BuKKDLBl4A=
 golang.org/x/oauth2 v0.0.0-20210113205817-d3ed898aa8a3/go.mod h1:KelEdhl1UZF7XfJ4dDtk6s++YSgaE7mD/BuKKDLBl4A=
-golang.org/x/oauth2 v0.0.0-20210210192628-66670185b0cd/go.mod h1:KelEdhl1UZF7XfJ4dDtk6s++YSgaE7mD/BuKKDLBl4A=
 golang.org/x/oauth2 v0.0.0-20210218202405-ba52d332ba99/go.mod h1:KelEdhl1UZF7XfJ4dDtk6s++YSgaE7mD/BuKKDLBl4A=
 golang.org/x/oauth2 v0.0.0-20210220000619-9bb904979d93 h1:alLDrZkL34Y2bnGHfvC1CYBRBXCXgx8AC2vY4MRtYX4=
 golang.org/x/oauth2 v0.0.0-20210220000619-9bb904979d93/go.mod h1:KelEdhl1UZF7XfJ4dDtk6s++YSgaE7mD/BuKKDLBl4A=
