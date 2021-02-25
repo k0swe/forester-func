@@ -151,6 +151,7 @@ github.com/k0swe/adif-json-protobuf/go v0.0.0-20201215170007-a98021ef4423 h1:Ej9
 github.com/k0swe/adif-json-protobuf/go v0.0.0-20201215170007-a98021ef4423/go.mod h1:BhcpZpsk2usW06WahrCX+3Zos8befpn2/XI3og7fCjc=
 github.com/k0swe/lotw-qsl v0.3.5 h1:Ik39QHNPWangbLYpoEQPvUH1qxxK1Zz7odoYu56lYmw=
 github.com/k0swe/lotw-qsl v0.3.5/go.mod h1:0yTEyTl6ZwBXaKjmMTs2QL4tNkGZzl5t4Cd3czSX6Ig=
+github.com/k0swe/qrz-logbook v0.1.6 h1:Wb5zEyX52gu4F65IjVlXMFF+1Yw/dKriAWzZtCx3D1s=
 github.com/k0swe/qrz-logbook v0.1.6/go.mod h1:HwEysP0Q9NE3kIMX3mELEKP+c3her0zeuzbHxWKloPA=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=
@@ -469,8 +470,7 @@ google.golang.org/genproto v0.0.0-20201214200347-8c77b98c765d/go.mod h1:FWY/as6D
 google.golang.org/genproto v0.0.0-20210108203827-ffc7fda8c3d7/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
 google.golang.org/genproto v0.0.0-20210203152818-3206188e46ba/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
 google.golang.org/genproto v0.0.0-20210222152913-aa3ee6e6a81c/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
-google.golang.org/genproto v0.0.0-20210223151946-22b48be4551b h1:GXCSqFSSKq+L4Pi31A2Ba7j8BZCwHN8oJkREab1VokI=
-google.golang.org/genproto v0.0.0-20210223151946-22b48be4551b/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
+google.golang.org/genproto v0.0.0-20210224155714-063164c882e6/go.mod h1:FWY/as6DDZQgahTzZj3fqbO1CbirC29ZNUFHwi0/+no=
 google.golang.org/grpc v1.19.0/go.mod h1:mqu4LbDTu4XGKhr4mRzUsmM4RtVoemTSY81AxZiDr8c=
 google.golang.org/grpc v1.20.1/go.mod h1:10oTOabMzJvdu6/UiuZezV6QK5dSlG84ov/aaiqXj38=
 google.golang.org/grpc v1.21.1/go.mod h1:oYelfM1adQP15Ek0mdvEgi9Df8B9CZIaU1084ijfRaM=
