@@ -18,6 +18,6 @@ require (
 	go.opencensus.io v0.22.6 // indirect
 	golang.org/x/oauth2 v0.0.0-20210220000619-9bb904979d93
 	google.golang.org/api v0.40.0
-	google.golang.org/genproto v0.0.0-20210226172003-ab064af71705
+	google.golang.org/genproto v0.0.0-20210302174412-5ede27ff9881
 	google.golang.org/protobuf v1.25.0
 )
