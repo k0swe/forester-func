@@ -140,8 +140,8 @@ github.com/jinzhu/copier v0.2.5/go.mod h1:24xnZezI2Yqac9J61UC6/dG/k76ttpq0DdJI3Q
 github.com/jstemmer/go-junit-report v0.0.0-20190106144839-af01ea7f8024/go.mod h1:6v2b51hI/fHJwM22ozAgKL4VKDeJcHhJFhtBdhmNjmU=
 github.com/jstemmer/go-junit-report v0.9.1 h1:6QPYqodiu3GuPL+7mfx+NwDdp2eTkp9IfEUpgAwUN0o=
 github.com/jstemmer/go-junit-report v0.9.1/go.mod h1:Brl9GWCQeLvo8nXZwPNNblvFj/XSXhF0NWZEnDohbsk=
-github.com/k0swe/adif-json-protobuf/go v0.0.0-20201215170007-a98021ef4423 h1:Ej9o68Sm5GU5Sap3oG4IMfEgalbfAFDBsIpnDK74sbs=
-github.com/k0swe/adif-json-protobuf/go v0.0.0-20201215170007-a98021ef4423/go.mod h1:BhcpZpsk2usW06WahrCX+3Zos8befpn2/XI3og7fCjc=
+github.com/k0swe/adif-json-protobuf/go v0.0.5 h1:/Y+QdbQqiaSyjQCV+rkYIB6p9oOuPBUZX0oH/OxcuYU=
+github.com/k0swe/adif-json-protobuf/go v0.0.5/go.mod h1:BhcpZpsk2usW06WahrCX+3Zos8befpn2/XI3og7fCjc=
 github.com/k0swe/lotw-qsl v0.3.5 h1:Ik39QHNPWangbLYpoEQPvUH1qxxK1Zz7odoYu56lYmw=
 github.com/k0swe/lotw-qsl v0.3.5/go.mod h1:0yTEyTl6ZwBXaKjmMTs2QL4tNkGZzl5t4Cd3czSX6Ig=
 github.com/k0swe/qrz-logbook v0.1.6 h1:Wb5zEyX52gu4F65IjVlXMFF+1Yw/dKriAWzZtCx3D1s=
