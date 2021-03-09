@@ -12,7 +12,7 @@ require (
 	github.com/golang/protobuf v1.4.3
 	github.com/google/go-cmp v0.5.5 // indirect
 	github.com/imdario/mergo v0.3.11
-	github.com/jinzhu/copier v0.2.5
+	github.com/jinzhu/copier v0.2.8
 	github.com/k0swe/adif-json-protobuf/go v0.0.5
 	github.com/k0swe/lotw-qsl v0.3.5
 	github.com/k0swe/qrz-logbook v0.1.6
