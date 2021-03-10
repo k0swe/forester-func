@@ -15,9 +15,11 @@ require (
 	github.com/k0swe/adif-json-protobuf/go v0.0.5
 	github.com/k0swe/lotw-qsl v0.3.5
 	github.com/k0swe/qrz-logbook v0.1.6
+	golang.org/x/mod v0.4.2 // indirect
 	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
 	golang.org/x/oauth2 v0.0.0-20210220000619-9bb904979d93
+	golang.org/x/sys v0.0.0-20210309074719-68d13333faf2 // indirect
 	google.golang.org/api v0.41.0
-	google.golang.org/genproto v0.0.0-20210309190941-1aeedc14537d
+	google.golang.org/genproto v0.0.0-20210310155132-4ce2db91004e
 	google.golang.org/protobuf v1.25.0
 )
