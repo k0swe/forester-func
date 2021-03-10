@@ -10,18 +10,14 @@ require (
 	github.com/Matir/adifparser v0.0.0-20210115003802-6f5d33690059
 	github.com/antihax/optional v1.0.0
 	github.com/golang/protobuf v1.4.3
-	github.com/google/go-cmp v0.5.5 // indirect
 	github.com/imdario/mergo v0.3.12
 	github.com/jinzhu/copier v0.2.8
 	github.com/k0swe/adif-json-protobuf/go v0.0.5
 	github.com/k0swe/lotw-qsl v0.3.5
 	github.com/k0swe/qrz-logbook v0.1.6
-	go.opencensus.io v0.23.0 // indirect
 	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
 	golang.org/x/oauth2 v0.0.0-20210220000619-9bb904979d93
-	golang.org/x/sys v0.0.0-20210304152209-afaa3650a925 // indirect
-	google.golang.org/api v0.40.0
+	google.golang.org/api v0.41.0
 	google.golang.org/genproto v0.0.0-20210309190941-1aeedc14537d
-	google.golang.org/grpc v1.36.0 // indirect
 	google.golang.org/protobuf v1.25.0
 )
