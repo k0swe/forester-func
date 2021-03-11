@@ -3,7 +3,7 @@ module github.com/k0swe/kellog-func
 go 1.14
 
 require (
-	cloud.google.com/go v0.78.0
+	cloud.google.com/go v0.79.0
 	cloud.google.com/go/firestore v1.5.0
 	cloud.google.com/go/storage v1.14.0 // indirect
 	firebase.google.com/go/v4 v4.2.0
@@ -16,7 +16,6 @@ require (
 	github.com/k0swe/lotw-qsl v0.3.5
 	github.com/k0swe/qrz-logbook v0.1.6
 	golang.org/x/mod v0.4.2 // indirect
-	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
 	golang.org/x/oauth2 v0.0.0-20210220000619-9bb904979d93
 	golang.org/x/sys v0.0.0-20210309074719-68d13333faf2 // indirect
 	google.golang.org/api v0.41.0
