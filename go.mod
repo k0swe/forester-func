@@ -9,7 +9,7 @@ require (
 	firebase.google.com/go/v4 v4.2.0
 	github.com/Matir/adifparser v0.0.0-20210115003802-6f5d33690059
 	github.com/antihax/optional v1.0.0
-	github.com/golang/protobuf v1.4.3
+	github.com/golang/protobuf v1.5.1
 	github.com/imdario/mergo v0.3.12
 	github.com/jinzhu/copier v0.2.8
 	github.com/k0swe/adif-json-protobuf/go v0.0.5
@@ -21,5 +21,5 @@ require (
 	golang.org/x/sys v0.0.0-20210316092937-0b90fd5c4c48 // indirect
 	google.golang.org/api v0.42.0
 	google.golang.org/genproto v0.0.0-20210315173758-2651cd453018
-	google.golang.org/protobuf v1.25.0
+	google.golang.org/protobuf v1.26.0
 )
