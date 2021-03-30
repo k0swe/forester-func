@@ -9,7 +9,7 @@ require (
 	firebase.google.com/go/v4 v4.3.0
 	github.com/Matir/adifparser v0.0.0-20210115003802-6f5d33690059
 	github.com/antihax/optional v1.0.0
-	github.com/golang/protobuf v1.5.1
+	github.com/golang/protobuf v1.5.2
 	github.com/imdario/mergo v0.3.12
 	github.com/jinzhu/copier v0.2.8
 	github.com/k0swe/adif-json-protobuf/go v0.0.5
