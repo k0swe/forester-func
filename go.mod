@@ -13,7 +13,7 @@ require (
 	github.com/imdario/mergo v0.3.12
 	github.com/jinzhu/copier v0.2.8
 	github.com/k0swe/adif-json-protobuf/go v0.0.5
-	github.com/k0swe/lotw-qsl v0.3.7
+	github.com/k0swe/lotw-qsl v0.3.8
 	github.com/k0swe/qrz-logbook v0.1.8
 	golang.org/x/mod v0.4.2 // indirect
 	golang.org/x/net v0.0.0-20210324205630-d1beb07c2056 // indirect
