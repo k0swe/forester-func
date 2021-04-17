@@ -21,6 +21,6 @@ require (
 	golang.org/x/oauth2 v0.0.0-20210413134643-5e61552d6c78
 	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/api v0.44.0
-	google.golang.org/genproto v0.0.0-20210415145412-64678f1ae2d5
+	google.golang.org/genproto v0.0.0-20210416161957-9910b6c460de
 	google.golang.org/protobuf v1.26.0
 )
