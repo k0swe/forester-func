@@ -3,4 +3,4 @@
 
 # kellog-func
 
-Serverless cloud functions to support K0SWE's KelLog amateur radio logger.
+Serverless cloud functions to support K0SWE's [Forester](https://github.com/k0swe/forester) (originally called KelLog) amateur radio logger.
