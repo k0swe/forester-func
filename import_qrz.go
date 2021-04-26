@@ -13,7 +13,8 @@ import (
 
 const qrzLastFetchedDate = "qrzLastFetchedDate"
 
-// Import QSOs from QRZ logbook and merge into Firestore. Called via GCP Cloud Functions.
+// ImportQrz imports QSOs from QRZ logbook and merges them into Firestore. Called via GCP Cloud
+// Functions.
 func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	const isFixCase = true
 	ctx, cancel := context.WithCancel(context.Background())

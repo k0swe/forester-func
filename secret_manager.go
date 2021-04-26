@@ -37,8 +37,8 @@ func (s *SecretStore) FetchSecret(logbookId string, key string) (string, error) 
 	return string(resp.GetPayload().GetData()), nil
 }
 
-// Add a version to the given secret, possibly creating the secret first. Returns the version name,
-// e.g. "/projects/*/secrets/*/versions/*".
+// SetSecret adds a version to the given secret, possibly creating the secret first. It returns the
+// version name, e.g. "/projects/*/secrets/*/versions/*".
 func (s *SecretStore) SetSecret(logbookId string, key string, secretValue string) (string, error) {
 	secretId := makeSecretId(logbookId, key)
 	projectName := "projects/" + projectID

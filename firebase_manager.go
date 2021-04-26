@@ -40,8 +40,8 @@ type FirebaseManager struct {
 	contactsCol     *firestore.CollectionRef
 }
 
-// Do a bunch of initialization. Verify JWT and get user token back, and init a Firestore connection
-//as that user.
+// MakeFirebaseManager does a bunch of initialization. It verifies the JWT and exchanges it for a
+// user token, and inits a Firestore connection as that user.
 func MakeFirebaseManager(ctx *context.Context, r *http.Request) (*FirebaseManager, error) {
 	// Use the application default credentials
 
@@ -183,7 +183,7 @@ func (f *FirebaseManager) GetContacts() ([]FirestoreQso, error) {
 	return retval, nil
 }
 
-// Merge the remote ADIF contacts into the Firestore ones. Returns the counts of
+// MergeQsos merges the remote ADIF contacts into the Firestore ones. It returns the counts of
 // QSOs created, modified, and with no difference.
 func (f *FirebaseManager) MergeQsos(
 	firebaseQsos []FirestoreQso,

@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// Import QSOs from QRZ logbook and merge into Firestore. Called via GCP Cloud Functions.
+// UpdateSecret allows users to add or change their stored secrets. Called via GCP Cloud Functions.
 func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
