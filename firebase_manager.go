@@ -9,7 +9,6 @@ import (
 	firebase "firebase.google.com/go/v4"
 	"firebase.google.com/go/v4/auth"
 	"fmt"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/imdario/mergo"
 	"github.com/jinzhu/copier"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
@@ -231,7 +230,7 @@ func (f *FirebaseManager) MergeQsos(
 }
 
 func hashQso(qsopb *adifpb.Qso) string {
-	timeOn, _ := ptypes.Timestamp(qsopb.TimeOn)
+	timeOn := qsopb.TimeOn.AsTime()
 	// Some providers (QRZ.com) only have minute precision
 	timeOn = timeOn.Truncate(time.Minute)
 	payload := []byte(qsopb.LoggingStation.StationCall +

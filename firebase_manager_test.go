@@ -3,6 +3,7 @@ package kellog
 import (
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"testing"
 	"time"
 )
@@ -179,16 +180,16 @@ func Test_mergeQso(t *testing.T) {
 					FreqRx:      14.0761,
 					Mode:        "FT8",
 					DistanceKm:  1307,
-					TimeOn:      protoTime(time.Unix(1603656900, 0)),
-					TimeOff:     protoTime(time.Unix(1603656960, 0)),
+					TimeOn:      timestamppb.New(time.Unix(1603656900, 0)),
+					TimeOff:     timestamppb.New(time.Unix(1603656960, 0)),
 					RstReceived: "-04",
 					RstSent:     "-13",
 					Qrzcom: &adifpb.Upload{
-						UploadDate:   protoTime(time.Unix(1603584000, 0)),
+						UploadDate:   timestamppb.New(time.Unix(1603584000, 0)),
 						UploadStatus: adifpb.UploadStatus_UPLOAD_COMPLETE,
 					},
 					Lotw: &adifpb.Qsl{
-						SentDate:   protoTime(time.Unix(1603584000, 0)),
+						SentDate:   timestamppb.New(time.Unix(1603584000, 0)),
 						SentStatus: "Y",
 					},
 					AppDefined: map[string]string{
@@ -204,9 +205,9 @@ func Test_mergeQso(t *testing.T) {
 					Band:             "20m",
 					Freq:             14.0761,
 					Mode:             "FT8",
-					TimeOn:           protoTime(time.Unix(1603656900, 0)),
+					TimeOn:           timestamppb.New(time.Unix(1603656900, 0)),
 					Lotw: &adifpb.Qsl{
-						ReceivedDate:   protoTime(time.Unix(1604102400, 0)),
+						ReceivedDate:   timestamppb.New(time.Unix(1604102400, 0)),
 						ReceivedStatus: "Y",
 					},
 					AppDefined: map[string]string{
@@ -255,18 +256,18 @@ func Test_mergeQso(t *testing.T) {
 					FreqRx:      14.0761,
 					Mode:        "FT8",
 					DistanceKm:  1307,
-					TimeOn:      protoTime(time.Unix(1603656900, 0)),
-					TimeOff:     protoTime(time.Unix(1603656960, 0)),
+					TimeOn:      timestamppb.New(time.Unix(1603656900, 0)),
+					TimeOff:     timestamppb.New(time.Unix(1603656960, 0)),
 					RstReceived: "-04",
 					RstSent:     "-13",
 					Qrzcom: &adifpb.Upload{
-						UploadDate:   protoTime(time.Unix(1603584000, 0)),
+						UploadDate:   timestamppb.New(time.Unix(1603584000, 0)),
 						UploadStatus: adifpb.UploadStatus_UPLOAD_COMPLETE,
 					},
 					Lotw: &adifpb.Qsl{
-						SentDate:       protoTime(time.Unix(1603584000, 0)),
+						SentDate:       timestamppb.New(time.Unix(1603584000, 0)),
 						SentStatus:     "Y",
-						ReceivedDate:   protoTime(time.Unix(1604102400, 0)),
+						ReceivedDate:   timestamppb.New(time.Unix(1604102400, 0)),
 						ReceivedStatus: "Y",
 					},
 					AppDefined: map[string]string{

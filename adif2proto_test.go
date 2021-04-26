@@ -1,9 +1,8 @@
 package kellog
 
 import (
-	"github.com/golang/protobuf/ptypes"
-	"github.com/golang/protobuf/ptypes/timestamp"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"reflect"
 	"testing"
 	"time"
@@ -11,7 +10,7 @@ import (
 
 func Test_adifToProto(t *testing.T) {
 	createTime := time.Now()
-	createStamp, _ := ptypes.TimestampProto(createTime)
+	createStamp := timestamppb.New(createTime)
 	standardHeader := &adifpb.Header{
 		AdifVersion:      "3.1.1",
 		CreatedTimestamp: createStamp,
@@ -241,12 +240,12 @@ QSL RX SINCE: 2020-10-31 21:08:24 (system supplied default)
 						Band:             "20M",
 						Freq:             14.07610,
 						Mode:             "FT8",
-						TimeOn:           protoTime(time.Date(2020, 10, 25, 20, 15, 0, 0, time.UTC)),
+						TimeOn:           timestamppb.New(time.Date(2020, 10, 25, 20, 15, 0, 0, time.UTC)),
 						LoggingStation:   &adifpb.Station{},
 						ContactedStation: &adifpb.Station{StationCall: "N6DN"},
 						Propagation:      &adifpb.Propagation{},
 						Card: &adifpb.Qsl{
-							ReceivedDate:   protoTime(time.Date(2020, 10, 31, 0, 0, 0, 0, time.UTC)),
+							ReceivedDate:   timestamppb.New(time.Date(2020, 10, 31, 0, 0, 0, 0, time.UTC)),
 							ReceivedStatus: "Y",
 						},
 						AppDefined: map[string]string{
@@ -273,9 +272,4 @@ QSL RX SINCE: 2020-10-31 21:08:24 (system supplied default)
 			}
 		})
 	}
-}
-
-func protoTime(t time.Time) *timestamp.Timestamp {
-	proto, _ := ptypes.TimestampProto(t)
-	return proto
 }

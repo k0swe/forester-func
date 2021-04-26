@@ -2,9 +2,9 @@ package kellog
 
 import (
 	"github.com/Matir/adifparser"
-	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"io"
 	"log"
 	"math"
@@ -17,7 +17,7 @@ import (
 func adifToProto(adifString string, createTime time.Time) (*adifpb.Adif, error) {
 	reader := adifparser.NewADIFReader(strings.NewReader(adifString))
 	adi := new(adifpb.Adif)
-	created, _ := ptypes.TimestampProto(createTime)
+	created := timestamppb.New(createTime)
 	adi.Header = &adifpb.Header{
 		AdifVersion:      "3.1.1",
 		CreatedTimestamp: created,
@@ -353,11 +353,7 @@ func getTimestamp(record adifparser.ADIFRecord, dateField string, timeField stri
 	if err != nil {
 		log.Print(err)
 	}
-	ts, err := ptypes.TimestampProto(t)
-	if err != nil {
-		log.Print(err)
-	}
-	return ts
+	return timestamppb.New(t)
 }
 
 func getDate(record adifparser.ADIFRecord, field string) *timestamp.Timestamp {
@@ -369,9 +365,5 @@ func getDate(record adifparser.ADIFRecord, field string) *timestamp.Timestamp {
 	if err != nil {
 		log.Print(err)
 	}
-	ts, err := ptypes.TimestampProto(t)
-	if err != nil {
-		log.Print(err)
-	}
-	return ts
+	return timestamppb.New(t)
 }
