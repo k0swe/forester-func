@@ -17,11 +17,10 @@ require (
 	github.com/k0swe/lotw-qsl v0.3.9
 	github.com/k0swe/qrz-logbook v0.1.10
 	golang.org/x/mod v0.4.2 // indirect
-	golang.org/x/net v0.0.0-20210423184538-5f58ad60dda6 // indirect
-	golang.org/x/oauth2 v0.0.0-20210413134643-5e61552d6c78
-	golang.org/x/sys v0.0.0-20210426080607-c94f62235c83 // indirect
-	golang.org/x/text v0.3.6 // indirect
+	golang.org/x/net v0.0.0-20210428140749-89ef3d95e781 // indirect
+	golang.org/x/oauth2 v0.0.0-20210427180440-81ed05c6b58c
+	golang.org/x/sys v0.0.0-20210426230700-d19ff857e887 // indirect
 	google.golang.org/api v0.45.0
-	google.golang.org/genproto v0.0.0-20210423144448-3a41ef94ed2b
+	google.golang.org/genproto v0.0.0-20210427215850-f767ed18ee4d
 	google.golang.org/protobuf v1.26.0
 )
