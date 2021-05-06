@@ -152,8 +152,8 @@ github.com/k0swe/adif-json-protobuf/go v0.0.5 h1:/Y+QdbQqiaSyjQCV+rkYIB6p9oOuPBU
 github.com/k0swe/adif-json-protobuf/go v0.0.5/go.mod h1:BhcpZpsk2usW06WahrCX+3Zos8befpn2/XI3og7fCjc=
 github.com/k0swe/lotw-qsl v0.3.10 h1:8HDrZvSenMzp12pAaiXA/YQNvmA61O2F5yNX+x9sG/8=
 github.com/k0swe/lotw-qsl v0.3.10/go.mod h1:x7UnFb/VO8AIw0cpYB0WgRj7x1SpwUSHhPDtLvwbAss=
-github.com/k0swe/qrz-logbook v0.1.10 h1:x3aDrUAh+dKXM/E/ZtoEw/gXPDzpACnjSnInRzOd5uM=
-github.com/k0swe/qrz-logbook v0.1.10/go.mod h1:kebadTnMTSmFB2UAaAg6YhJfcViOTwgWHERHkSheDAc=
+github.com/k0swe/qrz-logbook v0.1.11 h1:uMfXtWN31I+H2eGMPEENOuMQ84+L3z5qMFIzyacWPuE=
+github.com/k0swe/qrz-logbook v0.1.11/go.mod h1:PwpXzdU9uyXDPpTH92LkEJLkLsZKw6zss1XSnGrVkXM=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
