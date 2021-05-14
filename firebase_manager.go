@@ -1,4 +1,4 @@
-package kellog
+package forester
 
 import (
 	"cloud.google.com/go/firestore"

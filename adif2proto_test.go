@@ -1,4 +1,4 @@
-package kellog
+package forester
 
 import (
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
@@ -14,7 +14,7 @@ func Test_adifToProto(t *testing.T) {
 	standardHeader := &adifpb.Header{
 		AdifVersion:      "3.1.1",
 		CreatedTimestamp: createStamp,
-		ProgramId:        "kellog-func",
+		ProgramId:        "forester-func",
 		ProgramVersion:   "0.0.1",
 	}
 	type args struct {

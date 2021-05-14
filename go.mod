@@ -1,4 +1,4 @@
-module github.com/k0swe/kellog-func
+module github.com/k0swe/forester-func
 
 go 1.14
 

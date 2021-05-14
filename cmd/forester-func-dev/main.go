@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/k0swe/kellog-func"
+	"github.com/k0swe/forester-func"
 	"log"
 	"net/http"
 	"os"
@@ -15,9 +15,9 @@ func main() {
 		log.Printf("GCP_PROJECT is %v", os.Getenv("GCP_PROJECT"))
 	}
 	const addr = "localhost:8080"
-	http.HandleFunc("/ImportQrz", kellog.ImportQrz)
-	http.HandleFunc("/ImportLotw", kellog.ImportLotw)
-	http.HandleFunc("/UpdateSecret", kellog.UpdateSecret)
+	http.HandleFunc("/ImportQrz", forester.ImportQrz)
+	http.HandleFunc("/ImportLotw", forester.ImportLotw)
+	http.HandleFunc("/UpdateSecret", forester.UpdateSecret)
 	log.Printf("Ready to serve on http://%s", addr)
 	log.Fatal(http.ListenAndServe(addr, nil))
 }

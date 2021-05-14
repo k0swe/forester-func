@@ -1,4 +1,4 @@
-package kellog
+package forester
 
 import (
 	"github.com/k0swe/adif-json-protobuf/go"

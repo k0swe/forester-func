@@ -1,4 +1,4 @@
-package kellog
+package forester
 
 import (
 	"github.com/Matir/adifparser"
@@ -21,7 +21,7 @@ func adifToProto(adifString string, createTime time.Time) (*adifpb.Adif, error) 
 	adi.Header = &adifpb.Header{
 		AdifVersion:      "3.1.1",
 		CreatedTimestamp: created,
-		ProgramId:        "kellog-func",
+		ProgramId:        "forester-func",
 		ProgramVersion:   "0.0.1",
 	}
 	qsos := make([]*adifpb.Qso, reader.RecordCount())
