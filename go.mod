@@ -19,7 +19,7 @@ require (
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed // indirect
 	golang.org/x/oauth2 v0.0.0-20210514164344-f6687ab2804c
 	google.golang.org/api v0.47.0
-	google.golang.org/genproto v0.0.0-20210520160233-290a1ae68a05
+	google.golang.org/genproto v0.0.0-20210521181308-5ccab8a35a9a
 	google.golang.org/grpc v1.38.0 // indirect
 	google.golang.org/protobuf v1.26.0
 )
