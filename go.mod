@@ -12,7 +12,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2
 	github.com/imdario/mergo v0.3.12
-	github.com/jinzhu/copier v0.3.0
+	github.com/jinzhu/copier v0.3.2
 	github.com/k0swe/adif-json-protobuf/go v0.0.7
 	github.com/k0swe/lotw-qsl v0.3.11
 	github.com/k0swe/qrz-logbook v0.1.12
