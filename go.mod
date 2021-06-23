@@ -16,7 +16,7 @@ require (
 	github.com/k0swe/adif-json-protobuf/go v0.0.8
 	github.com/k0swe/lotw-qsl v0.3.13
 	github.com/k0swe/qrz-logbook v0.1.14
-	golang.org/x/oauth2 v0.0.0-20210615190721-d04028783cf1
+	golang.org/x/oauth2 v0.0.0-20210622215436-a8dc77f794b6
 	golang.org/x/sys v0.0.0-20210608053332-aa57babbf139 // indirect
 	google.golang.org/api v0.48.0
 	google.golang.org/genproto v0.0.0-20210617175327-b9e0b3197ced
