@@ -1,7 +1,11 @@
 package forester
 
 import (
+	"cloud.google.com/go/firestore"
+	"encoding/json"
 	"fmt"
+	adifpb "github.com/k0swe/adif-json-protobuf/go"
+	"google.golang.org/protobuf/encoding/protojson"
 	"log"
 	"net/http"
 	"os"
@@ -34,4 +38,13 @@ func writeError(statusCode int, message string, err error, w http.ResponseWriter
 	if statusCode >= 500 {
 		log.Printf(message+": %v", err)
 	}
+}
+
+func ParseFirestoreQso(qsoDoc *firestore.DocumentSnapshot) (FirestoreQso, error) {
+	// I want to just qsoDoc.DataTo(&qso), but timestamps don't unmarshal
+	buf := qsoDoc.Data()
+	marshal, _ := json.Marshal(buf)
+	var qso adifpb.Qso
+	err := protojson.Unmarshal(marshal, &qso)
+	return FirestoreQso{&qso, qsoDoc.Ref}, err
 }

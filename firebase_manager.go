@@ -168,16 +168,12 @@ func (f *FirebaseManager) GetContacts() ([]FirestoreQso, error) {
 			return nil, err
 		}
 
-		// I want to just qsoDoc.DataTo(&qso), but timestamps don't unmarshal
-		buf := qsoDoc.Data()
-		marshal, _ := json.Marshal(buf)
-		var qso adifpb.Qso
-		err = protojson.Unmarshal(marshal, &qso)
+		firestoreQso, err := ParseFirestoreQso(qsoDoc)
 		if err != nil {
 			log.Printf("Skipping qso %d: unmarshaling error: %v", i, err)
 			continue
 		}
-		retval = append(retval, FirestoreQso{&qso, qsoDoc.Ref})
+		retval = append(retval, firestoreQso)
 	}
 	return retval, nil
 }
