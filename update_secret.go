@@ -29,8 +29,10 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 	}
 	lotwUser := r.PostFormValue(lotwUsername)
 	lotwPass := r.PostFormValue(lotwPassword)
+	qrzUser := r.PostFormValue(qrzUsername)
+	qrzPass := r.PostFormValue(qrzPassword)
 	qrzKey := r.PostFormValue(qrzLogbookApiKey)
-	if lotwUser == "" && lotwPass == "" && qrzKey == "" {
+	if lotwUser == "" && lotwPass == "" && qrzUser == "" && qrzPass == "" && qrzKey == "" {
 		log.Print("Nothing to do")
 		w.WriteHeader(204)
 		return
@@ -48,6 +50,22 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 	if lotwPass != "" {
 		log.Printf("Updating %v", lotwPassword)
 		_, err = checkAndSetSecret(secretStore, fb, lotwPassword, lotwPass)
+		if err != nil {
+			writeError(500, "Error storing a secret", err, w)
+			return
+		}
+	}
+	if qrzUser != "" {
+		log.Printf("Updating %v", qrzUsername)
+		_, err = checkAndSetSecret(secretStore, fb, qrzUsername, qrzUser)
+		if err != nil {
+			writeError(500, "Error storing a secret", err, w)
+			return
+		}
+	}
+	if qrzPass != "" {
+		log.Printf("Updating %v", qrzPassword)
+		_, err = checkAndSetSecret(secretStore, fb, qrzPassword, qrzPass)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
 			return
