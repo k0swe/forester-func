@@ -107,7 +107,6 @@ func qrzLookupToStation(c qrz.Callsign) adifpb.Station {
 		County:      c.County,
 		State:       c.State,
 		Country:     c.Country,
-		Continent:   c.Continent,
 		Dxcc:        uint32(dxcc),
 		Email:       c.Email,
 		CqZone:      uint32(cq),
