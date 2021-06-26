@@ -5,8 +5,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	adifpb "github.com/k0swe/adif-json-protobuf/go"
 	"github.com/k0swe/qrz-api"
 	"log"
+	"strconv"
+	"strings"
 )
 
 // PubSubMessage is the payload of a Pub/Sub event.
@@ -34,11 +37,12 @@ func FillNewQsoFromQrz(ctx context.Context, m PubSubMessage) error {
 		return err
 	}
 	defer client.Close()
-	contact, err := client.Doc(firebasePath).Get(ctx)
+	doc := client.Doc(firebasePath)
+	snapshot, err := doc.Get(ctx)
 	if err != nil {
 		return err
 	}
-	qso, err := ParseFirestoreQso(contact)
+	qso, err := ParseFirestoreQso(snapshot)
 	if err != nil {
 		return err
 	}
@@ -54,13 +58,22 @@ func FillNewQsoFromQrz(ctx context.Context, m PubSubMessage) error {
 	if err != nil {
 		return err
 	}
-	log.Printf("QRZ.com lookup: %v is %v", lookupResp.Callsign.Call, lookupResp.Callsign.Name)
+	log.Printf("QRZ.com lookup: %v is %v %v",
+		lookupResp.Callsign.Call, lookupResp.Callsign.Fname, lookupResp.Callsign.Name)
 
-	// TODO: copy fields into ADIFPB
-	// TODO: fixcase on ADIFPB
-	// TODO: merge
-	// TODO: save
-
+	station := qrzLookupToStation(lookupResp.Callsign)
+	q := adifpb.Qso{ContactedStation: &station, LoggingStation: &adifpb.Station{}}
+	fixCase(&q)
+	mergeQso(qso.qsopb, &q)
+	j, err := qsoToJson(qso.qsopb)
+	if err != nil {
+		return err
+	}
+	_, err = doc.Set(ctx, j)
+	if err != nil {
+		return err
+	}
+	log.Printf("Updated contact with QRZ.com details")
 	return nil
 }
 
@@ -75,4 +88,30 @@ func getQrzCreds(ctx context.Context, logbookId string) (string, string, error) 
 		return "", "", err
 	}
 	return username, password, nil
+}
+
+func qrzLookupToStation(c qrz.Callsign) adifpb.Station {
+	dxcc, _ := strconv.ParseUint(c.Dxcc, 10, 32)
+	cq, _ := strconv.ParseUint(c.Cqzone, 10, 32)
+	itu, _ := strconv.ParseUint(c.Ituzone, 10, 32)
+	return adifpb.Station{
+		StationCall: c.Call,
+		OpName:      strings.TrimSpace(c.Fname + " " + c.Name),
+		GridSquare:  c.Grid,
+		Latitude:    c.Lat,
+		Longitude:   c.Lon,
+		QslVia:      c.Qslmgr,
+		Street:      c.Addr1,
+		City:        c.Addr2,
+		PostalCode:  c.Zip,
+		County:      c.County,
+		State:       c.State,
+		Country:     c.Country,
+		Continent:   c.Continent,
+		Dxcc:        uint32(dxcc),
+		Email:       c.Email,
+		CqZone:      uint32(cq),
+		ItuZone:     uint32(itu),
+		Iota:        c.Iota,
+	}
 }
