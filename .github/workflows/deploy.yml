@@ -123,7 +123,7 @@ jobs:
         with:
           name: FillNewQsoFromQrz
           entry_point: FillNewQsoFromQrz
-          # event_trigger_type: providers/cloud.pubsub/eventTypes/topic.publish
-          # event_trigger_resource: contact-created
+          event_trigger_type: providers/cloud.pubsub/eventTypes/topic.publish
+          event_trigger_resource: projects/k0swe-kellog/topics/contact-created
           runtime: go113
           env_vars: GCP_PROJECT=k0swe-kellog
