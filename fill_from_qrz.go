@@ -54,7 +54,7 @@ func FillNewQsoFromQrz(ctx context.Context, m PubSubMessage) error {
 	}
 
 	log.Printf("Querying QRZ.com for %v", contactedStationCall)
-	lookupResp, err := qrz.Lookup(&qrzUser, &qrzPass, &contactedStationCall)
+	lookupResp, err := qrz.Lookup(ctx, &qrzUser, &qrzPass, &contactedStationCall)
 	if err != nil {
 		return err
 	}

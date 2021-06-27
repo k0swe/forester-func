@@ -40,7 +40,7 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching QRZ API key from secret manager", err, w)
 		return
 	}
-	qrzResponse, err := ql.Fetch(&qrzApiKey)
+	qrzResponse, err := ql.Fetch(ctx, &qrzApiKey)
 	if err != nil {
 		writeError(500, "Error fetching QRZ.com data", err, w)
 		return
