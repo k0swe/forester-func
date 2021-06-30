@@ -5,7 +5,7 @@ go 1.14
 require (
 	cloud.google.com/go v0.84.0
 	cloud.google.com/go/firestore v1.5.0
-	cloud.google.com/go/storage v1.15.0 // indirect
+	cloud.google.com/go/storage v1.16.0 // indirect
 	firebase.google.com/go/v4 v4.6.0
 	github.com/Matir/adifparser v0.0.0-20210115003802-6f5d33690059
 	github.com/antihax/optional v1.0.0
@@ -19,7 +19,9 @@ require (
 	github.com/k0swe/qrz-logbook v0.2.1
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
 	golang.org/x/oauth2 v0.0.0-20210628180205-a41e5a781914
+	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	google.golang.org/api v0.49.0
 	google.golang.org/genproto v0.0.0-20210629200056-84d6f6074151
+	google.golang.org/grpc v1.39.0 // indirect
 	google.golang.org/protobuf v1.27.1
 )
