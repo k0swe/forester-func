@@ -3,7 +3,7 @@ module github.com/k0swe/forester-func
 go 1.14
 
 require (
-	cloud.google.com/go v0.86.0
+	cloud.google.com/go v0.87.0
 	cloud.google.com/go/firestore v1.5.0
 	cloud.google.com/go/storage v1.16.0 // indirect
 	firebase.google.com/go/v4 v4.6.0
