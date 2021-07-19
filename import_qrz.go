@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	ql "github.com/k0swe/qrz-logbook"
-	"log"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"time"
 )
@@ -19,10 +19,11 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	const isFixCase = true
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
+	SetupLogging(ctx)
 	if handleCorsOptions(w, r) {
 		return
 	}
-	log.Print("Starting ImportQrz")
+	log.Info().Msg("Starting ImportQrz")
 	fb, err := MakeFirebaseManager(&ctx, r)
 	if err != nil {
 		writeError(500, "Error", err, w)
@@ -45,11 +46,13 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching QRZ.com data", err, w)
 		return
 	}
-	log.Printf("Fetched QRZ.com data, %d records", qrzResponse.Count)
+	log.Info().Uint64("recordCount", qrzResponse.Count).Msg("Fetched QRZ.com data")
 	qrzAdi, err := adifToProto(qrzResponse.Adif, time.Now())
 	if err != nil {
 		writeError(500, "Failed parsing QRZ.com data", err, w)
-		log.Printf("QRZ.com payload: %v", base64.StdEncoding.EncodeToString([]byte(qrzResponse.Adif)))
+		log.Debug().
+			Str("payload", base64.StdEncoding.EncodeToString([]byte(qrzResponse.Adif))).
+			Msg("Failed parsing QRZ.com data")
 		return
 	}
 	if isFixCase {
@@ -70,7 +73,7 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	report["created"] = created
 	report["modified"] = modified
 	report["noDiff"] = noDiff
-	log.Printf("report: %v", report)
 	marshal, _ := json.Marshal(report)
+	log.Info().RawJSON("report", marshal).Msg("Complete")
 	_, _ = fmt.Fprint(w, string(marshal))
 }

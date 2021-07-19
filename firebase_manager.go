@@ -12,12 +12,12 @@ import (
 	"github.com/imdario/mergo"
 	"github.com/jinzhu/copier"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
+	"github.com/rs/zerolog/log"
 	"golang.org/x/oauth2"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -170,7 +170,7 @@ func (f *FirebaseManager) GetContacts() ([]FirestoreQso, error) {
 
 		firestoreQso, err := ParseFirestoreQso(qsoDoc)
 		if err != nil {
-			log.Printf("Skipping qso %d: unmarshaling error: %v", i, err)
+			log.Warn().Err(err).Int("qsoIndex)", i).Msg("Unmarshalling error, skipping")
 			continue
 		}
 		retval = append(retval, firestoreQso)
@@ -197,24 +197,27 @@ func (f *FirebaseManager) MergeQsos(
 		if _, ok := m[hash]; ok {
 			diff := mergeQso(m[hash].qsopb, remoteQso)
 			if diff {
-				log.Printf("Updating QSO with %v on %v",
-					remoteQso.ContactedStation.StationCall,
-					remoteQso.TimeOn.String())
+				log.Debug().
+					Str("callsign", remoteQso.ContactedStation.StationCall).
+					Str("qsoTime", remoteQso.TimeOn.String()).
+					Msg("Updating QSO")
 				err := f.Update(m[hash])
 				if err != nil {
 					continue
 				}
 				modified++
 			} else {
-				log.Printf("No difference for QSO with %v on %v",
-					remoteQso.ContactedStation.StationCall,
-					remoteQso.TimeOn.String())
+				log.Debug().
+					Str("callsign", remoteQso.ContactedStation.StationCall).
+					Str("qsoTime", remoteQso.TimeOn.String()).
+					Msg("No difference")
 				noDiff++
 			}
 		} else {
-			log.Printf("Creating QSO with %v on %v",
-				remoteQso.ContactedStation.StationCall,
-				remoteQso.TimeOn.String())
+			log.Debug().
+				Str("callsign", remoteQso.ContactedStation.StationCall).
+				Str("qsoTime", remoteQso.TimeOn.String()).
+				Msg("Creating QSO")
 			err := f.Create(remoteQso)
 			if err != nil {
 				continue
@@ -249,12 +252,12 @@ func mergeQso(base *adifpb.Qso, backfill *adifpb.Qso) bool {
 func (f *FirebaseManager) Create(qso *adifpb.Qso) error {
 	buf, err := qsoToJson(qso)
 	if err != nil {
-		log.Printf("Problem unmarshaling for create: %v", err)
+		log.Warn().Err(err).Msg("Problem unmarshalling for create")
 		return err
 	}
 	_, err = f.contactsCol.NewDoc().Create(*f.ctx, buf)
 	if err != nil {
-		log.Printf("Problem creating: %v", err)
+		log.Warn().Err(err).Msg("Problem creating")
 		return err
 	}
 	return nil
@@ -263,12 +266,12 @@ func (f *FirebaseManager) Create(qso *adifpb.Qso) error {
 func (f *FirebaseManager) Update(qso FirestoreQso) error {
 	buf, err := qsoToJson(qso.qsopb)
 	if err != nil {
-		log.Printf("Problem unmarshaling for update: %v", err)
+		log.Warn().Err(err).Msg("Problem unmarshalling for update")
 		return err
 	}
 	_, err = qso.docref.Set(*f.ctx, buf)
 	if err != nil {
-		log.Printf("Problem updating: %v", err)
+		log.Warn().Err(err).Msg("Problem updating")
 		return err
 	}
 	return nil

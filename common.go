@@ -2,11 +2,12 @@ package forester
 
 import (
 	"cloud.google.com/go/firestore"
+	"context"
 	"encoding/json"
 	"fmt"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/protobuf/encoding/protojson"
-	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -14,6 +15,27 @@ import (
 
 // GCP_PROJECT is a user-set environment variable.
 var projectID = os.Getenv("GCP_PROJECT")
+
+func SetupLogging(ctx context.Context) {
+	//output := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.RFC3339}
+	//output.FormatTimestamp = func(i interface{}) string {
+	//	return strings.ToUpper(fmt.Sprintf("| %-6s|", i))
+	//}
+	//output.FormatLevel = func(i interface{}) string {
+	//	return strings.ToUpper(fmt.Sprintf("| %-6s|", i))
+	//}
+	//output.FormatMessage = func(i interface{}) string {
+	//	return fmt.Sprintf("***%s****", i)
+	//}
+	//output.FormatFieldName = func(i interface{}) string {
+	//	return fmt.Sprintf("%s:", i)
+	//}
+	//output.FormatFieldValue = func(i interface{}) string {
+	//	return strings.ToUpper(fmt.Sprintf("%s", i))
+	//}
+	//
+	//log.Logger = zerolog.New(output).With().Timestamp().Logger()
+}
 
 // Write CORS headers to the response. Returns true if this is an OPTIONS request; false otherwise.
 func handleCorsOptions(w http.ResponseWriter, r *http.Request) bool {
@@ -36,7 +58,7 @@ func writeError(statusCode int, message string, err error, w http.ResponseWriter
 	w.WriteHeader(statusCode)
 	_, _ = fmt.Fprintf(w, message+": %v", err)
 	if statusCode >= 500 {
-		log.Printf(message+": %v", err)
+		log.Error().Err(err).Msg(message)
 	}
 }
 

@@ -4,9 +4,9 @@ import (
 	"github.com/Matir/adifparser"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"io"
-	"log"
 	"math"
 	"regexp"
 	"strconv"
@@ -351,7 +351,7 @@ func getTimestamp(record adifparser.ADIFRecord, dateField string, timeField stri
 	}
 	t, err := time.Parse("20060102 150405", dateStr+" "+timeStr)
 	if err != nil {
-		log.Print(err)
+		log.Warn().Err(err).Msg("Problem parsing in getTimestamp")
 	}
 	return timestamppb.New(t)
 }
@@ -363,7 +363,7 @@ func getDate(record adifparser.ADIFRecord, field string) *timestamp.Timestamp {
 	}
 	t, err := time.Parse("20060102", dateStr)
 	if err != nil {
-		log.Print(err)
+		log.Warn().Err(err).Msg("Problem parsing in getDate")
 	}
 	return timestamppb.New(t)
 }
