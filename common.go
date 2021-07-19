@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/protobuf/encoding/protojson"
-	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -36,7 +36,7 @@ func writeError(statusCode int, message string, err error, w http.ResponseWriter
 	w.WriteHeader(statusCode)
 	_, _ = fmt.Fprintf(w, message+": %v", err)
 	if statusCode >= 500 {
-		log.Printf(message+": %v", err)
+		log.Error().Err(err).Msg(message)
 	}
 }
 

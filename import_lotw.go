@@ -8,7 +8,7 @@ import (
 	"github.com/antihax/optional"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
 	"github.com/k0swe/lotw-qsl"
-	"log"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"time"
 )
@@ -24,7 +24,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	if handleCorsOptions(w, r) {
 		return
 	}
-	log.Print("Starting ImportLotw")
+	log.Info().Msg("Starting ImportLotw")
 	fb, err := MakeFirebaseManager(&ctx, r)
 	if err != nil {
 		writeError(500, "Error", err, w)
@@ -38,7 +38,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	if lastFetchedTime == "<nil>" {
 		lastFetchedTime = "1970-01-01"
 	}
-	log.Printf("Last fetched time was %v", lastFetchedTime)
+	log.Info().Str("lastFetchedTime", lastFetchedTime).Msg("Last fetched time")
 	lotwUser, lotwPass, err := getLotwCreds(ctx, fb.logbookId)
 	if err != nil {
 		writeError(500, "Error fetching LotW creds", err, w)
@@ -53,11 +53,13 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 		writeError(500, "Error fetching LotW data", err, w)
 		return
 	}
-	log.Printf("Fetched LotW data, %d bytes", len(lotwResponse))
+	log.Info().Int("responseBytes", len(lotwResponse)).Msg("Fetched LotW data")
 	lotwAdi, err := adifToProto(lotwResponse, time.Now())
 	if err != nil {
 		writeError(500, "Failed parsing LotW data", err, w)
-		log.Printf("LotW payload: %v", base64.StdEncoding.EncodeToString([]byte(lotwResponse)))
+		log.Debug().
+			Str("payload", base64.StdEncoding.EncodeToString([]byte(lotwResponse))).
+			Msg("Failed parsing LotW")
 		return
 	}
 	fixLotwQsls(lotwAdi)
@@ -85,8 +87,8 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 	report["created"] = created
 	report["modified"] = modified
 	report["noDiff"] = noDiff
-	log.Printf("report: %v", report)
 	marshal, _ := json.Marshal(report)
+	log.Info().RawJSON("report", marshal).Msg("Complete")
 	_, _ = fmt.Fprint(w, string(marshal))
 }
 

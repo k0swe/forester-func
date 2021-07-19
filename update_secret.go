@@ -3,7 +3,7 @@ package forester
 import (
 	"context"
 	"fmt"
-	"log"
+	"github.com/rs/zerolog/log"
 	"net/http"
 	"time"
 )
@@ -15,7 +15,7 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 	if handleCorsOptions(w, r) {
 		return
 	}
-	log.Print("Starting UpdateSecret")
+	log.Info().Msg("Starting UpdateSecret")
 	fb, err := MakeFirebaseManager(&ctx, r)
 	if err != nil {
 		writeError(500, "Error", err, w)
@@ -33,14 +33,13 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 	qrzPass := r.PostFormValue(qrzPassword)
 	qrzKey := r.PostFormValue(qrzLogbookApiKey)
 	if lotwUser == "" && lotwPass == "" && qrzUser == "" && qrzPass == "" && qrzKey == "" {
-		log.Print("Nothing to do")
+		log.Info().Msg("Nothing to do")
 		w.WriteHeader(204)
 		return
 	}
 
 	secretStore := NewSecretStore(ctx)
 	if lotwUser != "" {
-		log.Printf("Updating %v", lotwUsername)
 		_, err = checkAndSetSecret(secretStore, fb, lotwUsername, lotwUser)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
@@ -48,7 +47,6 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if lotwPass != "" {
-		log.Printf("Updating %v", lotwPassword)
 		_, err = checkAndSetSecret(secretStore, fb, lotwPassword, lotwPass)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
@@ -56,7 +54,6 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if qrzUser != "" {
-		log.Printf("Updating %v", qrzUsername)
 		_, err = checkAndSetSecret(secretStore, fb, qrzUsername, qrzUser)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
@@ -64,7 +61,6 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if qrzPass != "" {
-		log.Printf("Updating %v", qrzPassword)
 		_, err = checkAndSetSecret(secretStore, fb, qrzPassword, qrzPass)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
@@ -72,7 +68,6 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if qrzKey != "" {
-		log.Printf("Updating %v", qrzLogbookApiKey)
 		_, err = checkAndSetSecret(secretStore, fb, qrzLogbookApiKey, qrzKey)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
@@ -83,6 +78,7 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 }
 
 func checkAndSetSecret(secretStore SecretStore, fb *FirebaseManager, key string, value string) (string, error) {
+	log.Info().Str("secret", key).Msgf("Updating")
 	// Rely on Firestore rules to check that user is an editor on the logbook
 	err := fb.SetLogbookProperty(
 		key+"_last_set",

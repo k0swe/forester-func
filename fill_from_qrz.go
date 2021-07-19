@@ -7,7 +7,7 @@ import (
 	"fmt"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
 	"github.com/k0swe/qrz-api"
-	"log"
+	"github.com/rs/zerolog/log"
 	"strconv"
 	"strings"
 )
@@ -30,7 +30,7 @@ func FillNewQsoFromQrz(ctx context.Context, m PubSubMessage) error {
 	logbookId := psMap["logbookId"]
 	contactId := psMap["contactId"]
 	firebasePath := fmt.Sprintf("logbooks/%s/contacts/%s", logbookId, contactId)
-	log.Printf("Got a new Firebase QSO at path %s", firebasePath)
+	log.Info().Str("path", firebasePath).Msg("Got a new Firebase QSO")
 
 	client, err := firestore.NewClient(ctx, projectID)
 	if err != nil {
@@ -53,13 +53,12 @@ func FillNewQsoFromQrz(ctx context.Context, m PubSubMessage) error {
 		return err
 	}
 
-	log.Printf("Querying QRZ.com for %v", contactedStationCall)
+	log.Info().Str("callsign", contactedStationCall).Msg("Querying QRZ.com")
 	lookupResp, err := qrz.Lookup(ctx, &qrzUser, &qrzPass, &contactedStationCall)
 	if err != nil {
 		return err
 	}
-	log.Printf("QRZ.com lookup: %v is %v %v",
-		lookupResp.Callsign.Call, lookupResp.Callsign.Fname, lookupResp.Callsign.Name)
+	log.Info().Str("fetchedCall", lookupResp.Callsign.Call).Msg("QRZ.com lookup successful")
 
 	station := qrzLookupToStation(lookupResp.Callsign)
 	q := adifpb.Qso{ContactedStation: &station, LoggingStation: &adifpb.Station{}}
@@ -73,7 +72,7 @@ func FillNewQsoFromQrz(ctx context.Context, m PubSubMessage) error {
 	if err != nil {
 		return err
 	}
-	log.Printf("Updated contact with QRZ.com details")
+	log.Info().Msg("Updated contact with QRZ.com details")
 	return nil
 }
 
