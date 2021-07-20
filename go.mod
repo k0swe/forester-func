@@ -17,11 +17,11 @@ require (
 	github.com/k0swe/lotw-qsl v0.3.14
 	github.com/k0swe/qrz-api v0.2.1
 	github.com/k0swe/qrz-logbook v0.2.1
-	github.com/rs/zerolog v1.23.0 // indirect
+	github.com/rs/zerolog v1.23.0
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
 	golang.org/x/oauth2 v0.0.0-20210628180205-a41e5a781914
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	google.golang.org/api v0.50.0
-	google.golang.org/genproto v0.0.0-20210716133855-ce7ef5c701ea
+	google.golang.org/genproto v0.0.0-20210719143636-1d5a45f8e492
 	google.golang.org/protobuf v1.27.1
 )
