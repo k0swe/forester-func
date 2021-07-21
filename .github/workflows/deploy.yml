@@ -53,6 +53,7 @@ jobs:
           entry_point: ImportQrz
           runtime: go113
           env_vars: GCP_PROJECT=k0swe-kellog
+          deploy_timeout: 600
 
   deploy-ImportLotw:
     runs-on: ubuntu-latest
@@ -77,6 +78,7 @@ jobs:
           entry_point: ImportLotw
           runtime: go113
           env_vars: GCP_PROJECT=k0swe-kellog
+          deploy_timeout: 600
 
   deploy-UpdateSecret:
     runs-on: ubuntu-latest
@@ -101,6 +103,7 @@ jobs:
           entry_point: UpdateSecret
           runtime: go113
           env_vars: GCP_PROJECT=k0swe-kellog
+          deploy_timeout: 600
 
   deploy-FillNewQsoFromQrz:
     runs-on: ubuntu-latest
@@ -127,6 +130,7 @@ jobs:
           event_trigger_resource: projects/k0swe-kellog/topics/contact-created
           runtime: go113
           env_vars: GCP_PROJECT=k0swe-kellog
+          deploy_timeout: 600
 
   deploy-Javascript:
     runs-on: ubuntu-latest
