@@ -18,10 +18,9 @@ require (
 	github.com/k0swe/qrz-api v0.2.1
 	github.com/k0swe/qrz-logbook v0.2.1
 	golang.org/x/net v0.0.0-20210805182204-aaa1db679c0d // indirect
-	golang.org/x/oauth2 v0.0.0-20210805134026-6f1e6394065a
+	golang.org/x/oauth2 v0.0.0-20210810183815-faf39c7919d5
 	golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069 // indirect
 	google.golang.org/api v0.52.0
 	google.golang.org/genproto v0.0.0-20210809142519-0135a39c2737
-	google.golang.org/grpc v1.39.1 // indirect
 	google.golang.org/protobuf v1.27.1
 )
