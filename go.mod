@@ -23,6 +23,6 @@ require (
 	golang.org/x/sys v0.0.0-20210818153620-00dd8d7831e7 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/api v0.54.0
-	google.golang.org/genproto v0.0.0-20210816143620-e15ff196659d
+	google.golang.org/genproto v0.0.0-20210818220304-27ea9cc85d9f
 	google.golang.org/protobuf v1.27.1
 )
