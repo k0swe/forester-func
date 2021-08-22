@@ -32,7 +32,7 @@ type FirestoreQso struct {
 type FirebaseManager struct {
 	ctx             *context.Context
 	userToken       *auth.Token
-	logbookId       string
+	logbookID       string
 	firestoreClient *firestore.Client
 	userDoc         *firestore.DocumentRef
 	logbookDoc      *firestore.DocumentRef
@@ -51,41 +51,41 @@ func MakeFirebaseManager(ctx *context.Context, r *http.Request) (*FirebaseManage
 	app, err := firebase.NewApp(*ctx, conf)
 	if err != nil {
 		// 500
-		return nil, fmt.Errorf("error initializing Firebase app: %v", err)
+		return nil, fmt.Errorf("error initializing Firebase app: %w", err)
 	}
 
 	authClient, err := app.Auth(*ctx)
 	if err != nil {
 		// 500
-		return nil, fmt.Errorf("error getting authClient: %v", err)
+		return nil, fmt.Errorf("error getting authClient: %w", err)
 	}
-	idToken, err := extractIdToken(r)
+	idToken, err := extractIDToken(r)
 	if err != nil {
 		// 403
-		return nil, fmt.Errorf("couldn't find authorization: %v", err)
+		return nil, fmt.Errorf("couldn't find authorization: %w", err)
 	}
 	userToken, err := authClient.VerifyIDToken(*ctx, idToken)
 	if err != nil {
 		// 403
-		return nil, fmt.Errorf("couldn't verify authorization: %v", err)
+		return nil, fmt.Errorf("couldn't verify authorization: %w", err)
 	}
-	logbookId, err := extractLogbookId(r)
+	logbookID, err := extractLogbookID(r)
 	if err != nil {
 		// 400
-		return nil, fmt.Errorf("couldn't get logbook ID: %v", err)
+		return nil, fmt.Errorf("couldn't get logbook ID: %w", err)
 	}
 	firestoreClient, err := makeFirestoreClient(*ctx, idToken)
 	if err != nil {
 		// 500
-		return nil, fmt.Errorf("error creating firestore client: %v", err)
+		return nil, fmt.Errorf("error creating firestore client: %w", err)
 	}
 	userDoc := firestoreClient.Collection("users").Doc(userToken.UID)
-	logbookDoc := firestoreClient.Collection("logbooks").Doc(logbookId)
+	logbookDoc := firestoreClient.Collection("logbooks").Doc(logbookID)
 	contactsCol := logbookDoc.Collection("contacts")
 	return &FirebaseManager{
 		ctx,
 		userToken,
-		logbookId,
+		logbookID,
 		firestoreClient,
 		userDoc,
 		logbookDoc,
@@ -93,7 +93,7 @@ func MakeFirebaseManager(ctx *context.Context, r *http.Request) (*FirebaseManage
 	}, nil
 }
 
-func extractIdToken(r *http.Request) (string, error) {
+func extractIDToken(r *http.Request) (string, error) {
 	idToken := strings.TrimSpace(r.Header.Get("Authorization"))
 	if idToken == "" {
 		return "", errors.New("requests must be authenticated with a Firebase JWT")
@@ -102,7 +102,7 @@ func extractIdToken(r *http.Request) (string, error) {
 	return idToken, nil
 }
 
-func extractLogbookId(r *http.Request) (string, error) {
+func extractLogbookID(r *http.Request) (string, error) {
 	logbookIds, ok := r.URL.Query()["logbookId"]
 	if !ok || len(logbookIds) != 1 {
 		return "", errors.New("must be exactly one logbookId param")
@@ -161,7 +161,7 @@ func (f *FirebaseManager) GetContacts() ([]FirestoreQso, error) {
 	var retval = make([]FirestoreQso, 0, 100)
 	for i := 0; ; i++ {
 		qsoDoc, err := docItr.Next()
-		if err == iterator.Done {
+		if errors.Is(err, iterator.Done) {
 			break
 		}
 		if err != nil {
@@ -247,7 +247,7 @@ func mergeQso(base *adifpb.Qso, backfill *adifpb.Qso) bool {
 }
 
 func (f *FirebaseManager) Create(qso *adifpb.Qso) error {
-	buf, err := qsoToJson(qso)
+	buf, err := qsoToJSON(qso)
 	if err != nil {
 		log.Printf("Problem unmarshaling for create: %v", err)
 		return err
@@ -261,7 +261,7 @@ func (f *FirebaseManager) Create(qso *adifpb.Qso) error {
 }
 
 func (f *FirebaseManager) Update(qso FirestoreQso) error {
-	buf, err := qsoToJson(qso.qsopb)
+	buf, err := qsoToJSON(qso.qsopb)
 	if err != nil {
 		log.Printf("Problem unmarshaling for update: %v", err)
 		return err
@@ -274,7 +274,7 @@ func (f *FirebaseManager) Update(qso FirestoreQso) error {
 	return nil
 }
 
-func qsoToJson(qso *adifpb.Qso) (map[string]interface{}, error) {
+func qsoToJSON(qso *adifpb.Qso) (map[string]interface{}, error) {
 	jso, _ := protojson.Marshal(qso)
 	var buf map[string]interface{}
 	err := json.Unmarshal(jso, &buf)

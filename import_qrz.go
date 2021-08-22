@@ -35,12 +35,12 @@ func ImportQrz(w http.ResponseWriter, r *http.Request) {
 	}
 
 	secretStore := NewSecretStore(ctx)
-	qrzApiKey, err := secretStore.FetchSecret(fb.logbookId, qrzLogbookApiKey)
+	qrzAPIKey, err := secretStore.FetchSecret(fb.logbookID, qrzLogbookAPIKey)
 	if err != nil {
 		writeError(500, "Error fetching QRZ API key from secret manager", err, w)
 		return
 	}
-	qrzResponse, err := ql.Fetch(ctx, &qrzApiKey)
+	qrzResponse, err := ql.Fetch(ctx, &qrzAPIKey)
 	if err != nil {
 		writeError(500, "Error fetching QRZ.com data", err, w)
 		return

@@ -31,7 +31,7 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 	lotwPass := r.PostFormValue(lotwPassword)
 	qrzUser := r.PostFormValue(qrzUsername)
 	qrzPass := r.PostFormValue(qrzPassword)
-	qrzKey := r.PostFormValue(qrzLogbookApiKey)
+	qrzKey := r.PostFormValue(qrzLogbookAPIKey)
 	if lotwUser == "" && lotwPass == "" && qrzUser == "" && qrzPass == "" && qrzKey == "" {
 		log.Print("Nothing to do")
 		w.WriteHeader(204)
@@ -72,8 +72,8 @@ func UpdateSecret(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if qrzKey != "" {
-		log.Printf("Updating %v", qrzLogbookApiKey)
-		_, err = checkAndSetSecret(secretStore, fb, qrzLogbookApiKey, qrzKey)
+		log.Printf("Updating %v", qrzLogbookAPIKey)
+		_, err = checkAndSetSecret(secretStore, fb, qrzLogbookAPIKey, qrzKey)
 		if err != nil {
 			writeError(500, "Error storing a secret", err, w)
 			return
@@ -94,5 +94,5 @@ func checkAndSetSecret(secretStore SecretStore, fb *FirebaseManager, key string,
 			"not saving secret: %v", err)
 	}
 
-	return secretStore.SetSecret(fb.logbookId, key, value)
+	return secretStore.SetSecret(fb.logbookID, key, value)
 }

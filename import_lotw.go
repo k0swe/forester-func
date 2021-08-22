@@ -39,7 +39,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 		lastFetchedTime = "1970-01-01"
 	}
 	log.Printf("Last fetched time was %v", lastFetchedTime)
-	lotwUser, lotwPass, err := getLotwCreds(ctx, fb.logbookId)
+	lotwUser, lotwPass, err := getLOTWCreds(ctx, fb.logbookID)
 	if err != nil {
 		writeError(500, "Error fetching LotW creds", err, w)
 		return
@@ -60,7 +60,7 @@ func ImportLotw(w http.ResponseWriter, r *http.Request) {
 		log.Printf("LotW payload: %v", base64.StdEncoding.EncodeToString([]byte(lotwResponse)))
 		return
 	}
-	fixLotwQsls(lotwAdi)
+	fixLOTWQsls(lotwAdi)
 	if isFixCase {
 		for _, qso := range lotwAdi.Qsos {
 			fixCase(qso)
@@ -95,7 +95,7 @@ func storeLastFetched(fb *FirebaseManager) error {
 	return fb.SetLogbookProperty(lotwLastFetchedDate, today)
 }
 
-func fixLotwQsls(lotwAdi *adifpb.Adif) {
+func fixLOTWQsls(lotwAdi *adifpb.Adif) {
 	// LotW puts their QSL in the ADIF fields where cards should go
 	for _, qso := range lotwAdi.Qsos {
 		qso.Lotw = qso.Card
@@ -103,13 +103,13 @@ func fixLotwQsls(lotwAdi *adifpb.Adif) {
 	}
 }
 
-func getLotwCreds(ctx context.Context, logbookId string) (string, string, error) {
+func getLOTWCreds(ctx context.Context, logbookID string) (string, string, error) {
 	secretStore := NewSecretStore(ctx)
-	username, err := secretStore.FetchSecret(logbookId, lotwUsername)
+	username, err := secretStore.FetchSecret(logbookID, lotwUsername)
 	if err != nil {
 		return "", "", err
 	}
-	password, err := secretStore.FetchSecret(logbookId, lotwPassword)
+	password, err := secretStore.FetchSecret(logbookID, lotwPassword)
 	if err != nil {
 		return "", "", err
 	}

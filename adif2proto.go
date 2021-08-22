@@ -1,6 +1,7 @@
 package forester
 
 import (
+	"errors"
 	"github.com/Matir/adifparser"
 	"github.com/golang/protobuf/ptypes/timestamp"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
@@ -30,7 +31,7 @@ func adifToProto(adifString string, createTime time.Time) (*adifpb.Adif, error) 
 		qsos = append(qsos, recordToQso(record))
 		record, err = reader.ReadRecord()
 	}
-	if err != io.EOF {
+	if !errors.Is(err, io.EOF) {
 		return nil, err
 	}
 	adi.Qsos = qsos
@@ -159,10 +160,10 @@ func parseLoggingStation(record adifparser.ADIFRecord, qso *adifpb.Qso) {
 }
 
 func parseContest(record adifparser.ADIFRecord, qso *adifpb.Qso) {
-	contestId, _ := record.GetValue("contest_id")
-	if contestId != "" {
+	contestID, _ := record.GetValue("contest_id")
+	if contestID != "" {
 		qso.Contest = new(adifpb.ContestData)
-		qso.Contest.ContestId = contestId
+		qso.Contest.ContestId = contestID
 		qso.Contest.ArrlSection, _ = record.GetValue("arrl_sect")
 		qso.Contest.StationClass, _ = record.GetValue("class")
 		qso.Contest.Check, _ = record.GetValue("check")

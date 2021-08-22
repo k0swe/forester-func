@@ -27,9 +27,9 @@ func FillNewQsoFromQrz(ctx context.Context, m PubSubMessage) error {
 	if err != nil {
 		return err
 	}
-	logbookId := psMap["logbookId"]
-	contactId := psMap["contactId"]
-	firebasePath := fmt.Sprintf("logbooks/%s/contacts/%s", logbookId, contactId)
+	logbookID := psMap["logbookId"]
+	contactID := psMap["contactId"]
+	firebasePath := fmt.Sprintf("logbooks/%s/contacts/%s", logbookID, contactID)
 	log.Printf("Got a new Firebase QSO at path %s", firebasePath)
 
 	client, err := firestore.NewClient(ctx, projectID)
@@ -48,7 +48,7 @@ func FillNewQsoFromQrz(ctx context.Context, m PubSubMessage) error {
 	}
 	contactedStationCall := qso.qsopb.ContactedStation.StationCall
 
-	qrzUser, qrzPass, err := getQrzCreds(ctx, logbookId)
+	qrzUser, qrzPass, err := getQrzCreds(ctx, logbookID)
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func FillNewQsoFromQrz(ctx context.Context, m PubSubMessage) error {
 	q := adifpb.Qso{ContactedStation: &station, LoggingStation: &adifpb.Station{}}
 	fixCase(&q)
 	mergeQso(qso.qsopb, &q)
-	j, err := qsoToJson(qso.qsopb)
+	j, err := qsoToJSON(qso.qsopb)
 	if err != nil {
 		return err
 	}
@@ -77,13 +77,13 @@ func FillNewQsoFromQrz(ctx context.Context, m PubSubMessage) error {
 	return nil
 }
 
-func getQrzCreds(ctx context.Context, logbookId string) (string, string, error) {
+func getQrzCreds(ctx context.Context, logbookID string) (string, string, error) {
 	secretStore := NewSecretStore(ctx)
-	username, err := secretStore.FetchSecret(logbookId, qrzUsername)
+	username, err := secretStore.FetchSecret(logbookID, qrzUsername)
 	if err != nil {
 		return "", "", err
 	}
-	password, err := secretStore.FetchSecret(logbookId, qrzPassword)
+	password, err := secretStore.FetchSecret(logbookID, qrzPassword)
 	if err != nil {
 		return "", "", err
 	}

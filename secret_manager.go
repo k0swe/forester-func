@@ -10,7 +10,7 @@ const lotwUsername = "lotw_username"
 const lotwPassword = "lotw_password"
 const qrzUsername = "qrz_username"
 const qrzPassword = "qrz_password"
-const qrzLogbookApiKey = "qrz_logbook_api_key"
+const qrzLogbookAPIKey = "qrz_logbook_api_key"
 
 type SecretStore struct {
 	ctx    context.Context
@@ -22,13 +22,13 @@ func NewSecretStore(ctx context.Context) SecretStore {
 	return SecretStore{ctx, client}
 }
 
-func makeSecretId(scope string, key string) string {
+func makeSecretID(scope string, key string) string {
 	return scope + "_" + key
 }
 
-func (s *SecretStore) FetchSecret(logbookId string, key string) (string, error) {
-	secretId := makeSecretId(logbookId, key)
-	versionName := "projects/" + projectID + "/secrets/" + secretId + "/versions/latest"
+func (s *SecretStore) FetchSecret(logbookID string, key string) (string, error) {
+	secretID := makeSecretID(logbookID, key)
+	versionName := "projects/" + projectID + "/secrets/" + secretID + "/versions/latest"
 	req := &secretmanagerpb.AccessSecretVersionRequest{
 		Name: versionName,
 	}
@@ -41,14 +41,14 @@ func (s *SecretStore) FetchSecret(logbookId string, key string) (string, error) 
 
 // SetSecret adds a version to the given secret, possibly creating the secret first. It returns the
 // version name, e.g. "/projects/*/secrets/*/versions/*".
-func (s *SecretStore) SetSecret(logbookId string, key string, secretValue string) (string, error) {
-	secretId := makeSecretId(logbookId, key)
+func (s *SecretStore) SetSecret(logbookID string, key string, secretValue string) (string, error) {
+	secretID := makeSecretID(logbookID, key)
 	projectName := "projects/" + projectID
-	secretName := projectName + "/secrets/" + secretId
+	secretName := projectName + "/secrets/" + secretID
 	_, err := s.client.GetSecret(s.ctx, &secretmanagerpb.GetSecretRequest{Name: secretName})
 	if err != nil {
 		// assume the secret didn't exist and create it
-		secretName, err = s.createSecret(projectName, secretId)
+		secretName, err = s.createSecret(projectName, secretID)
 		if err != nil {
 			return "", err
 		}
@@ -57,10 +57,10 @@ func (s *SecretStore) SetSecret(logbookId string, key string, secretValue string
 }
 
 // Create a new secret with no versions. Returns the secret name, e.g. "/projects/*/secrets/*".
-func (s *SecretStore) createSecret(projectName string, secretId string) (string, error) {
+func (s *SecretStore) createSecret(projectName string, secretID string) (string, error) {
 	createResp, err := s.client.CreateSecret(s.ctx, &secretmanagerpb.CreateSecretRequest{
 		Parent:   projectName,
-		SecretId: secretId,
+		SecretId: secretID,
 		Secret: &secretmanagerpb.Secret{
 			Replication: &secretmanagerpb.Replication{
 				Replication: &secretmanagerpb.Replication_Automatic_{
