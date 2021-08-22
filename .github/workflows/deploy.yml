@@ -33,6 +33,7 @@ jobs:
     strategy:
       matrix:
         function-name: [ ImportQrz, ImportLotw, UpdateSecret ]
+      fail-fast: false
 
     steps:
       - name: Checkout
@@ -58,7 +59,12 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy Golang PubSub
     needs: test
-    # TODO: can I do a matrix with an tuple of [name, resource]?
+    strategy:
+      matrix:
+        function-spec: [
+          { name: FillNewQsoFromQrz, trigger: projects/k0swe-kellog/topics/contact-created }
+        ]
+      fail-fast: false
 
     steps:
       - name: Checkout
@@ -74,10 +80,10 @@ jobs:
       - name: Cloud Functions Deploy
         uses: google-github-actions/deploy-cloud-functions@main
         with:
-          name: FillNewQsoFromQrz
-          entry_point: FillNewQsoFromQrz
+          name: ${{ matrix.function-spec.name }}
+          entry_point: ${{ matrix.function-spec.name }}
           event_trigger_type: google.pubsub.topic.publish
-          event_trigger_resource: projects/k0swe-kellog/topics/contact-created
+          event_trigger_resource: ${{ matrix.function-spec.trigger }}
           runtime: go113
           env_vars: GCP_PROJECT=k0swe-kellog
           deploy_timeout: 600
