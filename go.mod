@@ -5,7 +5,7 @@ go 1.14
 require (
 	cloud.google.com/go v0.93.3 // indirect
 	cloud.google.com/go/firestore v1.5.0
-	cloud.google.com/go/secretmanager v0.1.0
+	cloud.google.com/go/secretmanager v0.93.3
 	cloud.google.com/go/storage v1.16.0 // indirect
 	firebase.google.com/go/v4 v4.6.0
 	github.com/Matir/adifparser v0.0.0-20210115003802-6f5d33690059
