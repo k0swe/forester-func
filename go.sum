@@ -172,8 +172,8 @@ github.com/jstemmer/go-junit-report v0.0.0-20190106144839-af01ea7f8024/go.mod h1
 github.com/jstemmer/go-junit-report v0.9.1/go.mod h1:Brl9GWCQeLvo8nXZwPNNblvFj/XSXhF0NWZEnDohbsk=
 github.com/k0swe/adif-json-protobuf/go v0.0.8 h1:mwNCIg3E1Zmihxinv6+C8PjUJbTDq0tjAqAQiTt/O3s=
 github.com/k0swe/adif-json-protobuf/go v0.0.8/go.mod h1:HsZ/eOslVnO0QGyDeFbwyjmrXYeaRugYsLmUcet3SpA=
-github.com/k0swe/lotw-qsl v0.3.15 h1:SzFWeBN22qWPzJbH4BcGLUBYTyqCvHKhI2f2XeiI+a4=
-github.com/k0swe/lotw-qsl v0.3.15/go.mod h1:Uzbx6ZU29CiXl+xtNXT6GmImHfjRcwiN7VvCXsK03WY=
+github.com/k0swe/lotw-qsl v0.3.16 h1:xdRd21NjvNre25zPGsczrNtoiuggLJo0rZvDGCT3pAQ=
+github.com/k0swe/lotw-qsl v0.3.16/go.mod h1:dG1+WGZk0JlujCeQbMhLrf6Grs3qh84I8ksJkQwn34k=
 github.com/k0swe/qrz-api v0.2.3 h1:htF0WZ78/mMtJs5awweNb1m4b18kHC+RFC5zZgSuDs4=
 github.com/k0swe/qrz-api v0.2.3/go.mod h1:hDrHN2YbQ4QY3kTuNruJCx/b1aLba/5eKi/SY+lDd2U=
 github.com/k0swe/qrz-logbook v0.2.2 h1:WwepQ83HE2fjMewuEH1+wMXjWY5EWlAaXYE/2zvjjW4=
