@@ -3,7 +3,6 @@ package forester
 import (
 	"errors"
 	"github.com/Matir/adifparser"
-	"github.com/golang/protobuf/ptypes/timestamp"
 	adifpb "github.com/k0swe/adif-json-protobuf/go"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"io"
@@ -341,7 +340,7 @@ func getInt32(record adifparser.ADIFRecord, field string) int32 {
 	return int32(i64)
 }
 
-func getTimestamp(record adifparser.ADIFRecord, dateField string, timeField string) *timestamp.Timestamp {
+func getTimestamp(record adifparser.ADIFRecord, dateField string, timeField string) *timestamppb.Timestamp {
 	dateStr, _ := record.GetValue(dateField)
 	if dateStr == "" {
 		return nil
@@ -357,7 +356,7 @@ func getTimestamp(record adifparser.ADIFRecord, dateField string, timeField stri
 	return timestamppb.New(t)
 }
 
-func getDate(record adifparser.ADIFRecord, field string) *timestamp.Timestamp {
+func getDate(record adifparser.ADIFRecord, field string) *timestamppb.Timestamp {
 	dateStr, _ := record.GetValue(field)
 	if dateStr == "" {
 		return nil
