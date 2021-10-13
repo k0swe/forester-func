@@ -20,7 +20,7 @@ require (
 	golang.org/x/sys v0.0.0-20211007075335-d3039528d8ac // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/api v0.58.0
-	google.golang.org/genproto v0.0.0-20211012143446-e1d23e1da178
+	google.golang.org/genproto v0.0.0-20211013025323-ce878158c4d4
 	google.golang.org/grpc v1.41.0 // indirect
 	google.golang.org/protobuf v1.27.1
 )
