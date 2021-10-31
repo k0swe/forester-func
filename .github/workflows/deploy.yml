@@ -15,7 +15,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.13.x
+          go-version: 1.16.x
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -51,7 +51,7 @@ jobs:
         with:
           name: ${{ matrix.function-name }}
           entry_point: ${{ matrix.function-name }}
-          runtime: go113
+          runtime: go116
           env_vars: GCP_PROJECT=k0swe-kellog
           deploy_timeout: 900
 
@@ -84,7 +84,7 @@ jobs:
           entry_point: ${{ matrix.function-spec.name }}
           event_trigger_type: google.pubsub.topic.publish
           event_trigger_resource: ${{ matrix.function-spec.trigger }}
-          runtime: go113
+          runtime: go116
           env_vars: GCP_PROJECT=k0swe-kellog
           deploy_timeout: 900
 
