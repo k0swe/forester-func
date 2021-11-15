@@ -22,11 +22,11 @@ require (
 	github.com/k0swe/lotw-qsl v0.3.17
 	github.com/k0swe/qrz-api v0.2.4
 	github.com/k0swe/qrz-logbook v0.2.4
-	golang.org/x/net v0.0.0-20211029224645-99673261e6eb // indirect
+	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
-	golang.org/x/sys v0.0.0-20211031064116-611d5d643895 // indirect
+	golang.org/x/sys v0.0.0-20211113001501-0c823b97ae02 // indirect
 	google.golang.org/api v0.60.0
 	google.golang.org/genproto v0.0.0-20211112145013-271947fe86fd
-	google.golang.org/grpc v1.41.0 // indirect
+	google.golang.org/grpc v1.42.0 // indirect
 	google.golang.org/protobuf v1.27.1
 )
