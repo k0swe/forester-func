@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/firestore v1.6.1
 	cloud.google.com/go/secretmanager v1.0.0
 	cloud.google.com/go/storage v1.18.2 // indirect
-	firebase.google.com/go/v4 v4.6.1
+	firebase.google.com/go/v4 v4.7.0
 	github.com/Matir/adifparser v0.0.0-20210115003802-6f5d33690059
 	github.com/antihax/optional v1.0.0
 	github.com/census-instrumentation/opencensus-proto v0.3.0 // indirect
