@@ -12,25 +12,34 @@ on:
       - '**'
 
 jobs:
-  test:
-    name: Run unit tests
-    strategy:
-      matrix:
-        go-version: [ 1.16.x ]
-        os: [ ubuntu-latest ]
-    runs-on: ${{ matrix.os }}
+  test-go:
+    name: Build and test Golang functions
+    runs-on: ubuntu-latest
 
     steps:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
-          go-version: ${{ matrix.go-version }}
+          go-version: 1.16.x
 
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Test
-        run: go test ./...
+        run: make build-go
 
-      - name: Vet
-        run: go vet ./...
+  test-js:
+    name: Build and test Javascript functions
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Test
+        run: make build-js
