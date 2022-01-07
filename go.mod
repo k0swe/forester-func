@@ -11,11 +11,6 @@ require (
 	firebase.google.com/go/v4 v4.7.0
 	github.com/Matir/adifparser v0.0.0-20210115003802-6f5d33690059
 	github.com/antihax/optional v1.0.0
-	github.com/census-instrumentation/opencensus-proto v0.3.0 // indirect
-	github.com/cespare/xxhash/v2 v2.1.2 // indirect
-	github.com/cncf/xds/go v0.0.0-20211216145620-d92e9ce0af51 // indirect
-	github.com/envoyproxy/go-control-plane v0.10.1 // indirect
-	github.com/envoyproxy/protoc-gen-validate v0.6.2 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/imdario/mergo v0.3.12
 	github.com/jinzhu/copier v0.3.4
@@ -25,8 +20,8 @@ require (
 	github.com/k0swe/qrz-logbook v0.2.5
 	golang.org/x/net v0.0.0-20220105145211-5b0dc2dfae98 // indirect
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
-	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
-	google.golang.org/api v0.63.0
+	golang.org/x/text v0.3.7 // indirect
+	google.golang.org/api v0.64.0
 	google.golang.org/genproto v0.0.0-20220106181925-4b6d468c965f
 	google.golang.org/grpc v1.43.0 // indirect
 	google.golang.org/protobuf v1.27.1
