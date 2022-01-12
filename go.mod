@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	cloud.google.com/go v0.100.2 // indirect
+	cloud.google.com/go/compute v1.0.0 // indirect
 	cloud.google.com/go/firestore v1.6.1
 	cloud.google.com/go/iam v0.1.0 // indirect
 	cloud.google.com/go/secretmanager v1.0.0
@@ -18,11 +19,12 @@ require (
 	github.com/k0swe/lotw-qsl v0.3.18
 	github.com/k0swe/qrz-api v0.2.5
 	github.com/k0swe/qrz-logbook v0.2.5
-	golang.org/x/net v0.0.0-20220105145211-5b0dc2dfae98 // indirect
+	golang.org/x/net v0.0.0-20220111093109-d55c255bac03 // indirect
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
+	golang.org/x/sys v0.0.0-20220111092808-5a964db01320 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/api v0.64.0
-	google.golang.org/genproto v0.0.0-20220107163113-42d7afdf6368
+	google.golang.org/api v0.65.0
+	google.golang.org/genproto v0.0.0-20220111164026-67b88f271998
 	google.golang.org/grpc v1.43.0 // indirect
 	google.golang.org/protobuf v1.27.1
 )
