@@ -117,7 +117,7 @@ jobs:
 
   tag:
     runs-on: ubuntu-latest
-    name: Deploy Javascript Functions to Cloud Functions
+    name: Tag as deployed
     needs:
       - deploy-golang-http
       - deploy-golang-pubsub
