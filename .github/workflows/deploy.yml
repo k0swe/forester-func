@@ -4,7 +4,6 @@ on: workflow_dispatch
 
 jobs:
   test-go:
-    name: Build and test Golang functions
     uses: k0swe/forester-func/.github/workflows/test-go.yml@main
 
   deploy-golang-http:
@@ -72,7 +71,6 @@ jobs:
           deploy_timeout: 900
 
   test-js:
-    name: Build and test Javascript functions
     uses: k0swe/forester-func/.github/workflows/test-js.yml@main
 
   deploy-javascript:
