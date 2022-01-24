@@ -1,12 +1,8 @@
 name: Deploy
 
-on:
-  push:
-    tags:
-      - deploy
+on: workflow_dispatch
 
 jobs:
-
   test:
     name: Run Golang unit tests
     runs-on: ubuntu-latest
@@ -118,3 +114,19 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         working-directory: ./javascript/functions/
         run: npx firebase deploy --only functions --token "$FIREBASE_TOKEN"
+
+  tag:
+    runs-on: ubuntu-latest
+    name: Deploy Javascript Functions to Cloud Functions
+    needs:
+      - deploy-golang-http
+      - deploy-golang-pubsub
+      - deploy-javascript
+
+    steps:
+      - name: Tag as deployed
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: deployed
+          tag_prefix: ''
