@@ -111,6 +111,8 @@ jobs:
       - deploy-golang-http
       - deploy-golang-pubsub
       - deploy-javascript
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
