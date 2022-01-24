@@ -40,7 +40,7 @@ jobs:
   deploy-golang-pubsub:
     runs-on: ubuntu-latest
     name: Deploy Golang PubSub
-    needs: test
+    needs: test-go
     strategy:
       matrix:
         function-spec: [
