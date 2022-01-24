@@ -3,26 +3,14 @@ name: Deploy
 on: workflow_dispatch
 
 jobs:
-  test:
-    name: Run Golang unit tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.16.x
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Test
-        run: make build-go
+  test-go:
+    name: Build and test Golang functions
+    uses: k0swe/forester-func/.github/workflows/test-go.yml@main
 
   deploy-golang-http:
     name: Deploy Golang HTTP
     runs-on: ubuntu-latest
-    needs: test
+    needs: test-go
     strategy:
       matrix:
         function-name: [ ImportQrz, ImportLotw, UpdateSecret ]
@@ -81,9 +69,14 @@ jobs:
           env_vars: GCP_PROJECT=k0swe-kellog
           deploy_timeout: 900
 
+  test-js:
+    name: Build and test Javascript functions
+    uses: k0swe/forester-func/.github/workflows/test-js.yml@main
+
   deploy-javascript:
     runs-on: ubuntu-latest
     name: Deploy Javascript Functions to Cloud Functions
+    needs: test-js
 
     steps:
       - name: Checkout
@@ -109,7 +102,7 @@ jobs:
         working-directory: ./javascript/functions/
         run: npm install
 
-      - name: Build & deploy
+      - name: Deploy
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         working-directory: ./javascript/functions/
@@ -124,6 +117,9 @@ jobs:
       - deploy-javascript
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Tag as deployed
         uses: mathieudutour/github-tag-action@v6.0
         with:
