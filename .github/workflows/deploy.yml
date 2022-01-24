@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         function-name: [ ImportQrz, ImportLotw, UpdateSecret ]
+      max-parallel: 1
       fail-fast: false
 
     steps:
@@ -45,6 +46,7 @@ jobs:
         function-spec: [
           { name: FillNewQsoFromQrz, trigger: projects/k0swe-kellog/topics/contact-created }
         ]
+      max-parallel: 1
       fail-fast: false
 
     steps:
