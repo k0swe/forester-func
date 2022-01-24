@@ -11,10 +11,9 @@ build-go:	test-go
 build-js:
 	cd javascript/functions && npm install && npm run build
 
-deploy: build-go build-js
-	git tag deploy -m deploy -s --force && git push --tags --force
+build: build-go build-js
 
 clean:
 	go clean ./...
 
-.PHONY: test-go build-go build-js deploy clean
+.PHONY: test-go build-go build-js build clean
