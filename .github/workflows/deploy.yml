@@ -117,8 +117,8 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Tag as deployed
-        uses: mathieudutour/github-tag-action@v6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_tag: deployed
-          tag_prefix: ''
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email github-actions@github.com
+          git tag deployed --force
+          git push --tags --force
