@@ -44,6 +44,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Update Javascript dependencies
+        working-directory: javascript/functions
         run: npm update
 
       - name: Create Pull Request
