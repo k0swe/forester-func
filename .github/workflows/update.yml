@@ -24,9 +24,9 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: '${{ secrets.GH_PAT }}'
-          add-paths: 'go.mod go.sum'
-          commit-message: 'go get -u'
-          title: 'go get -u'
+          add-paths: go.mod go.sum
+          commit-message: go get -u
+          title: go get -u
           branch: go-update
           author: 'github-actions <github-actions@github.com>'
 
