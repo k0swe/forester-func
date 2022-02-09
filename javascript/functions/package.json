@@ -16,7 +16,7 @@
   "dependencies": {
     "@firebase/app-types": "0.7.0",
     "@google-cloud/pubsub": "2.18.5",
-    "firebase-admin": "9.12.0",
+    "firebase-admin": "10.0.2",
     "firebase-functions": "3.17.2"
   },
   "devDependencies": {
