@@ -17,7 +17,7 @@
     "@firebase/app-types": "0.7.0",
     "@google-cloud/pubsub": "2.18.5",
     "firebase-admin": "10.0.2",
-    "firebase-functions": "3.17.2"
+    "firebase-functions": "3.18.0"
   },
   "devDependencies": {
     "@types/node": "17.0.17",
