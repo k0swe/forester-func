@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go/firestore v1.6.1
 	cloud.google.com/go/iam v0.2.0 // indirect
 	cloud.google.com/go/secretmanager v1.2.0
-	cloud.google.com/go/storage v1.20.0 // indirect
+	cloud.google.com/go/storage v1.21.0 // indirect
 	firebase.google.com/go/v4 v4.7.1
 	github.com/Matir/adifparser v0.0.0-20210115003802-6f5d33690059
 	github.com/antihax/optional v1.0.0
@@ -20,6 +20,6 @@ require (
 	github.com/k0swe/qrz-logbook v0.2.5
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
 	google.golang.org/api v0.69.0
-	google.golang.org/genproto v0.0.0-20220216160803-4663080d8bc8
+	google.golang.org/genproto v0.0.0-20220217155828-d576998c0009
 	google.golang.org/protobuf v1.27.1
 )
