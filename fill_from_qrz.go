@@ -2,6 +2,7 @@ package forester
 
 import (
 	"cloud.google.com/go/firestore"
+	"cloud.google.com/go/pubsub"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -12,16 +13,9 @@ import (
 	"strings"
 )
 
-// PubSubMessage is the payload of a Pub/Sub event.
-// See the documentation for more details:
-// https://cloud.google.com/pubsub/docs/reference/rest/v1/PubsubMessage
-type PubSubMessage struct {
-	Data []byte `json:"data"`
-}
-
 // FillNewQsoFromQrz listens to Pub/Sub for new contacts in Firestore, and fills
 // in missing QSO details for the contacted station from QRZ.com.
-func FillNewQsoFromQrz(ctx context.Context, m PubSubMessage) error {
+func FillNewQsoFromQrz(ctx context.Context, m pubsub.Message) error {
 	var psMap map[string]string
 	err := json.Unmarshal(m.Data, &psMap)
 	if err != nil {
