@@ -8,7 +8,7 @@ require (
 	cloud.google.com/go/iam v0.2.0 // indirect
 	cloud.google.com/go/kms v1.3.0 // indirect
 	cloud.google.com/go/pubsub v1.18.0
-	cloud.google.com/go/secretmanager v1.2.0
+	cloud.google.com/go/secretmanager v1.3.0
 	cloud.google.com/go/storage v1.21.0 // indirect
 	firebase.google.com/go/v4 v4.7.1
 	github.com/Matir/adifparser v0.0.0-20210115003802-6f5d33690059
