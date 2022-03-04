@@ -26,3 +26,6 @@ require (
 	google.golang.org/genproto v0.0.0-20220303160752-862486edd9cc
 	google.golang.org/protobuf v1.27.1
 )
+
+// TODO: Remove after https://github.com/Matir/adifparser/pull/11 is merged
+replace github.com/Matir/adifparser => github.com/xylo04/adifparser v0.0.0-20220301050301-060597d9b87e
