@@ -28,4 +28,4 @@ require (
 )
 
 // TODO: Remove after https://github.com/Matir/adifparser/pull/11 is merged
-replace github.com/Matir/adifparser => github.com/xylo04/adifparser v0.0.0-20220301050301-060597d9b87e
+replace github.com/Matir/adifparser => github.com/xylo04/adifparser v0.0.0-20210115003802-6f5d33690059
