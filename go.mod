@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go/firestore v1.6.1
 	cloud.google.com/go/iam v0.3.0 // indirect
 	cloud.google.com/go/kms v1.3.0 // indirect
-	cloud.google.com/go/pubsub v1.18.0
+	cloud.google.com/go/pubsub v1.19.0
 	cloud.google.com/go/secretmanager v1.3.0
 	cloud.google.com/go/storage v1.21.0 // indirect
 	firebase.google.com/go/v4 v4.7.1
