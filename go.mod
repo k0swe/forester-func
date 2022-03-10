@@ -3,7 +3,6 @@ module github.com/k0swe/forester-func
 go 1.16
 
 require (
-	cloud.google.com/go/compute v1.5.0 // indirect
 	cloud.google.com/go/firestore v1.6.1
 	cloud.google.com/go/iam v0.3.0 // indirect
 	cloud.google.com/go/kms v1.3.0 // indirect
@@ -22,7 +21,7 @@ require (
 	github.com/k0swe/qrz-logbook v0.2.7
 	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a
 	golang.org/x/sys v0.0.0-20220307203707-22a9840ba4d7 // indirect
-	google.golang.org/api v0.70.0
+	google.golang.org/api v0.71.0
 	google.golang.org/genproto v0.0.0-20220308174144-ae0e22291548
 	google.golang.org/protobuf v1.27.1
 )
