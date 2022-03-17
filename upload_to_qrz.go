@@ -58,6 +58,9 @@ func UploadNewQsoToQrz(ctx context.Context, m pubsub.Message) error {
 	}
 	log.Printf("Uploaded contact to QRZ.com")
 
+	if qso.qsopb.AppDefined == nil {
+		qso.qsopb.AppDefined = map[string]string{}
+	}
 	qso.qsopb.AppDefined["app_qrzlog_logid"] = insert.LogId
 	j, err := qsoToJSON(qso.qsopb)
 	if err != nil {
