@@ -229,10 +229,17 @@ func hashQso(qsopb *adifpb.Qso) string {
 	timeOn := qsopb.TimeOn.AsTime()
 	// Some providers (QRZ.com) only have minute precision
 	timeOn = timeOn.Truncate(time.Minute)
-	payload := []byte(qsopb.LoggingStation.StationCall +
-		qsopb.ContactedStation.StationCall +
+	payload := []byte(normalizeCall(qsopb.LoggingStation.StationCall) +
+		normalizeCall(qsopb.ContactedStation.StationCall) +
 		strconv.FormatInt(timeOn.Unix(), 10))
 	return fmt.Sprintf("%x", sha256.Sum256(payload))
+}
+
+func normalizeCall(call string) string {
+	c := strings.ReplaceAll(call, "/", "")
+	c = strings.ReplaceAll(c, "_", "")
+	c = strings.ReplaceAll(c, "-", "")
+	return c
 }
 
 // Given two QSO objects, replace missing values in `base` with those from `backfill`. Values
