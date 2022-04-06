@@ -123,3 +123,12 @@ jobs:
           git config --global user.email github-actions@github.com
           git tag deployed --force
           git push --tags --force
+
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@0.3.2
+        with:
+          args: >
+            I just deployed forester-func:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
