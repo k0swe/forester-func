@@ -15,12 +15,11 @@ require (
 	github.com/imdario/mergo v0.3.12
 	github.com/jinzhu/copier v0.3.5
 	github.com/k0swe/adif-json-protobuf/go v0.0.8
-	github.com/k0swe/lotw-qsl v0.3.21
-	github.com/k0swe/qrz-api v0.2.8
+	github.com/k0swe/lotw-qsl v0.3.22
+	github.com/k0swe/qrz-api v0.2.9
 	github.com/k0swe/qrz-logbook v0.2.8
-	golang.org/x/net v0.0.0-20220412020605-290c469a71a5 // indirect
 	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5
-	golang.org/x/sys v0.0.0-20220412071739-889880a91fd5 // indirect
+	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
 	golang.org/x/xerrors v0.0.0-20220411194840-2f41105eb62f // indirect
 	google.golang.org/api v0.74.0
 	google.golang.org/genproto v0.0.0-20220407144326-9054f6ed7bac
