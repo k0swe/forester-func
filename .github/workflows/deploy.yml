@@ -40,8 +40,7 @@ jobs:
     strategy:
       matrix:
         function-spec: [
-          { name: FillNewQsoFromQrz, trigger: projects/k0swe-kellog/topics/contact-created },
-          { name: UploadNewQsoToQrz, trigger: projects/k0swe-kellog/topics/contact-created }
+          { name: SyncNewQso, trigger: projects/k0swe-kellog/topics/contact-created }
         ]
       fail-fast: false
 
