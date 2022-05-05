@@ -5,7 +5,7 @@ go 1.16
 require (
 	cloud.google.com/go v0.101.1 // indirect
 	cloud.google.com/go/firestore v1.6.1
-	cloud.google.com/go/pubsub v1.21.0
+	cloud.google.com/go/pubsub v1.21.1
 	cloud.google.com/go/secretmanager v1.4.0
 	firebase.google.com/go/v4 v4.8.0
 	github.com/Matir/adifparser v0.0.0-20220313221635-9d3943ccbac8
