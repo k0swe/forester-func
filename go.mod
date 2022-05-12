@@ -11,6 +11,7 @@ require (
 	github.com/Matir/adifparser v0.0.0-20220313221635-9d3943ccbac8
 	github.com/antihax/optional v1.0.0
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
+	github.com/googleapis/gax-go/v2 v2.4.0 // indirect
 	github.com/imdario/mergo v0.3.12
 	github.com/jinzhu/copier v0.3.5
 	github.com/k0swe/adif-json-protobuf/go v0.0.8
