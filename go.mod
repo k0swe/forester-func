@@ -23,6 +23,6 @@ require (
 	golang.org/x/oauth2 v0.0.0-20220608161450-d0670ef3b1eb
 	golang.org/x/sys v0.0.0-20220614162138-6c1b26c55098 // indirect
 	google.golang.org/api v0.84.0
-	google.golang.org/genproto v0.0.0-20220614165028-45ed7f3ff16e
+	google.golang.org/genproto v0.0.0-20220615141314-f1464d18c36b
 	google.golang.org/protobuf v1.28.0
 )
