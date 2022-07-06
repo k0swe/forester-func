@@ -17,10 +17,11 @@ require (
 	github.com/k0swe/adif-json-protobuf/go v0.0.8
 	github.com/k0swe/lotw-qsl v0.3.25
 	github.com/k0swe/qrz-api v0.2.13
-	github.com/k0swe/qrz-logbook v0.2.12
+	github.com/k0swe/qrz-logbook v0.2.13
+	golang.org/x/net v0.0.0-20220706163947-c90051bbdb60 // indirect
 	golang.org/x/oauth2 v0.0.0-20220630143837-2104d58473e0
 	golang.org/x/sys v0.0.0-20220704084225-05e143d24a9e // indirect
 	google.golang.org/api v0.86.0
-	google.golang.org/genproto v0.0.0-20220630174209-ad1d48641aa7
+	google.golang.org/genproto v0.0.0-20220706185917-7780775163c4
 	google.golang.org/protobuf v1.28.0
 )
