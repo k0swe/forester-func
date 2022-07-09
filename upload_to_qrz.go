@@ -39,6 +39,11 @@ func UploadNewQsoToQrz(ctx context.Context, m pubsub.Message) error {
 		return err
 	}
 
+	if qso.qsopb.ContactedStation.StationCall == "T3ST" {
+		log.Printf("Contacted station is special value T3ST; aborting upload")
+		return nil
+	}
+
 	adifProto := &adifpb.Adif{Qsos: []*adifpb.Qso{qso.qsopb}}
 	adif, err := protoToAdif(adifProto)
 	if err != nil {
