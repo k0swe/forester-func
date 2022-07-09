@@ -3,6 +3,7 @@ package forester
 import (
 	"cloud.google.com/go/secretmanager/apiv1"
 	"context"
+	"google.golang.org/api/iterator"
 	secretmanagerpb "google.golang.org/genproto/googleapis/cloud/secretmanager/v1"
 )
 
@@ -26,6 +27,7 @@ func makeSecretID(scope string, key string) string {
 	return scope + "_" + key
 }
 
+// FetchSecret gets the latest value of the secret for the given logbook and key.
 func (s *SecretStore) FetchSecret(logbookID string, key string) (string, error) {
 	secretID := makeSecretID(logbookID, key)
 	versionName := "projects/" + projectID + "/secrets/" + secretID + "/versions/latest"
@@ -40,7 +42,7 @@ func (s *SecretStore) FetchSecret(logbookID string, key string) (string, error) 
 }
 
 // SetSecret adds a version to the given secret, possibly creating the secret first. It returns the
-// version name, e.g. "/projects/*/secrets/*/versions/*".
+// version name, e.g. "/projects/*/secrets/*/versions/n".
 func (s *SecretStore) SetSecret(logbookID string, key string, secretValue string) (string, error) {
 	secretID := makeSecretID(logbookID, key)
 	projectName := "projects/" + projectID
@@ -53,10 +55,15 @@ func (s *SecretStore) SetSecret(logbookID string, key string, secretValue string
 			return "", err
 		}
 	}
-	return s.addSecretVersion(secretName, secretValue)
+	newVersion, err := s.addSecretVersion(secretName, secretValue)
+	if err != nil {
+		return "", err
+	}
+	err = s.deleteAllVersionsExceptLatest(secretName, newVersion)
+	return newVersion, err
 }
 
-// Create a new secret with no versions. Returns the secret name, e.g. "/projects/*/secrets/*".
+// Creates a new secret with no versions. Returns the secret name, e.g. "/projects/*/secrets/*".
 func (s *SecretStore) createSecret(projectName string, secretID string) (string, error) {
 	createResp, err := s.client.CreateSecret(s.ctx, &secretmanagerpb.CreateSecretRequest{
 		Parent:   projectName,
@@ -75,7 +82,8 @@ func (s *SecretStore) createSecret(projectName string, secretID string) (string,
 	return createResp.Name, nil
 }
 
-// Add a version to the given secret. Returns the version name, e.g. "/projects/*/secrets/*/versions/*".
+// Adds a version to the given secret. Returns the version name, e.g.
+// "/projects/*/secrets/*/versions/n".
 func (s *SecretStore) addSecretVersion(secretName string, secretValue string) (string, error) {
 	versionResp, err := s.client.AddSecretVersion(s.ctx, &secretmanagerpb.AddSecretVersionRequest{
 		Parent: secretName,
@@ -87,4 +95,32 @@ func (s *SecretStore) addSecretVersion(secretName string, secretValue string) (s
 		return "", err
 	}
 	return versionResp.Name, nil
+}
+
+// Destroys all versions of the secret except the given (latest) version name, e.g.
+// "/projects/*/secrets/*/versions/n".
+func (s *SecretStore) deleteAllVersionsExceptLatest(
+	secretName string, latestVersionName string) error {
+
+	versionItr := s.client.ListSecretVersions(s.ctx,
+		&secretmanagerpb.ListSecretVersionsRequest{Parent: secretName})
+	for {
+		ver, err := versionItr.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return err
+		}
+		if ver.Name == latestVersionName {
+			// Don't delete the (given) latest
+			continue
+		}
+		ver, err = s.client.DestroySecretVersion(s.ctx,
+			&secretmanagerpb.DestroySecretVersionRequest{Name: ver.Name, Etag: ver.Etag})
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
