@@ -40,7 +40,12 @@ func FillNewQsoFromQrz(ctx context.Context, m pubsub.Message) error {
 	if err != nil {
 		return err
 	}
+
 	contactedStationCall := qso.qsopb.ContactedStation.StationCall
+	if contactedStationCall == "T3ST" {
+		log.Printf("Contacted station is special value T3ST; aborting lookup")
+		return nil
+	}
 
 	qrzUser, qrzPass, err := getQrzCreds(ctx, logbookID)
 	if err != nil {

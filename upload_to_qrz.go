@@ -39,7 +39,8 @@ func UploadNewQsoToQrz(ctx context.Context, m pubsub.Message) error {
 		return err
 	}
 
-	if qso.qsopb.ContactedStation.StationCall == "T3ST" {
+	contactedStationCall := qso.qsopb.ContactedStation.StationCall
+	if contactedStationCall == "T3ST" {
 		log.Printf("Contacted station is special value T3ST; aborting upload")
 		return nil
 	}
