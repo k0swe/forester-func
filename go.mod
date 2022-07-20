@@ -16,11 +16,11 @@ require (
 	github.com/jinzhu/copier v0.3.5
 	github.com/k0swe/adif-json-protobuf/go v0.0.8
 	github.com/k0swe/lotw-qsl v0.3.26
-	github.com/k0swe/qrz-api v0.2.13
-	github.com/k0swe/qrz-logbook v0.2.13
+	github.com/k0swe/qrz-api v0.2.14
+	github.com/k0swe/qrz-logbook v0.2.14
 	golang.org/x/oauth2 v0.0.0-20220718184931-c8730f7fcb92
 	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
-	google.golang.org/api v0.87.0
+	google.golang.org/api v0.88.0
 	google.golang.org/genproto v0.0.0-20220719170305-83ca9fad585f
 	google.golang.org/grpc v1.48.0 // indirect
 	google.golang.org/protobuf v1.28.0

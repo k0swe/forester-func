@@ -218,10 +218,10 @@ github.com/k0swe/adif-json-protobuf/go v0.0.8 h1:mwNCIg3E1Zmihxinv6+C8PjUJbTDq0t
 github.com/k0swe/adif-json-protobuf/go v0.0.8/go.mod h1:HsZ/eOslVnO0QGyDeFbwyjmrXYeaRugYsLmUcet3SpA=
 github.com/k0swe/lotw-qsl v0.3.26 h1:ku/hKAfrHrI4pubhpY++AODVBd/AwjvNrwqFL7bABII=
 github.com/k0swe/lotw-qsl v0.3.26/go.mod h1:Oilqi5zkLcPzcm/iSCJUxvlMnS6Br3eJHZCNUBBw11s=
-github.com/k0swe/qrz-api v0.2.13 h1:6lVp0pVd+xmND3+s9PfFmfZiR3Iz6IJ+mekh/ph8Luo=
-github.com/k0swe/qrz-api v0.2.13/go.mod h1:TjMyHjV12Kya5QfLlxpfwp3xjef0cVdsaxRVCLzXHf4=
-github.com/k0swe/qrz-logbook v0.2.13 h1:T74cWAQdYyEKbEhyUe0G3/A9ajZGO7a39ZsbOfONW1I=
-github.com/k0swe/qrz-logbook v0.2.13/go.mod h1:1Jm8c5TktEIhC06qYrvNAxtTAd09iEK5wPZpoR+954c=
+github.com/k0swe/qrz-api v0.2.14 h1:zh/YqhEg0I+AoT2UassUM8NCEu5buExJ0MKv6Yar4xQ=
+github.com/k0swe/qrz-api v0.2.14/go.mod h1:7FJJwqfe4fFlmSrbjNs+yEd6g6yp5D/LPtTswc/OOXQ=
+github.com/k0swe/qrz-logbook v0.2.14 h1:Ln1sf7wfOec+++eeRJJEDRNnL8bEliBxnafqKp/YcG4=
+github.com/k0swe/qrz-logbook v0.2.14/go.mod h1:hss4RysYOMVYfud2WcliYWtORlxF7lG4icxIDJOQnzQ=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
@@ -333,7 +333,6 @@ golang.org/x/net v0.0.0-20220425223048-2871e0cb64e4/go.mod h1:CfG3xpIq0wQ8r1q4Su
 golang.org/x/net v0.0.0-20220607020251-c690dde0001d/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
 golang.org/x/net v0.0.0-20220617184016-355a448f1bc9/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
 golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
-golang.org/x/net v0.0.0-20220630215102-69896b714898/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
 golang.org/x/net v0.0.0-20220708220712-1185a9018129 h1:vucSRfWwTsoXro7P+3Cjlr6flUMtzCwzlvkxEQtHHB0=
 golang.org/x/net v0.0.0-20220708220712-1185a9018129/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
 golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=
@@ -358,7 +357,6 @@ golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a/go.mod h1:DAh4E804XQdzx2j
 golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5/go.mod h1:DAh4E804XQdzx2j+YRIaUnCqCV2RuMz24cGBJ5QYIrc=
 golang.org/x/oauth2 v0.0.0-20220608161450-d0670ef3b1eb/go.mod h1:jaDAt6Dkxork7LmZnYtzbRWj0W47D86a3TGe0YHBvmE=
 golang.org/x/oauth2 v0.0.0-20220622183110-fd043fe589d2/go.mod h1:jaDAt6Dkxork7LmZnYtzbRWj0W47D86a3TGe0YHBvmE=
-golang.org/x/oauth2 v0.0.0-20220630143837-2104d58473e0/go.mod h1:h4gKUeWbJ4rQPri7E0u6Gs4e9Ri2zaLxzw5DI5XGrYg=
 golang.org/x/oauth2 v0.0.0-20220718184931-c8730f7fcb92 h1:oVlhw3Oe+1reYsE2Nqu19PDJfLzwdU3QUUrG86rLK68=
 golang.org/x/oauth2 v0.0.0-20220718184931-c8730f7fcb92/go.mod h1:h4gKUeWbJ4rQPri7E0u6Gs4e9Ri2zaLxzw5DI5XGrYg=
 golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
@@ -560,8 +558,8 @@ google.golang.org/api v0.80.0/go.mod h1:xY3nI94gbvBrE0J6NHXhxOmW97HG7Khjkku6AFB3
 google.golang.org/api v0.84.0/go.mod h1:NTsGnUFJMYROtiquksZHBWtHfeMC7iYthki7Eq3pa8o=
 google.golang.org/api v0.85.0/go.mod h1:AqZf8Ep9uZ2pyTvgL+x0D3Zt0eoT9b5E8fmzfu6FO2g=
 google.golang.org/api v0.86.0/go.mod h1:+Sem1dnrKlrXMR/X0bPnMWyluQe4RsNoYfmNLhOIkzw=
-google.golang.org/api v0.87.0 h1:pUQVF/F+X7Tl1lo4LJoJf5BOpjtmINU80p9XpYTU2p4=
-google.golang.org/api v0.87.0/go.mod h1:+Sem1dnrKlrXMR/X0bPnMWyluQe4RsNoYfmNLhOIkzw=
+google.golang.org/api v0.88.0 h1:MPwxQRqpyskYhr2iNyfsQ8R06eeyhe7UEuR30p136ZQ=
+google.golang.org/api v0.88.0/go.mod h1:+Sem1dnrKlrXMR/X0bPnMWyluQe4RsNoYfmNLhOIkzw=
 google.golang.org/appengine v1.1.0/go.mod h1:EbEs0AVv82hx2wNQdGPgUI5lhzA/G0D9YwlJXL52JkM=
 google.golang.org/appengine v1.4.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 google.golang.org/appengine v1.5.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
