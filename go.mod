@@ -19,7 +19,7 @@ require (
 	github.com/k0swe/lotw-qsl v0.3.26
 	github.com/k0swe/qrz-api v0.2.14
 	github.com/k0swe/qrz-logbook v0.2.14
-	golang.org/x/oauth2 v0.0.0-20220718184931-c8730f7fcb92
+	golang.org/x/oauth2 v0.0.0-20220722155238-128564f6959c
 	golang.org/x/sys v0.0.0-20220721230656-c6bc011c0c49 // indirect
 	google.golang.org/api v0.88.0
 	google.golang.org/genproto v0.0.0-20220720214146-176da50484ac
