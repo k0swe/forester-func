@@ -24,7 +24,6 @@ require (
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
 	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f // indirect
 	google.golang.org/api v0.88.0
-	google.golang.org/genproto v0.0.0-20220722212130-b98a9ff5e252
-	google.golang.org/grpc v1.48.0 // indirect
+	google.golang.org/genproto v0.0.0-20220725144611-272f38e5d71b
 	google.golang.org/protobuf v1.28.0
 )
