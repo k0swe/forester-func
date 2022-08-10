@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	cloud.google.com/go v0.103.0 // indirect
+	cloud.google.com/go/compute v1.8.0 // indirect
 	cloud.google.com/go/firestore v1.6.1
 	cloud.google.com/go/pubsub v1.24.0
 	cloud.google.com/go/secretmanager v1.5.0
@@ -19,7 +20,7 @@ require (
 	github.com/k0swe/adif-json-protobuf/go v0.0.8
 	github.com/k0swe/lotw-qsl v0.3.28
 	github.com/k0swe/qrz-api v0.2.16
-	github.com/k0swe/qrz-logbook v0.2.15
+	github.com/k0swe/qrz-logbook v0.2.16
 	golang.org/x/oauth2 v0.0.0-20220808172628-8227340efae7
 	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4 // indirect
 	golang.org/x/sys v0.0.0-20220808155132-1c4a2a72c664 // indirect
