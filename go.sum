@@ -64,8 +64,8 @@ cloud.google.com/go/pubsub v1.2.0/go.mod h1:jhfEVHT8odbXTkndysNHCcx0awwzvfOlguIA
 cloud.google.com/go/pubsub v1.3.1/go.mod h1:i+ucay31+CNRpDW4Lu78I4xXG+O1r/MAHgjpRVR+TSU=
 cloud.google.com/go/pubsub v1.25.1 h1:l0wCNZKuEp2Q54wAy8283EV9O57+7biWOXnnU2/Tq/A=
 cloud.google.com/go/pubsub v1.25.1/go.mod h1:bY6l7rF8kCcwz6V3RaQ6kK4p5g7qc7PqjRoE9wDOqOU=
-cloud.google.com/go/secretmanager v1.5.0 h1:XdbW+Fx5amsRzjHeFbDAQI2v2VUkSl3BWEgkQD6z8hY=
-cloud.google.com/go/secretmanager v1.5.0/go.mod h1:5C9kM+RwSpkURNovKySkNvGQLUaOgyoR5W0RUx2SyHQ=
+cloud.google.com/go/secretmanager v1.6.0 h1:5v0zegRMlytVnN7J+bg5Ipqah3I2RZ67ysy00mvA+lA=
+cloud.google.com/go/secretmanager v1.6.0/go.mod h1:awVa/OXF6IiyaU1wQ34inzQNc4ISIDIrId8qE5QGgKA=
 cloud.google.com/go/security v1.5.0/go.mod h1:lgxGdyOKKjHL4YG3/YwIL2zLqMFCKs0UbQwgyZmfJl4=
 cloud.google.com/go/storage v1.0.0/go.mod h1:IhtSnM/ZTZV8YYJWCY8RULGVqBDmpoyjwiyrjsg+URw=
 cloud.google.com/go/storage v1.5.0/go.mod h1:tpKbwo567HUNpVclU5sGELwQWBDZ8gh0ZeosJ0Rtdos=
@@ -569,6 +569,7 @@ google.golang.org/api v0.90.0/go.mod h1:+Sem1dnrKlrXMR/X0bPnMWyluQe4RsNoYfmNLhOI
 google.golang.org/api v0.91.0/go.mod h1:+Sem1dnrKlrXMR/X0bPnMWyluQe4RsNoYfmNLhOIkzw=
 google.golang.org/api v0.93.0/go.mod h1:+Sem1dnrKlrXMR/X0bPnMWyluQe4RsNoYfmNLhOIkzw=
 google.golang.org/api v0.94.0/go.mod h1:eADj+UBuxkh5zlrSntJghuNeg8HwQ1w5lTKkuqaETEI=
+google.golang.org/api v0.95.0/go.mod h1:eADj+UBuxkh5zlrSntJghuNeg8HwQ1w5lTKkuqaETEI=
 google.golang.org/api v0.96.0 h1:F60cuQPJq7K7FzsxMYHAUJSiXh2oKctHxBMbDygxhfM=
 google.golang.org/api v0.96.0/go.mod h1:w7wJQLTM+wvQpNf5JyEcBoxK0RH7EDrh/L4qfsuJ13s=
 google.golang.org/appengine v1.1.0/go.mod h1:EbEs0AVv82hx2wNQdGPgUI5lhzA/G0D9YwlJXL52JkM=
