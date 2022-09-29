@@ -22,7 +22,7 @@ require (
 	golang.org/x/oauth2 v0.0.0-20220909003341-f21342109be1
 	golang.org/x/sync v0.0.0-20220819030929-7fc1605a5dde // indirect
 	golang.org/x/sys v0.0.0-20220829200755-d48e67d00261 // indirect
-	google.golang.org/api v0.97.0
+	google.golang.org/api v0.98.0
 	google.golang.org/appengine/v2 v2.0.2 // indirect
 	google.golang.org/genproto v0.0.0-20220927151529-dcaddaf36704
 	google.golang.org/protobuf v1.28.1
