@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	cloud.google.com/go/compute v1.9.0 // indirect
-	cloud.google.com/go/firestore v1.6.1
+	cloud.google.com/go/firestore v1.7.0
 	cloud.google.com/go/pubsub v1.25.1
 	cloud.google.com/go/secretmanager v1.7.0
 	cloud.google.com/go/storage v1.26.0 // indirect
