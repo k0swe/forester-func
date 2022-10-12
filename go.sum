@@ -326,8 +326,8 @@ github.com/jstemmer/go-junit-report v0.0.0-20190106144839-af01ea7f8024/go.mod h1
 github.com/jstemmer/go-junit-report v0.9.1/go.mod h1:Brl9GWCQeLvo8nXZwPNNblvFj/XSXhF0NWZEnDohbsk=
 github.com/k0swe/adif-json-protobuf/go v0.0.8 h1:mwNCIg3E1Zmihxinv6+C8PjUJbTDq0tjAqAQiTt/O3s=
 github.com/k0swe/adif-json-protobuf/go v0.0.8/go.mod h1:HsZ/eOslVnO0QGyDeFbwyjmrXYeaRugYsLmUcet3SpA=
-github.com/k0swe/lotw-qsl v0.3.30 h1:0qsL6WGEFog4RspnMANYTXl3+/gGU3cdYgr4UoX+ntQ=
-github.com/k0swe/lotw-qsl v0.3.30/go.mod h1:HTg3mZp49d9Z2cfvGwHBuUwdZrt2T7U53lPN9VDY7ZM=
+github.com/k0swe/lotw-qsl v0.3.31 h1:D3z0w7tmMeMOk2ip8rf+AYnBGLAoknSQFlXIJYhyHZ0=
+github.com/k0swe/lotw-qsl v0.3.31/go.mod h1:GVQLlKsFfK+AnqC6nJDFEvbnzvH4ghTo1SsIjiyiYSM=
 github.com/k0swe/qrz-api v0.2.18 h1:3r2IluNgp/bOeZaHRqo7exoSi+0YxnVeU6HItXsTkEo=
 github.com/k0swe/qrz-api v0.2.18/go.mod h1:L3EbA/YbtLMxCwWaZqL1fLs4pq5lY/4gSwHE++PpPCc=
 github.com/k0swe/qrz-logbook v0.2.18 h1:9sZeaOheFLSOGpTmErowcwvZJOHQQYKtcfZhb7mZjX4=
@@ -444,8 +444,9 @@ golang.org/x/net v0.0.0-20220607020251-c690dde0001d/go.mod h1:XRhObCWvk6IyKnWLug
 golang.org/x/net v0.0.0-20220617184016-355a448f1bc9/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
 golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
 golang.org/x/net v0.0.0-20220708220712-1185a9018129/go.mod h1:XRhObCWvk6IyKnWLug+ECip1KBveYUHfp+8e9klMJ9c=
-golang.org/x/net v0.0.0-20220909164309-bea034e7d591 h1:D0B/7al0LLrVC8aWF4+oxpv/m8bc7ViFfVS8/gXGdqI=
 golang.org/x/net v0.0.0-20220909164309-bea034e7d591/go.mod h1:YDH+HFinaLZZlnHAfSS6ZXJJ9M9t4Dl22yv3iI2vPwk=
+golang.org/x/net v0.0.0-20221004154528-8021a29435af h1:wv66FM3rLZGPdxpYL+ApnDe2HzHcTFta3z5nsc13wI4=
+golang.org/x/net v0.0.0-20221004154528-8021a29435af/go.mod h1:YDH+HFinaLZZlnHAfSS6ZXJJ9M9t4Dl22yv3iI2vPwk=
 golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=
 golang.org/x/oauth2 v0.0.0-20190226205417-e64efc72b421/go.mod h1:gOpvHmFTYa4IltrdGE7lF6nIHvwfUNPOp7c8zoXwtLw=
 golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45/go.mod h1:gOpvHmFTYa4IltrdGE7lF6nIHvwfUNPOp7c8zoXwtLw=
