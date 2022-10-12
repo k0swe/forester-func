@@ -328,8 +328,8 @@ github.com/k0swe/adif-json-protobuf/go v0.0.8 h1:mwNCIg3E1Zmihxinv6+C8PjUJbTDq0t
 github.com/k0swe/adif-json-protobuf/go v0.0.8/go.mod h1:HsZ/eOslVnO0QGyDeFbwyjmrXYeaRugYsLmUcet3SpA=
 github.com/k0swe/lotw-qsl v0.3.31 h1:D3z0w7tmMeMOk2ip8rf+AYnBGLAoknSQFlXIJYhyHZ0=
 github.com/k0swe/lotw-qsl v0.3.31/go.mod h1:GVQLlKsFfK+AnqC6nJDFEvbnzvH4ghTo1SsIjiyiYSM=
-github.com/k0swe/qrz-api v0.2.18 h1:3r2IluNgp/bOeZaHRqo7exoSi+0YxnVeU6HItXsTkEo=
-github.com/k0swe/qrz-api v0.2.18/go.mod h1:L3EbA/YbtLMxCwWaZqL1fLs4pq5lY/4gSwHE++PpPCc=
+github.com/k0swe/qrz-api v0.2.19 h1:uD2C62dCTa3o1covSvzo6cnEdHWIv5hKU1+AK/AyqBo=
+github.com/k0swe/qrz-api v0.2.19/go.mod h1:2FuBdLTuJycQhp+4VCf0tEPEucaoQAdPzcdTlgsm4bo=
 github.com/k0swe/qrz-logbook v0.2.18 h1:9sZeaOheFLSOGpTmErowcwvZJOHQQYKtcfZhb7mZjX4=
 github.com/k0swe/qrz-logbook v0.2.18/go.mod h1:zQxg6/rC8BefhmDcZsixYEXDk/DFlBnb+nsqUDr9B9A=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
