@@ -330,8 +330,8 @@ github.com/k0swe/lotw-qsl v0.3.31 h1:D3z0w7tmMeMOk2ip8rf+AYnBGLAoknSQFlXIJYhyHZ0
 github.com/k0swe/lotw-qsl v0.3.31/go.mod h1:GVQLlKsFfK+AnqC6nJDFEvbnzvH4ghTo1SsIjiyiYSM=
 github.com/k0swe/qrz-api v0.2.19 h1:uD2C62dCTa3o1covSvzo6cnEdHWIv5hKU1+AK/AyqBo=
 github.com/k0swe/qrz-api v0.2.19/go.mod h1:2FuBdLTuJycQhp+4VCf0tEPEucaoQAdPzcdTlgsm4bo=
-github.com/k0swe/qrz-logbook v0.2.18 h1:9sZeaOheFLSOGpTmErowcwvZJOHQQYKtcfZhb7mZjX4=
-github.com/k0swe/qrz-logbook v0.2.18/go.mod h1:zQxg6/rC8BefhmDcZsixYEXDk/DFlBnb+nsqUDr9B9A=
+github.com/k0swe/qrz-logbook v0.2.19 h1:v73iIw1/Ay4m6iMsRNOt4vRT7/Z6Zh2Zr4lK6zXXRqs=
+github.com/k0swe/qrz-logbook v0.2.19/go.mod h1:dz2JwBMj9LVzSfP+yXwm9g/4RzHwJdP3TrFZ2h2kGlM=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
