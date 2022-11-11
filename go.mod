@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/firestore v1.8.0
 	cloud.google.com/go/pubsub v1.26.0
 	cloud.google.com/go/secretmanager v1.9.0
-	firebase.google.com/go/v4 v4.9.0
+	firebase.google.com/go/v4 v4.10.0
 	github.com/Matir/adifparser v0.0.0-20221003030616-0cd0e289e6b8
 	github.com/antihax/optional v1.0.0
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
