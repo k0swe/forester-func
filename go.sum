@@ -21,8 +21,8 @@ cloud.google.com/go/storage v1.27.0/go.mod h1:x9DOL8TK/ygDUMieqwfhdpQryTeEkhGKMi
 firebase.google.com/go/v4 v4.10.0 h1:dgK/8uwfJbzc5LZK/GyRRfIkZEDObN9q0kgEXsjlXN4=
 firebase.google.com/go/v4 v4.10.0/go.mod h1:m0gLwPY9fxKggizzglgCNWOGnFnVPifLpqZzo5u3e/A=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/Matir/adifparser v0.0.0-20221003030616-0cd0e289e6b8 h1:25HxwxH2PNbHvajzOfNKWsR9UpEXPQ4paFDuyqxphik=
-github.com/Matir/adifparser v0.0.0-20221003030616-0cd0e289e6b8/go.mod h1:FrRQMGHkxX+CKufTY3SM7WM395NhLiOdx5//5Yi6+aI=
+github.com/Matir/adifparser v0.0.0-20221015064424-17fdadc82dc6 h1:HJcYB7HqFbmoXJYjVb8csfzRmWU7PUNGz7zFKwykEpw=
+github.com/Matir/adifparser v0.0.0-20221015064424-17fdadc82dc6/go.mod h1:FrRQMGHkxX+CKufTY3SM7WM395NhLiOdx5//5Yi6+aI=
 github.com/MicahParks/keyfunc v1.5.1 h1:RlyyYgKQI/adkIw1yXYtPvTAOb7hBhSX42aH23d8N0Q=
 github.com/MicahParks/keyfunc v1.5.1/go.mod h1:IdnCilugA0O/99dW+/MkvlyrsX8+L8+x95xuVNtM5jw=
 github.com/antihax/optional v1.0.0 h1:xK2lYat7ZLaVVcIuj82J8kIro4V6kDe0AUDFboUCwcg=
