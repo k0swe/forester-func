@@ -29,7 +29,7 @@ jobs:
         with:
           name: ${{ matrix.function-name }}
           entry_point: ${{ matrix.function-name }}
-          runtime: go116
+          runtime: go119
           env_vars: GCP_PROJECT=k0swe-kellog
           deploy_timeout: 3600
 
@@ -60,7 +60,7 @@ jobs:
           entry_point: ${{ matrix.function-spec.name }}
           event_trigger_type: google.pubsub.topic.publish
           event_trigger_resource: ${{ matrix.function-spec.trigger }}
-          runtime: go116
+          runtime: go119
           env_vars: GCP_PROJECT=k0swe-kellog
           deploy_timeout: 3600
 
