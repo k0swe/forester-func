@@ -88,8 +88,8 @@ github.com/k0swe/lotw-qsl v0.3.34 h1:Z2+Ay3but/ZhJRW/qvd/6GWmW7kjHIBYgwVuAwTqTOo
 github.com/k0swe/lotw-qsl v0.3.34/go.mod h1:/EXGS3+DBRST7Rn8oB7jf0cK/6ATRuCQp0Hax1zEpf4=
 github.com/k0swe/qrz-api v0.2.22 h1:iUHKytR4LdS/BTM8qPMJJOC49IHb7xlpVW/s/1wWz8U=
 github.com/k0swe/qrz-api v0.2.22/go.mod h1:d6JKEsw38i6RqHbIl4vk7LnvxzQWlFRX8kQ/TxoVqkQ=
-github.com/k0swe/qrz-logbook v0.2.19 h1:v73iIw1/Ay4m6iMsRNOt4vRT7/Z6Zh2Zr4lK6zXXRqs=
-github.com/k0swe/qrz-logbook v0.2.19/go.mod h1:dz2JwBMj9LVzSfP+yXwm9g/4RzHwJdP3TrFZ2h2kGlM=
+github.com/k0swe/qrz-logbook v0.2.22 h1:bzI7tw6fXS2gtFjelk7JmMqAsc7KDQRO3obOF3bc1Ww=
+github.com/k0swe/qrz-logbook v0.2.22/go.mod h1:iWgzvYM9xbAeH5mk86SzeIAJpOyBm0TW5C1W5MHI6sc=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
