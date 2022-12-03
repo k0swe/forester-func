@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	cloud.google.com/go/firestore v1.9.0
-	cloud.google.com/go/pubsub v1.27.0
+	cloud.google.com/go/pubsub v1.27.1
 	cloud.google.com/go/secretmanager v1.9.0
 	firebase.google.com/go/v4 v4.10.0
 	github.com/Matir/adifparser v0.0.0-20221003030616-0cd0e289e6b8
@@ -17,13 +17,13 @@ require (
 	github.com/k0swe/qrz-logbook v0.2.22
 	golang.org/x/oauth2 v0.2.0
 	google.golang.org/api v0.103.0
-	google.golang.org/genproto v0.0.0-20221201204527-e3fa12d562f3
+	google.golang.org/genproto v0.0.0-20221202195650-67e5cbc046fd
 	google.golang.org/protobuf v1.28.1
 )
 
 require (
 	cloud.google.com/go v0.105.0 // indirect
-	cloud.google.com/go/compute v1.12.1 // indirect
+	cloud.google.com/go/compute v1.13.0 // indirect
 	cloud.google.com/go/compute/metadata v0.2.1 // indirect
 	cloud.google.com/go/iam v0.7.0 // indirect
 	cloud.google.com/go/longrunning v0.3.0 // indirect
