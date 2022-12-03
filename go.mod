@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	cloud.google.com/go/firestore v1.9.0
-	cloud.google.com/go/pubsub v1.27.0
+	cloud.google.com/go/pubsub v1.27.1
 	cloud.google.com/go/secretmanager v1.9.0
 	firebase.google.com/go/v4 v4.10.0
 	github.com/Matir/adifparser v0.0.0-20221003030616-0cd0e289e6b8
