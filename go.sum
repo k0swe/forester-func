@@ -86,8 +86,8 @@ github.com/k0swe/adif-json-protobuf/go v0.0.8 h1:mwNCIg3E1Zmihxinv6+C8PjUJbTDq0t
 github.com/k0swe/adif-json-protobuf/go v0.0.8/go.mod h1:HsZ/eOslVnO0QGyDeFbwyjmrXYeaRugYsLmUcet3SpA=
 github.com/k0swe/lotw-qsl v0.3.35 h1:0OrGAR+tBtjT3F7ZPqZxbOJPKb1++QDf0X6nBo+nAUM=
 github.com/k0swe/lotw-qsl v0.3.35/go.mod h1:5BEVZQvKODedmva9TRS7OJc33VqHYPF+6j7MMZot9Fo=
-github.com/k0swe/qrz-api v0.2.22 h1:iUHKytR4LdS/BTM8qPMJJOC49IHb7xlpVW/s/1wWz8U=
-github.com/k0swe/qrz-api v0.2.22/go.mod h1:d6JKEsw38i6RqHbIl4vk7LnvxzQWlFRX8kQ/TxoVqkQ=
+github.com/k0swe/qrz-api v0.2.23 h1:A2Cq6z8aDGCKnzwaLYr4t+cml3l/7S0VkOEljhXvxGA=
+github.com/k0swe/qrz-api v0.2.23/go.mod h1:sJmNfRTtvLEihfqOyS8+tc219/w9336mfkMewkGRK+o=
 github.com/k0swe/qrz-logbook v0.2.22 h1:bzI7tw6fXS2gtFjelk7JmMqAsc7KDQRO3obOF3bc1Ww=
 github.com/k0swe/qrz-logbook v0.2.22/go.mod h1:iWgzvYM9xbAeH5mk86SzeIAJpOyBm0TW5C1W5MHI6sc=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
