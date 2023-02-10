@@ -15,7 +15,7 @@ require (
 	github.com/k0swe/lotw-qsl v0.3.36
 	github.com/k0swe/qrz-api v0.2.24
 	github.com/k0swe/qrz-logbook v0.2.24
-	golang.org/x/oauth2 v0.4.0
+	golang.org/x/oauth2 v0.5.0
 	google.golang.org/api v0.109.0
 	google.golang.org/genproto v0.0.0-20230202175211-008b39050e57
 	google.golang.org/protobuf v1.28.1
@@ -38,10 +38,10 @@ require (
 	github.com/googleapis/enterprise-certificate-proxy v0.2.1 // indirect
 	github.com/googleapis/gax-go/v2 v2.7.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
-	golang.org/x/net v0.5.0 // indirect
+	golang.org/x/net v0.6.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
