@@ -17,7 +17,7 @@ require (
 	github.com/k0swe/qrz-logbook v0.2.25
 	golang.org/x/oauth2 v0.5.0
 	google.golang.org/api v0.110.0
-	google.golang.org/genproto v0.0.0-20230209215440-0dfe4f8abfcc
+	google.golang.org/genproto v0.0.0-20230216225411-c8e22ba71e44
 	google.golang.org/protobuf v1.28.1
 )
 
@@ -25,7 +25,7 @@ require (
 	cloud.google.com/go v0.109.0 // indirect
 	cloud.google.com/go/compute v1.18.0 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
-	cloud.google.com/go/iam v0.10.0 // indirect
+	cloud.google.com/go/iam v0.11.0 // indirect
 	cloud.google.com/go/longrunning v0.4.0 // indirect
 	cloud.google.com/go/storage v1.29.0 // indirect
 	github.com/MicahParks/keyfunc v1.9.0 // indirect
